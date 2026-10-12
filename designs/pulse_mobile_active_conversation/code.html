@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#cbdbf5","surface-container-highest":"#d3e4fe","on-tertiary-fixed-variant":"#004e5c","secondary-container":"#316bf3","inverse-primary":"#c3c0ff","primary-container":"#4338ca","tertiary-fixed-dim":"#4cd7f6","on-error-container":"#93000a","inverse-on-surface":"#eaf1ff","on-secondary":"#ffffff","error":"#ba1a1a","primary":"#2a14b4","surface-container":"#e5eeff","secondary-fixed-dim":"#b4c5ff","surface-container-low":"#eff4ff","primary-fixed-dim":"#c3c0ff","on-secondary-fixed":"#00174b","on-primary":"#ffffff","background":"#f8f9ff","on-error":"#ffffff","on-secondary-container":"#fefcff","secondary":"#0051d5","outline-variant":"#c7c4d7","on-background":"#0b1c30","tertiary":"#00414d","surface-container-lowest":"#ffffff","error-container":"#ffdad6","on-primary-container":"#c1beff","on-primary-fixed-variant":"#372abf","surface-tint":"#5148d7","surface-container-high":"#dce9ff","on-secondary-fixed-variant":"#003ea8","tertiary-fixed":"#acedff","inverse-surface":"#213145","surface":"#f8f9ff","primary-fixed":"#e3dfff","surface-bright":"#f8f9ff","secondary-fixed":"#dbe1ff","on-primary-fixed":"#100069","on-tertiary-fixed":"#001f26","tertiary-container":"#005a6a","on-tertiary":"#ffffff","on-surface":"#0b1c30","on-surface-variant":"#464554","on-tertiary-container":"#4ad5f4","outline":"#777586","surface-variant":"#d3e4fe"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-lg":"1.25rem","space-xl":"1.5rem","margin-desktop":"2rem","space-base":"1rem","space-xs":"0.25rem",margin:"1rem","space-3xl":"3rem","gutter-desktop":"1.5rem",gutter:"1rem","space-2xs":"0.125rem","space-2xl":"2rem","space-sm":"0.5rem","space-md":"0.75rem"},fontFamily:{"body-sm":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],caption:["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"]},fontSize:{"body-sm":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"title-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.02em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"500"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"600"}],"headline-xl-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"700"}],caption:["10px",{lineHeight:"13px",letterSpacing:"0.03em",fontWeight:"500"}],"body-md":["15px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}],"title-md":["16px",{lineHeight:"22px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"400"}],"headline-xl":["36px",{lineHeight:"44px",letterSpacing:"-0.03em",fontWeight:"700"}]}}}}</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-space-base flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Go Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-title-md text-title-md text-on-surface truncate">Conversation Detail</h1></div><div class="flex items-center gap-space-xs"><button aria-label="More options" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">more_vert</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full relative pb-28">
+<!-- Sub-header Group Identity Card -->
+<div class="px-space-base pt-space-xs pb-space-sm bg-surface/90 backdrop-blur-md sticky top-0 z-20">
+<div class="flex items-center justify-between p-space-sm bg-surface-container-lowest rounded-xl shadow-[0_1px_4px_rgba(15,23,42,0.04)]">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative shrink-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up warm portrait of diverse creative team members collaborating around a bright desk, studio lighting, soft cobalt and neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAq55wcnDSDFHlgmqcm5chdX43nk12BKJG5FyW0_JtRgk-1kGOeJgnGXq30Pe4fwxQ7DpDsBXs_CCLXDwSZZsGnp6Qf48l8mCjfffXBfYCejtHfUW60fVQG4o_wIaagsCLEo50YgfUof2gOynvEUo7O2AY3OlP9vJpJMnWoTqVLEOaf9msxca6L4qP5312MWhg-lzTG61yZbXybrOTn4JJnebiqA7eJCzrmCwhGuOKt9rWMiQU-uN6"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-container rounded-full ring-2 ring-surface-container-lowest" title="Active"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-2xs">
+<span class="font-title-sm text-title-sm text-on-surface truncate">Project Team</span>
+<span class="material-symbols-outlined text-secondary text-[16px]">verified</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">6 members • 4 active now</span>
+</div>
+</div>
+<div class="flex items-center gap-space-2xs shrink-0">
+<button aria-label="Start audio call" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button aria-label="Start video call" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</button>
+<button aria-label="More conversation options" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Conversation Flow Container -->
+<div class="flex flex-col px-space-base space-y-space-md pt-space-xs">
+<!-- Date Divider -->
+<div class="flex items-center justify-center py-space-xs">
+<div class="px-space-md py-1 bg-surface-container-high rounded-full shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Today, November 14</span>
+</div>
+</div>
+<!-- Security E2E banner -->
+<div class="flex items-center justify-center">
+<div class="flex items-center gap-space-2xs px-space-md py-1 bg-surface-container-low rounded-lg text-on-surface-variant max-w-[85%] text-center">
+<span class="material-symbols-outlined text-[13px] text-secondary">lock</span>
+<span class="font-caption text-caption">Messages and calls are end-to-end encrypted.</span>
+</div>
+</div>
+<!-- 1. Incoming Message: Sarah Jenkins -->
+<div class="flex items-start gap-space-sm max-w-[85%]">
+<img class="w-8 h-8 rounded-full object-cover shrink-0 mt-1 shadow-sm" data-alt="Editorial portrait of Sarah Jenkins, a friendly young design strategist with soft natural lighting and warm smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdumga60uL3BflXll1QH8tcp1PVJ5ip-hzEW8wtrxA6BSgD4o36JfyQcakaK3zREUhAVNal-NXqMKHnK44USh8F4WJ3aG-D7ZOYcqmHlPDLtGX7Ds-U_iyWFk7FNBOh5K73MnZFy0t87bg7vEtQvU2PcuN0GLzhWIBlHjVFjUprPpajOfK1wvhfBcXNquZhiz12hTrUJQBYRAroLipwbZ-aIxTSBYXwyio6GcaQpy2tEGIAi-tgWYD"/>
+<div class="flex flex-col space-y-space-2xs min-w-0">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-md text-label-md text-primary font-semibold">Sarah Jenkins</span>
+<span class="font-caption text-caption text-on-surface-variant">11:24 AM</span>
+</div>
+<div class="relative group">
+<div class="p-space-md bg-surface-container-lowest text-on-surface rounded-2xl rounded-tl-sm shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+<p class="font-body-md text-body-md leading-relaxed">Hey team! Are you ready for lunch today? We picked the Italian trattoria around the corner 🍕</p>
+</div>
+<!-- Reaction Chip -->
+<button class="absolute -bottom-2.5 left-3 px-2 py-0.5 bg-surface-container-lowest rounded-full shadow-sm flex items-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="text-[12px]">🙌</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold">2</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 2. Incoming Media Message: Restaurant Photo -->
+<div class="flex items-start gap-space-sm max-w-[85%] pt-1">
+<div class="w-8 shrink-0"></div>
+<div class="flex flex-col space-y-space-2xs min-w-0">
+<div class="p-1.5 bg-surface-container-lowest rounded-2xl rounded-tl-sm shadow-[0_2px_8px_rgba(15,23,42,0.04)] overflow-hidden">
+<div class="relative w-64 h-44 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Charming sunlit outdoor Italian trattoria terrace with terracotta pots, checkered tablecloths, rustic stone walls, warm midday sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyf5Z4O5skgaeRZg0S16dU29y_6_mrwnVzIcnFpCzFluP1tj-eTzDiLUwQ-42d3g82sIl-x0HXx64d9AJ31tL0t0feUQuK8T36wmGW1ZONMsi9IZ8smulVaNDvJX64uxz2va3fhp-peuMZCfQIqEvZkPRVi6HL4pDvVbwE3qj-c0v82UoC0km4atao-mjbLn-BB1rLla0ac6NnaEpykXnhWsHg8AUr9c_GFCSG9vFjVyivhrQk4GL0"/>
+<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-inverse-surface/80 to-transparent p-space-sm">
+<p class="font-title-sm text-title-sm text-inverse-on-surface">Table is reserved for 12:30!</p>
+</div>
+</div>
+<div class="flex justify-end items-center px-space-xs pt-1">
+<span class="font-caption text-caption text-on-surface-variant">11:25 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Outgoing Message: User reply -->
+<div class="flex flex-col items-end self-end max-w-[82%] space-y-space-2xs">
+<div class="p-space-md bg-primary-container text-on-primary rounded-2xl rounded-tr-sm shadow-[0_4px_12px_rgba(42,20,180,0.18)]">
+<p class="font-body-md text-body-md leading-relaxed text-on-primary">Sounds great! Just wrapping up the new design system tokens. Give me 5 minutes and I'll meet you downstairs!</p>
+</div>
+<div class="flex items-center gap-1 pr-1">
+<span class="font-caption text-caption text-on-surface-variant">11:26 AM</span>
+<span class="material-symbols-outlined text-[14px] text-secondary-container" title="Read">done_all</span>
+</div>
+</div>
+<!-- 4. Incoming Voice Note Player Card -->
+<div class="flex items-start gap-space-sm max-w-[88%]">
+<img class="w-8 h-8 rounded-full object-cover shrink-0 mt-1 shadow-sm" data-alt="Portrait of Alex Rivera, product architect with thoughtful expression, natural warm daylight, navy tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMeEB1r-tfcNdPWUEat0YCme1Je7VMMbvbEg-R2cs7v9MTA4aOYNJrXFJZxW5dUZDnElemoiPy2tdcMerNL44R2vw7ZSpDzzJtgww8VDlFgy7hix5bEXtvnZT2s7F-uB-or9eRJDVdHk0i5NIAbhMGX5QzbkMtOFeu1P4ZjfnN-TR_-cj06OpSz2bJ4nuk3C3PewnhwQlrtyBVEpOQHNvCVbypx6VCxXTJevlIKgGH9SRI4HQLd8fv"/>
+<div class="flex flex-col space-y-space-2xs w-full min-w-0">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-md text-label-md text-primary font-semibold">Alex Rivera</span>
+<span class="font-caption text-caption text-on-surface-variant">11:26 AM</span>
+</div>
+<div class="p-space-sm bg-surface-container-lowest rounded-2xl rounded-tl-sm shadow-[0_2px_8px_rgba(15,23,42,0.04)] w-full">
+<div class="flex items-center gap-space-sm">
+<!-- Play/Pause Micro-Action -->
+<button aria-label="Play voice note" class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 active:scale-95 transition-transform shadow-sm" id="voice-play-btn" onclick="toggleVoicePlayback()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="voice-play-icon">play_arrow</span>
+</button>
+<!-- Animated Waveform Graphic -->
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center gap-[2.5px] h-7 w-full overflow-hidden" id="audio-waveform">
+<span class="w-[3px] h-3 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-5 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-2 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-6 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-4 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-7 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-3 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-5 bg-secondary rounded-full"></span>
+<span class="w-[3px] h-6 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-4 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-7 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-3 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-5 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-2 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-6 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-4 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-5 bg-surface-dim rounded-full"></span>
+<span class="w-[3px] h-3 bg-surface-dim rounded-full"></span>
+</div>
+<div class="flex justify-between items-center mt-1">
+<span class="font-caption text-caption text-secondary font-semibold">0:42</span>
+<span class="font-caption text-caption text-on-surface-variant">Voice note</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. Outgoing Message: Wrap up response -->
+<div class="flex flex-col items-end self-end max-w-[82%] space-y-space-2xs">
+<div class="p-space-md bg-primary-container text-on-primary rounded-2xl rounded-tr-sm shadow-[0_4px_12px_rgba(42,20,180,0.18)]">
+<p class="font-body-md text-body-md leading-relaxed text-on-primary">Can't wait! See you in a bit 🙌</p>
+</div>
+<div class="flex items-center gap-1 pr-1">
+<span class="font-caption text-caption text-on-surface-variant">11:27 AM</span>
+<span class="material-symbols-outlined text-[14px] text-secondary-container" title="Read">done_all</span>
+</div>
+</div>
+</div>
+<!-- Bottom Fixed Composer Dock -->
+<div class="fixed bottom-0 inset-x-0 z-30 p-space-sm bg-surface/90 backdrop-blur-xl shadow-[0_-4px_16px_rgba(15,23,42,0.05)]">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-1.5 rounded-full shadow-md">
+<!-- Attachment Quick Action -->
+<button aria-label="Add media or document attachment" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors shrink-0" type="button">
+<span class="material-symbols-outlined text-[22px]">add</span>
+</button>
+<!-- Input Text Field Container -->
+<div class="flex-1 min-w-0 flex items-center px-space-xs">
+<input class="w-full bg-transparent border-0 outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-1" id="composer-input" placeholder="Type a message..." type="text"/>
+</div>
+<!-- Emoji Trigger -->
+<button aria-label="Insert emoji" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shrink-0" type="button">
+<span class="material-symbols-outlined text-[22px]">sentiment_satisfied</span>
+</button>
+<!-- Mic / Dynamic Send Button -->
+<button aria-label="Record voice note" class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-md active:scale-95 transition-all" id="send-voice-action" type="button">
+<span class="material-symbols-outlined text-[20px]" id="composer-action-icon">mic</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Simple Voice Note micro-interaction
+  let isPlaying = false;
+  function toggleVoicePlayback() {
+    isPlaying = !isPlaying;
+    const icon = document.getElementById('voice-play-icon');
+    const btn = document.getElementById('voice-play-btn');
+    if (isPlaying) {
+      icon.textContent = 'pause';
+      btn.classList.add('scale-105');
+    } else {
+      icon.textContent = 'play_arrow';
+      btn.classList.remove('scale-105');
+    }
+  }
+
+  // Dynamic Send/Voice button state toggle based on typing
+  const composerInput = document.getElementById('composer-input');
+  const actionIcon = document.getElementById('composer-action-icon');
+  const actionBtn = document.getElementById('send-voice-action');
+
+  if (composerInput) {
+    composerInput.addEventListener('input', (e) => {
+      if (e.target.value.trim().length > 0) {
+        actionIcon.textContent = 'send';
+        actionBtn.setAttribute('aria-label', 'Send message');
+      } else {
+        actionIcon.textContent = 'mic';
+        actionBtn.setAttribute('aria-label', 'Record voice note');
+      }
+    });
+  }
+</script></main></body></html>

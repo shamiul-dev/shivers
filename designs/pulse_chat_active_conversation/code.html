@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary-fixed-dim": "#c3c0ff",
+          "primary-fixed": "#e3dfff",
+          "on-primary-fixed": "#100069",
+          "surface-bright": "#f8f9ff",
+          "on-surface-variant": "#464554",
+          "surface-container-high": "#dce9ff",
+          "surface": "#f8f9ff",
+          "secondary-fixed-dim": "#b4c5ff",
+          "surface-dim": "#cbdbf5",
+          "on-tertiary-fixed": "#001f26",
+          "on-error-container": "#93000a",
+          "surface-container": "#e5eeff",
+          "inverse-surface": "#213145",
+          "secondary": "#0051d5",
+          "surface-variant": "#d3e4fe",
+          "surface-container-highest": "#d3e4fe",
+          "inverse-on-surface": "#eaf1ff",
+          "on-secondary-fixed-variant": "#003ea8",
+          "on-primary": "#ffffff",
+          "on-secondary-container": "#fefcff",
+          "inverse-primary": "#c3c0ff",
+          "on-tertiary-fixed-variant": "#004e5c",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary": "#ffffff",
+          "tertiary-fixed": "#acedff",
+          "outline-variant": "#c7c4d7",
+          "on-error": "#ffffff",
+          "on-secondary-fixed": "#00174b",
+          "tertiary": "#00414d",
+          "primary": "#4338ca",
+          "on-tertiary-container": "#4ad5f4",
+          "tertiary-fixed-dim": "#4cd7f6",
+          "on-surface": "#0b1c30",
+          "tertiary-container": "#005a6a",
+          "outline": "#777586",
+          "on-primary-fixed-variant": "#372abf",
+          "on-background": "#0b1c30",
+          "secondary-fixed": "#dbe1ff",
+          "error": "#ba1a1a",
+          "error-container": "#ffdad6",
+          "background": "#f8f9ff",
+          "surface-container-low": "#eff4ff",
+          "primary-container": "#312e81",
+          "on-secondary": "#ffffff",
+          "on-primary-container": "#e0e7ff",
+          "secondary-container": "#316bf3",
+          "surface-tint": "#5148d7"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "2xl": "1rem",
+          "3xl": "1.5rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xl": "1.5rem",
+          "space-xs": "0.25rem",
+          "space-md": "0.75rem",
+          "space-lg": "1.25rem",
+          "margin-desktop": "2rem",
+          "space-2xs": "0.125rem",
+          "space-base": "1rem",
+          "space-sm": "0.5rem",
+          "margin": "1rem",
+          "space-2xl": "2rem",
+          "gutter-desktop": "1.5rem",
+          "space-3xl": "3rem",
+          "gutter": "1rem"
+        },
+        "fontFamily": {
+          "body": ["Plus Jakarta Sans", "sans-serif"]
+        }
+      }
+    }
+  };
+</script></head><body class="bg-surface font-body text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-primary"><aside class="fixed left-0 top-0 h-full w-[360px] lg:w-[380px] bg-surface-container-lowest z-30 flex flex-col border-r border-outline-variant/30"><div class="h-16 px-space-lg bg-surface-container-lowest flex items-center justify-between shrink-0 border-b border-outline-variant/20"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-sm shadow-primary/20"><span class="material-symbols-outlined text-[20px]">bolt</span></div><div><span class="font-bold text-[17px] text-on-surface tracking-tight">Pulse</span><span class="text-[11px] font-semibold text-primary ml-1.5 px-1.5 py-0.5 bg-primary-fixed/60 rounded-md">PRO</span></div></div><div class="flex items-center gap-1 text-on-surface-variant"><button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-low hover:text-primary transition-colors" title="New Message" type="button"><span class="material-symbols-outlined text-[19px]">edit_square</span></button><button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-low hover:text-on-surface transition-colors" title="More Options" type="button"><span class="material-symbols-outlined text-[19px]">more_horiz</span></button></div></div><div class="p-space-md pb-space-sm bg-surface-container-lowest shrink-0 space-y-space-sm"><div class="flex items-center gap-space-sm px-3.5 py-2 bg-surface-container-low/70 border border-outline-variant/30 rounded-xl focus-within:border-primary focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary/10 transition-all"><span class="material-symbols-outlined text-outline text-[18px]">search</span><input class="w-full bg-transparent text-[13px] text-on-surface placeholder:text-outline focus:outline-none" placeholder="Search conversations or contacts..." type="text"/><kbd class="text-[10px] text-outline bg-surface-container px-1.5 py-0.5 rounded font-mono">⌘K</kbd></div><nav class="flex items-center gap-1.5 overflow-x-auto pb-1" data-active-classes="bg-primary text-white"><button class="px-3 py-1 rounded-lg text-[12px] font-semibold bg-primary text-white shadow-sm shadow-primary/20 transition-all" type="button">All Chats</button><button class="px-3 py-1 rounded-lg text-[12px] font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5" type="button"><span>Unread</span><span class="w-4 h-4 rounded-full bg-secondary text-white text-[10px] flex items-center justify-center font-bold">2</span></button><button class="px-3 py-1 rounded-lg text-[12px] font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">Channels</button><button class="px-3 py-1 rounded-lg text-[12px] font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">Direct</button></nav></div><nav class="flex-1 overflow-y-auto px-space-sm space-y-1"><a aria-current="page" class="flex items-center gap-3 p-2.5 rounded-xl transition-all bg-primary-fixed/35 border border-primary/20 relative" data-path="active-thread" href="#"><div class="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-r-full"></div><div class="relative shrink-0"><div class="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">PT</div><span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white"></span></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-0.5"><span class="font-semibold text-[14px] text-on-surface truncate">Project Team</span><span class="text-[11px] font-medium text-primary">11:27 AM</span></div><p class="text-[12.5px] text-on-surface-variant truncate font-normal">Can't wait! See you in a bit 🙌</p></div></a><a class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-surface-container-low/70 transition-all group" data-path="chat-sarah" href="#"><div class="relative shrink-0"><img alt="Sarah Jenkins" class="w-11 h-11 rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDydvcgXQzRdCPZyHHOndbQ6AGrT9ytafpDwO8Oo6R3LuYL3LfNbZPsBtdsPZiciTGmujPdyTWNxuzBqRQuHjH_OaILZKanqqvuaVvTPmZuFhaEtsWyJcDmEF2hJgHRb_DtniqeL8UnmxGKByryJsBheTbHltFXAEA6IycHrELh4G6OYw38ED0VJ45BLcT5cxgFiKrGA0HSF6j3M2tYGAF5B9zbV0hvs72bAgVotc4OfhjrHv_d2oki"/><span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white"></span></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-0.5"><span class="font-semibold text-[14px] text-on-surface truncate group-hover:text-primary transition-colors">Sarah Jenkins</span><span class="text-[11px] text-outline">09:15 AM</span></div><p class="text-[12.5px] text-on-surface-variant truncate">Sounds great, let me review the app shell.</p></div></a><a class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-surface-container-low/70 transition-all group" data-path="chat-family" href="#"><div class="relative shrink-0"><div class="w-11 h-11 rounded-xl bg-surface-container-high text-primary flex items-center justify-center font-medium shrink-0"><span class="material-symbols-outlined text-[20px]">groups</span></div></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-0.5"><span class="font-semibold text-[14px] text-on-surface truncate group-hover:text-primary transition-colors">Design Guild</span><span class="text-[11px] text-outline">Yesterday</span></div><p class="text-[12.5px] text-on-surface-variant truncate">Alex: Figma component library v3 is ready</p></div><span class="w-5 h-5 rounded-full bg-secondary-container text-white text-[10px] font-bold flex items-center justify-center shrink-0">1</span></a><a class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-surface-container-low/70 transition-all group" data-path="chat-alex" href="#"><div class="relative shrink-0"><div class="w-11 h-11 rounded-xl bg-surface-container text-on-surface-variant flex items-center justify-center font-bold text-xs">MR</div><span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-zinc-300 rounded-full ring-2 ring-white"></span></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-0.5"><span class="font-semibold text-[14px] text-on-surface truncate group-hover:text-primary transition-colors">Marcus Reid</span><span class="text-[11px] text-outline">Tuesday</span></div><p class="text-[12.5px] text-on-surface-variant truncate">Thanks for sharing the updated mockups!</p></div></a></nav><div class="p-2.5 bg-surface-container-low/50 border-t border-outline-variant/20 shrink-0 flex items-center justify-between"><div class="flex items-center gap-2.5"><img alt="Profile" class="w-9 h-9 rounded-xl object-cover ring-1 ring-outline-variant/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2BL0txN-AATZLIoCkhyoAKZKeE8DI6d059SY8KK1hYEaLG7STLVWMX_lFc6rvr31c_DWtuO_FtT75mqWWqwkLHrkO7Y0k2VWHxJJQycPjCnIYK3z0FLnxgWOYf0m9ZZbaEBSyJloC9dn9rCJveGftxxdxH06kFDGP3MfwGI0OMxpYggoIe3XitmSdHlqf2SNM70iqK4sGPSmPj8r81WreWUko2oHsvGqZgUP8ZzXPDFHUT_Giv_cT"/><div><div class="text-[13px] font-semibold text-on-surface leading-tight">Alex Mercer</div><div class="text-[11px] text-emerald-600 font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block"></span>Active now</div></div></div><div class="flex items-center gap-1 text-on-surface-variant"><button class="p-1.5 rounded-lg hover:bg-surface-container hover:text-on-surface transition-colors" title="Settings" type="button"><span class="material-symbols-outlined text-[19px]">settings</span></button></div></div></aside><div class="pl-[360px] lg:pl-[380px] flex-1 flex flex-col min-h-screen bg-surface"><header class="fixed top-0 left-[360px] lg:left-[380px] right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md z-20 flex items-center justify-between px-6 border-b border-outline-variant/25"><div class="flex items-center gap-3.5"><div class="relative"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">PT</div><span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white"></span></div><div><div class="flex items-center gap-2"><h1 class="font-bold text-[15px] text-on-surface leading-tight">Project Team</h1><span class="text-[10px] font-semibold uppercase tracking-wider text-primary bg-primary-fixed/60 px-1.5 py-0.5 rounded">6 members</span></div><p class="text-[11.5px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>4 active now</p></div></div><nav class="flex items-center gap-1.5 text-on-surface-variant"><button class="w-9 h-9 rounded-xl hover:bg-surface-container-low hover:text-primary flex items-center justify-center transition-colors border border-transparent hover:border-outline-variant/30" title="Audio Call" type="button"><span class="material-symbols-outlined text-[20px]">call</span></button><button class="w-9 h-9 rounded-xl hover:bg-surface-container-low hover:text-primary flex items-center justify-center transition-colors border border-transparent hover:border-outline-variant/30" title="Video Meeting" type="button"><span class="material-symbols-outlined text-[20px]">videocam</span></button><button class="w-9 h-9 rounded-xl hover:bg-surface-container-low hover:text-on-surface flex items-center justify-center transition-colors border border-transparent hover:border-outline-variant/30" title="Search conversation" type="button"><span class="material-symbols-outlined text-[20px]">search</span></button><div class="h-4 w-px bg-outline-variant/30 mx-1"></div><button class="w-9 h-9 rounded-xl hover:bg-surface-container-low hover:text-on-surface flex items-center justify-center transition-colors" title="Chat details" type="button"><span class="material-symbols-outlined text-[20px]">info</span></button></nav></header><main class="relative pt-16 flex-1 flex flex-col min-h-screen bg-[#f8f9ff]"><div class="flex flex-col w-full h-[calc(100vh-4rem)] relative select-none"><div class="absolute inset-0 bg-[#f8f9ff] overflow-hidden pointer-events-none z-0"><div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div><div class="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div><svg class="w-full h-full opacity-[0.035] text-on-surface" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg"><defs><pattern height="24" id="pulse-dot-grid" patternunits="userSpaceOnUse" width="24"><circle cx="2" cy="2" fill="currentColor" r="1"></circle></pattern></defs><rect fill="url(#pulse-dot-grid)" height="100%" width="100%"></rect></svg></div><div class="relative z-10 flex-1 overflow-y-auto px-4 md:px-8 py-5 space-y-4 flex flex-col items-center" id="messages-container"><div class="my-1"><span class="px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/20 shadow-[0_1px_2px_rgba(0,0,0,0.03)] text-[11px] font-semibold text-on-surface-variant">Today, November 14</span></div><div class="w-full max-w-[760px] flex flex-col space-y-4"><!-- INCOMING MESSAGE 1 --><div class="flex items-start gap-2.5 max-w-[85%] md:max-w-[70%]"><img alt="Elena" class="w-7 h-7 rounded-lg object-cover mt-1 shrink-0 ring-1 ring-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDydvcgXQzRdCPZyHHOndbQ6AGrT9ytafpDwO8Oo6R3LuYL3LfNbZPsBtdsPZiciTGmujPdyTWNxuzBqRQuHjH_OaILZKanqqvuaVvTPmZuFhaEtsWyJcDmEF2hJgHRb_DtniqeL8UnmxGKByryJsBheTbHltFXAEA6IycHrELh4G6OYw38ED0VJ45BLcT5cxgFiKrGA0HSF6j3M2tYGAF5B9zbV0hvs72bAgVotc4OfhjrHv_d2oki"/><div class="flex flex-col gap-1 min-w-0"><div class="flex items-baseline gap-2"><span class="text-[12px] font-semibold text-on-surface">Sarah Jenkins</span><span class="text-[11px] text-outline">11:24 AM</span></div><div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_1px_3px_rgba(11,28,48,0.04)] text-[14px] text-on-surface leading-relaxed">
+                  Hey team! Are you ready for lunch today? We picked the Italian trattoria around the corner 🍕
+                </div><!-- Quick Reaction Pill --><div class="flex items-center gap-1 -mt-0.5 ml-1"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-low border border-outline-variant/25 text-[11px] font-medium text-on-surface-variant hover:bg-surface-container cursor-pointer transition-colors shadow-2xs"><span>🙌</span><span class="text-[10px]">2</span></span></div></div></div><!-- INCOMING MESSAGE 2 (IMAGE ATTACHMENT) --><div class="flex items-start gap-2.5 max-w-[85%] md:max-w-[70%]"><div class="w-7 shrink-0"></div><div class="flex flex-col gap-1 min-w-0"><div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-1.5 shadow-[0_1px_3px_rgba(11,28,48,0.04)] overflow-hidden"><div class="rounded-xl overflow-hidden relative group cursor-pointer"><img class="w-full h-52 object-cover transition-transform duration-300 group-hover:scale-102" data-alt="A warm, vibrant rustic Italian trattoria restaurant terrace with steaming authentic Neapolitan wood-fired pizza and pasta dishes arranged on a wooden table, flooded with midday European sunlight, high detail modern photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvgnUaRyJTAd4gIwif3crLdUz_GQR1hst83htrOj1F9k8WRtppV_pmM912fuRjOWBN-yNgoSrnPf7lO3kRojffOBdLGKMhRRqtnksXZEf5Vhu5pX9a68ce9MSHDSPUXv-JFe98_SNxG7Y_mtQ1aSnifRakoAZJ5PiRCqCC2XIMux3nd3ny1s6LR7DBeycBL7vD45mgm6JqRK4SjecNz9zoiiyNX9WbQEaX9O3zi6DMoZ4tRmqN1VqM"/><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div><div class="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white"><span class="text-[12px] font-semibold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/20">Trattoria Bella Vista</span><span class="material-symbols-outlined text-[18px]">open_in_new</span></div></div><div class="px-2.5 py-2 flex items-center justify-between"><span class="text-[13px] font-medium text-on-surface">Table is reserved for 12:30!</span><span class="text-[11px] text-outline">11:25 AM</span></div></div></div></div><!-- OUTGOING MESSAGE 1 --><div class="flex items-end justify-end gap-1.5 ml-auto max-w-[85%] md:max-w-[70%] group"><div class="flex flex-col items-end gap-1"><div class="bg-gradient-to-r from-primary to-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_2px_8px_rgba(67,56,202,0.25)] text-[14px] leading-relaxed">
+                  Sounds great! Just wrapping up the new design system tokens. Give me 5 minutes and I'll meet you downstairs!
+                </div><div class="flex items-center gap-1.5 pr-1 text-[11px] text-outline"><span class="font-normal">11:26 AM</span><span class="material-symbols-outlined text-[14px] text-primary" title="Read by team">done_all</span></div></div></div><!-- INCOMING MESSAGE 3 (VOICE NOTE) --><div class="flex items-start gap-2.5 max-w-[85%] md:max-w-[380px]"><img alt="Elena" class="w-7 h-7 rounded-lg object-cover mt-1 shrink-0 ring-1 ring-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDydvcgXQzRdCPZyHHOndbQ6AGrT9ytafpDwO8Oo6R3LuYL3LfNbZPsBtdsPZiciTGmujPdyTWNxuzBqRQuHjH_OaILZKanqqvuaVvTPmZuFhaEtsWyJcDmEF2hJgHRb_DtniqeL8UnmxGKByryJsBheTbHltFXAEA6IycHrELh4G6OYw38ED0VJ45BLcT5cxgFiKrGA0HSF6j3M2tYGAF5B9zbV0hvs72bAgVotc4OfhjrHv_d2oki"/><div class="flex-1 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl rounded-tl-sm p-3 shadow-[0_1px_3px_rgba(11,28,48,0.04)]"><div class="flex items-center gap-3"><button class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 hover:bg-primary-container transition-all shadow-sm shadow-primary/20" id="audio-play-btn" type="button"><span class="material-symbols-outlined text-[22px] ml-0.5" id="audio-play-icon">play_arrow</span></button><div class="flex-1 min-w-0"><div class="flex items-center gap-[3px] h-6 w-full cursor-pointer overflow-hidden py-1"><span class="w-[3px] h-2 bg-primary rounded-full"></span><span class="w-[3px] h-4 bg-primary rounded-full"></span><span class="w-[3px] h-5 bg-primary rounded-full"></span><span class="w-[3px] h-3 bg-primary rounded-full"></span><span class="w-[3px] h-6 bg-primary rounded-full"></span><span class="w-[3px] h-4 bg-primary rounded-full"></span><span class="w-[3px] h-2 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-5 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-3 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-6 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-5 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-2 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-4 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-5 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-3 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-2 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-4 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-6 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-3 bg-outline-variant/60 rounded-full"></span><span class="w-[3px] h-1 bg-outline-variant/60 rounded-full"></span></div><div class="flex items-center justify-between text-[11px] text-outline mt-0.5"><span class="font-semibold text-primary">0:42</span><span>Voice note</span></div></div></div></div></div><!-- OUTGOING MESSAGE 2 --><div class="flex items-end justify-end gap-1.5 ml-auto max-w-[85%] md:max-w-[70%] group"><div class="flex flex-col items-end gap-1"><div class="bg-gradient-to-r from-primary to-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_2px_8px_rgba(67,56,202,0.25)] text-[14px] leading-relaxed">
+                  Can't wait! See you in a bit 🙌
+                </div><div class="flex items-center gap-1.5 pr-1 text-[11px] text-outline"><span class="font-normal">11:27 AM</span><span class="material-symbols-outlined text-[14px] text-primary" title="Read by team">done_all</span></div></div></div></div></div><!-- MODERN FLOATING MESSAGE COMPOSER --><div class="relative z-20 px-4 md:px-8 pb-4 pt-2 bg-gradient-to-t from-surface via-surface/90 to-transparent"><div class="max-w-[760px] mx-auto bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-center gap-1.5"><div class="relative group/attach"><button class="w-9 h-9 rounded-xl flex items-center justify-center text-outline hover:text-primary hover:bg-surface-container-low transition-colors" id="attach-btn" title="Add attachment" type="button"><span class="material-symbols-outlined text-[20px]">add_circle</span></button><!-- Attachment Popover Menu --><div class="hidden absolute bottom-12 left-0 mb-2 p-1.5 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-xl flex flex-col gap-1 w-48 z-30" id="attach-menu"><button class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-container-low text-on-surface text-[13px] font-medium transition-colors text-left" type="button"><span class="w-7 h-7 rounded-lg bg-indigo-50 text-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[16px]">photo_library</span></span><span>Photos &amp; Video</span></button><button class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-container-low text-on-surface text-[13px] font-medium transition-colors text-left" type="button"><span class="w-7 h-7 rounded-lg bg-blue-50 text-secondary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[16px]">description</span></span><span>Document</span></button><button class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-container-low text-on-surface text-[13px] font-medium transition-colors text-left" type="button"><span class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[16px]">poll</span></span><span>Team Poll</span></button></div></div><div class="flex-1 flex items-center min-w-0 px-2"><input autocomplete="off" class="w-full bg-transparent text-[14px] text-on-surface placeholder:text-outline focus:outline-none py-1.5" id="chat-input" placeholder="Type a message or press '/' for commands..." type="text"/></div><div class="flex items-center gap-1 shrink-0"><button class="w-8 h-8 rounded-xl flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" title="Insert Emoji" type="button"><span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span></button><button class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 text-outline hover:bg-surface-container-low" id="send-action-btn" title="Voice note" type="button"><span class="material-symbols-outlined text-[20px]" id="send-action-icon">mic</span></button></div></div><div class="max-w-[760px] mx-auto mt-1.5 flex items-center justify-between px-2 text-[11px] text-outline"><span><strong class="font-medium text-on-surface-variant">Return</strong> to send · <strong class="font-medium text-on-surface-variant">Shift + Return</strong> for new line</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px] text-emerald-600">lock</span> End-to-end encrypted</span></div></div></div><script>
+  (function() {
+    const input = document.getElementById('chat-input');
+    const actionBtn = document.getElementById('send-action-btn');
+    const actionIcon = document.getElementById('send-action-icon');
+    const attachBtn = document.getElementById('attach-btn');
+    const attachMenu = document.getElementById('attach-menu');
+    const audioPlayBtn = document.getElementById('audio-play-btn');
+    const audioPlayIcon = document.getElementById('audio-play-icon');
+    const messagesContainer = document.getElementById('messages-container');
+
+    // Toggle attachment tray
+    if (attachBtn && attachMenu) {
+      attachBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        attachMenu.classList.toggle('hidden');
+      });
+      document.addEventListener('click', () => {
+        if (!attachMenu.classList.contains('hidden')) {
+          attachMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // Toggle Mic -> Send button based on text input
+    if (input && actionBtn && actionIcon) {
+      input.addEventListener('input', () => {
+        const hasText = input.value.trim().length > 0;
+        if (hasText) {
+          actionBtn.classList.remove('text-outline', 'hover:bg-surface-container-low');
+          actionBtn.classList.add('bg-primary', 'hover:bg-primary-container', 'text-white', 'shadow-sm', 'shadow-primary/20');
+          actionIcon.textContent = 'arrow_upward';
+          actionBtn.title = 'Send message';
+        } else {
+          actionBtn.classList.add('text-outline', 'hover:bg-surface-container-low');
+          actionBtn.classList.remove('bg-primary', 'hover:bg-primary-container', 'text-white', 'shadow-sm', 'shadow-primary/20');
+          actionIcon.textContent = 'mic';
+          actionBtn.title = 'Voice note';
+        }
+      });
+
+      // Submit message on Enter
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey && input.value.trim().length > 0) {
+          e.preventDefault();
+          appendOutgoingMessage(input.value.trim());
+          input.value = '';
+          input.dispatchEvent(new Event('input'));
+        }
+      });
+
+      actionBtn.addEventListener('click', () => {
+        if (input.value.trim().length > 0) {
+          appendOutgoingMessage(input.value.trim());
+          input.value = '';
+          input.dispatchEvent(new Event('input'));
+        }
+      });
+    }
+
+    // Audio simulated playback toggle
+    let isPlaying = false;
+    if (audioPlayBtn && audioPlayIcon) {
+      audioPlayBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        audioPlayIcon.textContent = isPlaying ? 'pause' : 'play_arrow';
+      });
+    }
+
+    // Helper to append a dynamic outgoing bubble smoothly
+    function appendOutgoingMessage(text) {
+      const streamWrapper = messagesContainer.querySelector('.max-w-\\[760px\\]');
+      if (!streamWrapper) return;
+
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const timeStr = `${hours}:${minutes} ${ampm}`;
+
+      const bubbleWrap = document.createElement('div');
+      bubbleWrap.className = 'flex items-end justify-end gap-1.5 ml-auto max-w-[85%] md:max-w-[70%] group transition-all duration-300 transform translate-y-2 opacity-0';
+      bubbleWrap.innerHTML = `
+        <div class="flex flex-col items-end gap-1">
+          <div class="bg-gradient-to-r from-primary to-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_2px_8px_rgba(67,56,202,0.25)] text-[14px] leading-relaxed break-words">
+            ${escapeHTML(text)}
+          </div>
+          <div class="flex items-center gap-1.5 pr-1 text-[11px] text-outline">
+            <span class="font-normal">${timeStr}</span>
+            <span class="material-symbols-outlined text-[14px] text-primary">done</span>
+          </div>
+        </div>
+      `;
+      streamWrapper.appendChild(bubbleWrap);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        bubbleWrap.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      // Smooth scroll to bottom
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  })();
+</script></main></div></body></html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="web_blank" name="shell-type">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    @keyframes laserScan {
+      0%, 100% { top: 12px; opacity: 0.8; }
+      50% { top: 220px; opacity: 1; }
+    }
+    .animate-laser {
+      animation: laserScan 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed-dim": "#c3c0ff",
+            "primary-fixed": "#e3dfff",
+            "on-primary-fixed": "#100069",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#464554",
+            "surface-container-high": "#dce9ff",
+            "surface": "#f8f9ff",
+            "secondary-fixed-dim": "#b4c5ff",
+            "surface-dim": "#cbdbf5",
+            "on-tertiary-fixed": "#001f26",
+            "on-error-container": "#93000a",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#213145",
+            "secondary": "#0051d5",
+            "surface-variant": "#d3e4fe",
+            "surface-container-highest": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "on-secondary-fixed-variant": "#003ea8",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#fefcff",
+            "inverse-primary": "#c3c0ff",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#acedff",
+            "outline-variant": "#c7c4d7",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#00174b",
+            "tertiary": "#00414d",
+            "primary": "#2a14b4",
+            "on-tertiary-container": "#4ad5f4",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "on-surface": "#0b1c30",
+            "tertiary-container": "#005a6a",
+            "outline": "#777586",
+            "on-primary-fixed-variant": "#372abf",
+            "on-background": "#0b1c30",
+            "secondary-fixed": "#dbe1ff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "background": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "primary-container": "#4338ca",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#c1beff",
+            "secondary-container": "#316bf3",
+            "surface-tint": "#5148d7"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-sans text-on-surface min-h-screen relative flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Ambient Gradient Header Accent -->
+<div class="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-surface-container via-surface-container-low to-transparent -z-10 pointer-events-none"></div>
+<!-- Global Top Bar -->
+<header class="w-full max-w-6xl mx-auto px-6 pt-7 pb-4 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Modern Brand Mark -->
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20 text-on-primary">
+<span class="material-symbols-outlined text-[22px]">all_inclusive</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-lg tracking-tight text-on-surface">Pulse</span>
+<span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">Web</span>
+</div>
+</div>
+</div>
+<!-- Security & Status indicator -->
+<div class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/40 shadow-sm text-on-surface-variant text-xs font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="">End-to-end encrypted protocol</span>
+</div>
+</header>
+<!-- Main Login Card Container -->
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-8"><div class="flex flex-col w-full items-center justify-center relative">
+<!-- Subtle ambient glow background shapes contained within parent -->
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-fixed blur-3xl opacity-40 rounded-full pointer-events-none -z-10"></div>
+<div class="absolute top-48 left-1/3 w-64 h-64 bg-secondary-fixed blur-2xl opacity-30 rounded-full pointer-events-none -z-10"></div>
+<!-- Main Auth Container -->
+<div class="w-full max-w-md mx-auto">
+<div class="bg-surface-container-lowest rounded-3xl p-8 sm:p-10 shadow-xl shadow-surface-dim/40 relative">
+<!-- Card Header: Brand Icon & Welcome -->
+<div class="flex flex-col items-center text-center mb-8">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary/25 mb-4 group transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">all_inclusive</span>
+</div>
+<div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-container-low text-primary mb-2.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Pulse Web 3.4</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Welcome back</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Log in to your account to continue chatting</p>
+</div>
+<!-- VIEW 1: Standard Password/Email Auth Form -->
+<div class="space-y-6" id="emailAuthSection">
+<!-- Quick Social Logins -->
+
+<!-- Modern Soft Divider -->
+
+<!-- Form Elements -->
+<form class="space-y-4" id="loginForm" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="loginEmail">Work or Personal Email</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-lg pointer-events-none">mail</span>
+<input class="w-full pl-11 pr-4 py-3 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-outline-variant outline-none focus:bg-surface-container transition-all" id="loginEmail" placeholder="name@company.com" required="" type="email">
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="loginPassword">Password</label>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot password?</a>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-lg pointer-events-none">lock</span>
+<input class="w-full pl-11 pr-11 py-3 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-outline-variant outline-none focus:bg-surface-container transition-all" id="loginPassword" placeholder="••••••••••••" required="" type="password">
+<button class="absolute right-3.5 text-on-surface-variant hover:text-on-surface transition-colors p-0.5 rounded-md" id="togglePasswordVisibility" type="button">
+<span class="material-symbols-outlined text-lg" id="passwordEyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me Checkbox -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center space-x-2.5 cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-0 focus:ring-offset-0 bg-surface-container-low border-none transition-colors cursor-pointer" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Remember me for 30 days</span>
+</label>
+</div>
+<!-- Primary Submit Button -->
+<button class="w-full mt-3 py-3.5 px-6 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-title-sm text-title-sm flex items-center justify-center space-x-2 shadow-lg shadow-primary/25 hover:opacity-95 active:scale-[0.99] transition-all" id="submitLoginBtn" type="submit">
+<span class="">Log In to Pulse</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</form>
+<!-- Secondary Option: Scan QR Code -->
+<div class="pt-2">
+<button class="w-full py-2.5 px-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center space-x-2 transition-colors" id="switchToQrBtn" type="button">
+<span class="material-symbols-outlined text-base">qr_code_scanner</span>
+<span class="">Or scan QR code to link device</span>
+</button>
+</div>
+</div>
+<!-- VIEW 2: QR Device Link View (Hidden by default) -->
+<div class="hidden flex flex-col items-center text-center space-y-5 animate-fade-in" id="qrAuthSection">
+<div class="relative p-4 bg-surface-container-lowest rounded-2xl shadow-inner flex items-center justify-center">
+<!-- Simulated Clean QR Code Graphic with Pulse brand center badge -->
+<div class="relative w-52 h-52 bg-surface-container-low rounded-xl p-3 flex flex-col justify-between overflow-hidden">
+<!-- Laser scan beam micro-interaction -->
+<div class="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent animate-laser pointer-events-none"></div>
+<!-- Stylized QR blocks pattern inline -->
+<div class="w-full h-full grid grid-cols-6 grid-rows-6 gap-1.5 opacity-80">
+<div class="bg-primary rounded-sm col-span-2 row-span-2 p-1"><div class="w-full h-full bg-surface-container-lowest rounded-xs flex items-center justify-center"><div class="w-2.5 h-2.5 bg-primary rounded-xs"></div></div></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-primary rounded-sm col-span-2 row-span-2 p-1"><div class="w-full h-full bg-surface-container-lowest rounded-xs flex items-center justify-center"><div class="w-2.5 h-2.5 bg-primary rounded-xs"></div></div></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-primary rounded-xs"></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-primary rounded-xs"></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-primary rounded-xs"></div>
+<div class="bg-primary rounded-sm col-span-2 row-span-2 p-1"><div class="w-full h-full bg-surface-container-lowest rounded-xs flex items-center justify-center"><div class="w-2.5 h-2.5 bg-primary rounded-xs"></div></div></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-surface-variant rounded-xs"></div>
+<div class="bg-on-surface rounded-xs"></div>
+<div class="bg-primary rounded-xs"></div>
+</div>
+<!-- Center Logo Overlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-lg">all_inclusive</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-1.5 max-w-xs">
+<p class="font-title-sm text-title-sm text-on-surface">Scan this code with Pulse Mobile</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Open Pulse on your phone, go to Settings &gt; Linked Devices, and aim your camera.</p>
+</div>
+<button class="w-full py-2.5 px-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center space-x-1.5 transition-colors" id="backToEmailBtn" type="button">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="">Return to email login</span>
+</button>
+</div>
+<!-- Card Footer -->
+<div class="mt-8 pt-6 text-center border-t border-surface-container-high/60">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Don't have an account? 
+          <a class="font-title-sm text-title-sm text-primary hover:text-primary-container transition-colors ml-1" href="/signup">Sign up</a>
+</p>
+</div>
+</div>
+<!-- Bottom Compliance & Security Assurance Badges -->
+<div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-on-surface-variant">
+<div class="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/80 shadow-sm backdrop-blur-sm">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-caption text-caption">End-to-end encrypted protocol</span>
+</div>
+<div class="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/80 shadow-sm backdrop-blur-sm">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-caption text-caption">SOC2 Type II compliant</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Password toggle
+    const togglePassBtn = document.getElementById('togglePasswordVisibility');
+    const passInput = document.getElementById('loginPassword');
+    const eyeIcon = document.getElementById('passwordEyeIcon');
+
+    if (togglePassBtn && passInput && eyeIcon) {
+      togglePassBtn.addEventListener('click', function() {
+        const isPassword = passInput.getAttribute('type') === 'password';
+        passInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+      });
+    }
+
+    // Toggle between Email Login and QR Scan login
+    const switchQrBtn = document.getElementById('switchToQrBtn');
+    const backEmailBtn = document.getElementById('backToEmailBtn');
+    const emailSection = document.getElementById('emailAuthSection');
+    const qrSection = document.getElementById('qrAuthSection');
+
+    if (switchQrBtn && backEmailBtn && emailSection && qrSection) {
+      switchQrBtn.addEventListener('click', function() {
+        emailSection.classList.add('hidden');
+        qrSection.classList.remove('hidden');
+      });
+
+      backEmailBtn.addEventListener('click', function() {
+        qrSection.classList.add('hidden');
+        emailSection.classList.remove('hidden');
+      });
+    }
+  })();
+</script></main>
+<!-- Login with Phone/Email Modal Overlay -->
+<div class="hidden fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-center justify-center p-4" id="phoneLoginModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-outline-variant/30 flex flex-col relative animate-fade-in">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors" id="closePhoneModal" type="button">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+<div class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-xl">phonelink_lock</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface mb-1">Sign in with phone or email</h3>
+<p class="text-xs text-on-surface-variant mb-6">Enter your phone number or registered email to receive a 6-digit confirmation code.</p>
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Country / Region</label>
+<div class="w-full px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-xl text-sm text-on-surface flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<span class="">United States (+1)</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Phone number or Email</label>
+<div class="flex">
+<span class="inline-flex items-center px-3.5 rounded-l-xl bg-surface-container border border-r-0 border-outline-variant/40 text-sm text-on-surface-variant font-medium">+1</span>
+<input class="flex-1 px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-r-xl text-sm text-on-surface placeholder:text-outline-variant outline-none focus:border-primary focus:bg-surface-container-lowest transition-all" placeholder="(555) 234-5678" type="text">
+</div>
+</div>
+<button class="w-full py-3 mt-3 bg-primary hover:bg-primary-container text-on-primary rounded-xl text-sm font-semibold transition-all shadow-md shadow-primary/20 active:scale-[0.98]" type="submit">
+          Send Verification Code
+        </button>
+</form>
+</div>
+</div>
+<!-- Minimal Interactive Script -->
+<script>
+    (function() {
+      // Modal Handlers
+      const toggleBtn = document.getElementById('togglePhoneLoginBtn');
+      const modal = document.getElementById('phoneLoginModal');
+      const closeBtn = document.getElementById('closePhoneModal');
+
+      if (toggleBtn && modal && closeBtn) {
+        toggleBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+        });
+        closeBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+        });
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+      }
+
+      // Refresh QR simulation
+      const refreshBtn = document.getElementById('refreshBtn');
+      const reloadBackdrop = document.getElementById('reloadBackdrop');
+      if (refreshBtn && reloadBackdrop) {
+        refreshBtn.addEventListener('click', () => {
+          reloadBackdrop.classList.add('hidden');
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>

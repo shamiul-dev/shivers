@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_blank" name="shell-type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    @keyframes laserScan {
+      0%, 100% { top: 12px; opacity: 0.8; }
+      50% { top: 220px; opacity: 1; }
+    }
+    .animate-laser {
+      animation: laserScan 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed-dim": "#c3c0ff",
+            "primary-fixed": "#e3dfff",
+            "on-primary-fixed": "#100069",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#464554",
+            "surface-container-high": "#dce9ff",
+            "surface": "#f8f9ff",
+            "secondary-fixed-dim": "#b4c5ff",
+            "surface-dim": "#cbdbf5",
+            "on-tertiary-fixed": "#001f26",
+            "on-error-container": "#93000a",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#213145",
+            "secondary": "#0051d5",
+            "surface-variant": "#d3e4fe",
+            "surface-container-highest": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "on-secondary-fixed-variant": "#003ea8",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#fefcff",
+            "inverse-primary": "#c3c0ff",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#acedff",
+            "outline-variant": "#c7c4d7",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#00174b",
+            "tertiary": "#00414d",
+            "primary": "#2a14b4",
+            "on-tertiary-container": "#4ad5f4",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "on-surface": "#0b1c30",
+            "tertiary-container": "#005a6a",
+            "outline": "#777586",
+            "on-primary-fixed-variant": "#372abf",
+            "on-background": "#0b1c30",
+            "secondary-fixed": "#dbe1ff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "background": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "primary-container": "#4338ca",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#c1beff",
+            "secondary-container": "#316bf3",
+            "surface-tint": "#5148d7"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-sans text-on-surface min-h-screen relative flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Ambient Gradient Header Accent -->
+<div class="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-surface-container via-surface-container-low to-transparent -z-10 pointer-events-none"></div>
+<!-- Global Top Bar -->
+<header class="w-full max-w-6xl mx-auto px-6 pt-7 pb-4 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Modern Brand Mark -->
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20 text-on-primary">
+<span class="material-symbols-outlined text-[22px]">all_inclusive</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-lg tracking-tight text-on-surface">Pulse</span>
+<span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">Web</span>
+</div>
+</div>
+</div>
+<!-- Security & Status indicator -->
+<div class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/40 shadow-sm text-on-surface-variant text-xs font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span>End-to-end encrypted protocol</span>
+</div>
+</header>
+<!-- Main Login Card Container -->
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-8"><div class="flex flex-col w-full items-center justify-center relative">
+<!-- Subtle decorative ambient orbs -->
+<div class="absolute -top-12 -left-16 w-72 h-72 bg-gradient-to-br from-primary-fixed to-secondary-fixed opacity-40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute -bottom-16 -right-16 w-80 h-80 bg-gradient-to-tr from-secondary-fixed to-surface-container-high opacity-35 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Primary Verification Card Container -->
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-3xl p-8 sm:p-10 shadow-2xl relative transition-all duration-300">
+<!-- Top Micro Bar: Status Ribbon -->
+<div class="flex items-center justify-between mb-8 pb-4 bg-surface-container-low/60 -mx-8 -mt-8 sm:-mx-10 sm:-mt-10 px-8 sm:px-10 pt-6 rounded-t-3xl">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Verification Step 2 of 2</span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant/80">
+<span class="material-symbols-outlined text-sm text-secondary">lock</span>
+<span class="font-caption text-caption text-on-surface-variant">256-bit TLS</span>
+</div>
+</div>
+<!-- Animated Badge / Mail Icon Header -->
+<div class="flex flex-col items-center text-center">
+<div class="relative mb-6 group cursor-default">
+<!-- Pulsing / Radiant Accent Rings -->
+<div class="absolute -inset-2.5 rounded-3xl bg-gradient-to-r from-primary to-secondary-container opacity-20 blur-md group-hover:opacity-35 transition-all duration-700"></div>
+<div class="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-primary-container via-secondary to-primary opacity-30 animate-pulse"></div>
+<!-- Central Icon Container -->
+<div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-container via-primary to-secondary flex items-center justify-center text-on-primary shadow-lg shadow-primary/25">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mark_email_read</span>
+<!-- Small corner notification node -->
+<div class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<span class="w-3.5 h-3.5 rounded-full bg-secondary-container flex items-center justify-center text-[9px] text-on-primary font-bold">✓</span>
+</div>
+</div>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-2">
+        Verify your email
+      </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm mx-auto leading-relaxed">
+        We sent a 6-digit verification code to
+        <span class="font-semibold text-on-surface bg-surface-container-low px-2 py-0.5 rounded-md inline-block my-0.5">sarah@example.com</span>.
+        Enter the code below to confirm your account.
+      </p>
+</div>
+<!-- OTP Form Section -->
+<form class="mt-8 flex flex-col items-center w-full" id="otpForm" onsubmit="event.preventDefault(); handleVerification();">
+<!-- 6-digit input fields container -->
+<div class="flex items-center justify-between gap-2 sm:gap-3 w-full mb-6" id="otpGroup">
+<!-- Digit 1 -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input autocomplete="one-time-code" class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-low rounded-xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all shadow-sm selection:bg-transparent" id="otp-0" inputmode="numeric" maxlength="1" type="text" value="5"/>
+</div>
+<!-- Digit 2 -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-low rounded-xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all shadow-sm selection:bg-transparent" id="otp-1" inputmode="numeric" maxlength="1" type="text" value="8"/>
+</div>
+<!-- Digit 3 -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-low rounded-xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all shadow-sm selection:bg-transparent" id="otp-2" inputmode="numeric" maxlength="1" type="text" value="2"/>
+</div>
+<!-- Center Divider Dot -->
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<!-- Digit 4 -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-low rounded-xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all shadow-sm selection:bg-transparent" id="otp-3" inputmode="numeric" maxlength="1" type="text" value="0"/>
+</div>
+<!-- Digit 5: Active Focused State with glowing indicator -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input autofocus="" class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest rounded-xl focus:outline-none transition-all shadow-md shadow-primary/10 selection:bg-transparent" id="otp-4" inputmode="numeric" maxlength="1" type="text" value=""/>
+<!-- Micro simulated pulsing cursor indicator inside empty focused field -->
+<span class="absolute inset-x-0 bottom-3.5 mx-auto w-3 h-0.5 bg-primary rounded-full animate-ping pointer-events-none opacity-75"></span>
+</div>
+<!-- Digit 6 -->
+<div class="relative flex-1 aspect-square max-w-[62px]">
+<input class="w-full h-full text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-low rounded-xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:outline-none transition-all shadow-sm selection:bg-transparent" id="otp-5" inputmode="numeric" maxlength="1" type="text" value=""/>
+</div>
+</div>
+<!-- Expiry Countdown & Resend Metas -->
+<div class="w-full flex items-center justify-between py-2 px-1 text-on-surface-variant font-label-md text-label-md mb-6">
+<!-- Live Countdown -->
+<div class="flex items-center space-x-1.5 text-on-surface">
+<span class="material-symbols-outlined text-base text-secondary animate-spin" style="animation-duration: 9s;">schedule</span>
+<span>Code expires in <strong class="font-semibold text-primary font-mono text-body-sm" id="countdownTimer">04:45</strong></span>
+</div>
+<!-- Resend Trigger -->
+<div class="flex items-center">
+<button class="group text-on-surface-variant hover:text-primary transition-colors flex items-center space-x-1 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-label-md" id="resendCodeBtn" onclick="triggerResend()" type="button">
+<span>Didn't receive code?</span>
+<span class="text-primary group-hover:underline font-semibold ml-1">Resend (<span id="resendSeconds">30</span>s)</span>
+</button>
+</div>
+</div>
+<!-- Primary Action CTA -->
+<button class="w-full h-12 bg-gradient-to-r from-primary-container via-primary to-secondary hover:brightness-105 active:scale-[0.99] text-on-primary rounded-full font-title-sm text-title-sm font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center space-x-2 transition-all group" id="verifyBtn" type="submit">
+<span>Verify &amp; Continue</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</form>
+<!-- Alternative Links -->
+<div class="mt-6 pt-5 border-t-0 flex flex-col items-center space-y-3 bg-surface-container-low/40 rounded-2xl py-3 px-4">
+<div class="flex items-center justify-center space-x-4 text-center">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center space-x-1" onclick="alert('Redirecting to update email address...')" type="button">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+<span>Use a different email</span>
+</button>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center space-x-1" onclick="history.back()" type="button">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span>Back to login</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Visual Info & Trust Row -->
+<div class="w-full max-w-lg mt-6 px-4 flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-label-sm text-label-sm gap-3">
+<!-- Help Trigger -->
+<a class="hover:text-primary transition-colors flex items-center space-x-1" href="#">
+<span class="material-symbols-outlined text-sm text-outline">help</span>
+<span>Need help? Contact Pulse support</span>
+</a>
+<!-- Security Micro-Badge -->
+<div class="flex items-center space-x-1.5 bg-surface-container-low px-3 py-1 rounded-full shadow-sm text-on-surface">
+<span class="material-symbols-outlined text-xs text-secondary">verified</span>
+<span class="font-caption text-caption text-on-surface-variant">Hardware-backed zero-trust authentication</span>
+</div>
+</div>
+<!-- Interactive OTP Script Handling -->
+<script>
+    (function initOtpFlow() {
+      const inputs = Array.from(document.querySelectorAll('#otpGroup input'));
+      const verifyBtn = document.getElementById('verifyBtn');
+      const timerDisplay = document.getElementById('countdownTimer');
+      const resendSeconds = document.getElementById('resendSeconds');
+      const resendBtn = document.getElementById('resendCodeBtn');
+
+      // Autofocus 5th element on load as requested in UI state
+      const fifthInput = document.getElementById('otp-4');
+      if (fifthInput) {
+        setTimeout(() => {
+          fifthInput.focus();
+        }, 150);
+      }
+
+      // Input navigation & digit handlers
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '');
+          e.target.value = val ? val[0] : '';
+          
+          if (val && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+            inputs[index + 1].select();
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            inputs[index - 1].focus();
+            inputs[index - 1].value = '';
+          } else if (e.key === 'ArrowLeft' && index > 0) {
+            inputs[index - 1].focus();
+          } else if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pastedData = (e.clipboardData || window.clipboardData).getData('text').trim();
+          const digits = pastedData.replace(/[^0-9]/g, '').slice(0, 6);
+          if (digits.length > 0) {
+            digits.split('').forEach((d, i) => {
+              if (inputs[i]) inputs[i].value = d;
+            });
+            const nextIdx = Math.min(digits.length, inputs.length - 1);
+            inputs[nextIdx].focus();
+          }
+        });
+      });
+
+      // 04:45 Expiry Countdown logic
+      let totalSeconds = 285; // 4 mins 45 sec
+      const timerInterval = setInterval(() => {
+        if (totalSeconds <= 0) {
+          clearInterval(timerInterval);
+          if (timerDisplay) timerDisplay.textContent = '00:00 (Expired)';
+          return;
+        }
+        totalSeconds--;
+        const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        if (timerDisplay) timerDisplay.textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      // Resend countdown (30s)
+      let resendCooldown = 30;
+      const resendInterval = setInterval(() => {
+        if (resendCooldown > 0) {
+          resendCooldown--;
+          if (resendSeconds) resendSeconds.textContent = resendCooldown;
+        } else {
+          clearInterval(resendInterval);
+          if (resendBtn) {
+            resendBtn.innerHTML = '<span class="text-primary font-semibold hover:underline">Resend new code now</span>';
+            resendBtn.removeAttribute('disabled');
+          }
+        }
+      }, 1000);
+
+      // Trigger Resend notification
+      window.triggerResend = function() {
+        if (resendCooldown <= 0) {
+          alert('A new 6-digit verification code has been dispatched to sarah@example.com.');
+          resendCooldown = 30;
+          if (resendSeconds) resendSeconds.textContent = '30';
+        }
+      };
+
+      // Submit handler
+      window.handleVerification = function() {
+        const fullCode = inputs.map(i => i.value).join('');
+        if (fullCode.length < 6) {
+          alert('Please enter all 6 digits of your verification code.');
+          const firstEmpty = inputs.find(i => !i.value);
+          if (firstEmpty) firstEmpty.focus();
+          return;
+        }
+
+        const originalText = verifyBtn.innerHTML;
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = `
+          <span class="inline-block animate-spin material-symbols-outlined text-lg">progress_activity</span>
+          <span>Verifying secure token...</span>
+        `;
+        
+        setTimeout(() => {
+          verifyBtn.innerHTML = `
+            <span class="material-symbols-outlined text-lg">check_circle</span>
+            <span>Email Verified! Redirecting...</span>
+          `;
+          verifyBtn.classList.remove('from-primary-container', 'via-primary', 'to-secondary');
+          verifyBtn.classList.add('bg-secondary-container');
+        }, 1200);
+      };
+    })();
+  </script>
+</div></main>
+<!-- Login with Phone/Email Modal Overlay -->
+<div class="hidden fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-center justify-center p-4" id="phoneLoginModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-outline-variant/30 flex flex-col relative animate-fade-in">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors" id="closePhoneModal" type="button">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+<div class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-xl">phonelink_lock</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface mb-1">Sign in with phone or email</h3>
+<p class="text-xs text-on-surface-variant mb-6">Enter your phone number or registered email to receive a 6-digit confirmation code.</p>
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Country / Region</label>
+<div class="w-full px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-xl text-sm text-on-surface flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<span>United States (+1)</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Phone number or Email</label>
+<div class="flex">
+<span class="inline-flex items-center px-3.5 rounded-l-xl bg-surface-container border border-r-0 border-outline-variant/40 text-sm text-on-surface-variant font-medium">+1</span>
+<input class="flex-1 px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-r-xl text-sm text-on-surface placeholder:text-outline-variant outline-none focus:border-primary focus:bg-surface-container-lowest transition-all" placeholder="(555) 234-5678" type="text"/>
+</div>
+</div>
+<button class="w-full py-3 mt-3 bg-primary hover:bg-primary-container text-on-primary rounded-xl text-sm font-semibold transition-all shadow-md shadow-primary/20 active:scale-[0.98]" type="submit">
+          Send Verification Code
+        </button>
+</form>
+</div>
+</div>
+<!-- Minimal Interactive Script -->
+<script>
+    (function() {
+      // Modal Handlers
+      const toggleBtn = document.getElementById('togglePhoneLoginBtn');
+      const modal = document.getElementById('phoneLoginModal');
+      const closeBtn = document.getElementById('closePhoneModal');
+
+      if (toggleBtn && modal && closeBtn) {
+        toggleBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+        });
+        closeBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+        });
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+      }
+
+      // Refresh QR simulation
+      const refreshBtn = document.getElementById('refreshBtn');
+      const reloadBackdrop = document.getElementById('reloadBackdrop');
+      if (refreshBtn && reloadBackdrop) {
+        refreshBtn.addEventListener('click', () => {
+          reloadBackdrop.classList.add('hidden');
+        });
+      }
+    })();
+  </script>
+</body></html>

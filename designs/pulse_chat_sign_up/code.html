@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="web_blank" name="shell-type">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    @keyframes laserScan {
+      0%, 100% { top: 12px; opacity: 0.8; }
+      50% { top: 220px; opacity: 1; }
+    }
+    .animate-laser {
+      animation: laserScan 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed-dim": "#c3c0ff",
+            "primary-fixed": "#e3dfff",
+            "on-primary-fixed": "#100069",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#464554",
+            "surface-container-high": "#dce9ff",
+            "surface": "#f8f9ff",
+            "secondary-fixed-dim": "#b4c5ff",
+            "surface-dim": "#cbdbf5",
+            "on-tertiary-fixed": "#001f26",
+            "on-error-container": "#93000a",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#213145",
+            "secondary": "#0051d5",
+            "surface-variant": "#d3e4fe",
+            "surface-container-highest": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "on-secondary-fixed-variant": "#003ea8",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#fefcff",
+            "inverse-primary": "#c3c0ff",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#acedff",
+            "outline-variant": "#c7c4d7",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#00174b",
+            "tertiary": "#00414d",
+            "primary": "#2a14b4",
+            "on-tertiary-container": "#4ad5f4",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "on-surface": "#0b1c30",
+            "tertiary-container": "#005a6a",
+            "outline": "#777586",
+            "on-primary-fixed-variant": "#372abf",
+            "on-background": "#0b1c30",
+            "secondary-fixed": "#dbe1ff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "background": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "primary-container": "#4338ca",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#c1beff",
+            "secondary-container": "#316bf3",
+            "surface-tint": "#5148d7"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-sans text-on-surface min-h-screen relative flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Ambient Gradient Header Accent -->
+<div class="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-surface-container via-surface-container-low to-transparent -z-10 pointer-events-none"></div>
+<!-- Global Top Bar -->
+<header class="w-full max-w-6xl mx-auto px-6 pt-7 pb-4 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Modern Brand Mark -->
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20 text-on-primary">
+<span class="material-symbols-outlined text-[22px]">all_inclusive</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-lg tracking-tight text-on-surface">Pulse</span>
+<span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-primary/10 text-primary border border-primary/20">Web</span>
+</div>
+</div>
+</div>
+<!-- Security & Status indicator -->
+<div class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/40 shadow-sm text-on-surface-variant text-xs font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="">End-to-end encrypted protocol</span>
+</div>
+</header>
+<!-- Main Login Card Container -->
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-8"><div class="flex flex-col w-full items-center justify-center">
+<!-- Interactive Registration Card Structure -->
+<div class="w-full max-w-xl mx-auto">
+<div class="bg-surface-container-lowest rounded-3xl p-8 sm:p-10 shadow-xl shadow-surface-container-high/40 relative overflow-hidden">
+<!-- Top Ambient Accent Light -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-fixed/40 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-20 w-44 h-44 bg-surface-container/60 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Card Header -->
+<div class="flex flex-col items-center text-center relative z-10">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-md shadow-primary/30 mb-5">
+<span class="material-symbols-outlined text-[26px]">all_inclusive</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-2">
+          Create your account
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">
+          Start conversations with teammates and friends in real-time
+        </p>
+</div>
+<!-- Quick OAuth Signup Row -->
+
+<!-- Subtle Clean Divider -->
+
+<!-- Registration Form -->
+<form class="space-y-5 relative z-10 mt-8" onsubmit="event.preventDefault();">
+<!-- Full Name Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center justify-between" for="fullName">
+<span class="">Full Name</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px] pointer-events-none">person</span>
+<input class="w-full pl-11 pr-4 py-3 bg-surface-container-low focus:bg-surface-container-lowest rounded-xl font-body-md text-body-md text-on-surface placeholder:text-outline/60 outline-none transition-all shadow-sm focus:shadow-md" id="fullName" name="fullName" placeholder="Sarah Jenkins" required="" type="text">
+</div>
+</div>
+<!-- Email Address Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center justify-between" for="email">
+<span class="">Email address</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px] pointer-events-none">mail</span>
+<input class="w-full pl-11 pr-4 py-3 bg-surface-container-low focus:bg-surface-container-lowest rounded-xl font-body-md text-body-md text-on-surface placeholder:text-outline/60 outline-none transition-all shadow-sm focus:shadow-md" id="email" name="email" placeholder="sarah@example.com" required="" type="email">
+</div>
+</div>
+<!-- Password Input & Dynamic Strength Meters -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">Password</label>
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wide" id="strengthLabel">Enter password</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px] pointer-events-none">lock</span>
+<input class="w-full pl-11 pr-11 py-3 bg-surface-container-low focus:bg-surface-container-lowest rounded-xl font-body-md text-body-md text-on-surface placeholder:text-outline/60 outline-none transition-all shadow-sm focus:shadow-md" id="password" name="password" placeholder="Create a strong password" required="" type="password">
+<button class="absolute right-3.5 p-1 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center" id="togglePassword" type="button">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+</button>
+</div>
+<!-- 4-segment Strength Bar -->
+<div class="grid grid-cols-4 gap-1.5 pt-2">
+<div class="h-1 rounded-full bg-surface-container transition-all duration-300" id="bar-1"></div>
+<div class="h-1 rounded-full bg-surface-container transition-all duration-300" id="bar-2"></div>
+<div class="h-1 rounded-full bg-surface-container transition-all duration-300" id="bar-3"></div>
+<div class="h-1 rounded-full bg-surface-container transition-all duration-300" id="bar-4"></div>
+</div>
+<!-- Real-time Verification Criteria Badges -->
+<div class="flex flex-wrap items-center gap-2 pt-2">
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant transition-colors" id="rule-length">
+<span class="material-symbols-outlined text-[13px] rule-icon">radio_button_unchecked</span>
+<span class="font-caption text-caption">8+ characters</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant transition-colors" id="rule-number">
+<span class="material-symbols-outlined text-[13px] rule-icon">radio_button_unchecked</span>
+<span class="font-caption text-caption">At least 1 number</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant transition-colors" id="rule-symbol">
+<span class="material-symbols-outlined text-[13px] rule-icon">radio_button_unchecked</span>
+<span class="font-caption text-caption">Special symbol</span>
+</div>
+</div>
+</div>
+<!-- Terms Agreement Checkbox -->
+<div class="pt-1">
+<label class="flex items-start gap-3 cursor-pointer group select-none">
+<div class="relative flex items-center justify-center mt-0.5">
+<input checked="" class="peer sr-only" id="termsCheckbox" required="" type="checkbox">
+<div class="w-4 h-4 rounded-md bg-surface-container-high peer-checked:bg-primary transition-all flex items-center justify-center text-on-primary shadow-xs">
+<span class="material-symbols-outlined text-[14px] font-bold opacity-0 peer-checked:opacity-100 transition-opacity">check</span>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-tight">
+              I agree to the <a class="text-primary font-medium hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-medium hover:underline" href="#">Privacy Policy</a>
+</span>
+</label>
+</div>
+<!-- Primary Action Button -->
+<div class="pt-2">
+<button class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-primary to-secondary-container hover:opacity-95 active:scale-[0.99] text-on-primary font-title-sm text-title-sm font-semibold tracking-wide shadow-md shadow-primary/25 transition-all flex items-center justify-center gap-2 group" type="submit">
+<span class="">Create Account</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Card Bottom Redirect Link -->
+<div class="mt-8 text-center relative z-10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Already have an account? 
+          <a class="text-primary font-semibold hover:underline ml-1" href="/login">Log in</a>
+</p>
+</div>
+</div>
+<!-- Security & Encryption Disclaimer Footnote -->
+<div class="flex items-center justify-center gap-2 mt-6 text-on-surface-variant text-center px-4">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">enhanced_encryption</span>
+<p class="font-body-sm text-body-sm">
+        Pulse uses end-to-end encryption for all personal and group chats.
+      </p>
+</div>
+</div>
+<!-- Interactive Password Logic & Micro-interactions -->
+<script>
+    (function() {
+      const passwordInput = document.getElementById('password');
+      const toggleBtn = document.getElementById('togglePassword');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const strengthLabel = document.getElementById('strengthLabel');
+
+      const bar1 = document.getElementById('bar-1');
+      const bar2 = document.getElementById('bar-2');
+      const bar3 = document.getElementById('bar-3');
+      const bar4 = document.getElementById('bar-4');
+      const bars = [bar1, bar2, bar3, bar4];
+
+      const ruleLength = document.getElementById('rule-length');
+      const ruleNumber = document.getElementById('rule-number');
+      const ruleSymbol = document.getElementById('rule-symbol');
+
+      // Password Visibility Toggle
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.getAttribute('type') === 'password';
+          passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+          eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+      }
+
+      function updateRuleState(element, isValid) {
+        const icon = element.querySelector('.rule-icon');
+        if (isValid) {
+          element.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          element.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+          icon.textContent = 'check_circle';
+          icon.style.fontVariationSettings = "'FILL' 1";
+        } else {
+          element.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+          element.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          icon.textContent = 'radio_button_unchecked';
+          icon.style.fontVariationSettings = "'FILL' 0";
+        }
+      }
+
+      // Password Evaluation Listener
+      if (passwordInput) {
+        passwordInput.addEventListener('input', () => {
+          const val = passwordInput.value;
+          
+          const hasLength = val.length >= 8;
+          const hasNumber = /\d/.test(val);
+          const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+          const hasMixedCase = /[a-z]/.test(val) && /[A-Z]/.test(val);
+
+          updateRuleState(ruleLength, hasLength);
+          updateRuleState(ruleNumber, hasNumber);
+          updateRuleState(ruleSymbol, hasSymbol);
+
+          // Calculate score (0 to 4)
+          let score = 0;
+          if (val.length > 0) score += 1;
+          if (hasLength) score += 1;
+          if (hasNumber || hasSymbol) score += 1;
+          if (hasLength && hasNumber && hasSymbol && hasMixedCase) score += 1;
+
+          // Clear bar colors
+          bars.forEach(b => {
+            b.className = 'h-1 rounded-full bg-surface-container transition-all duration-300';
+          });
+
+          if (val.length === 0) {
+            strengthLabel.textContent = 'Enter password';
+            strengthLabel.className = 'font-caption text-caption text-on-surface-variant uppercase tracking-wide';
+            return;
+          }
+
+          if (score === 1) {
+            strengthLabel.textContent = 'Weak';
+            strengthLabel.className = 'font-caption text-caption text-error uppercase tracking-wide font-semibold';
+            bar1.className = 'h-1 rounded-full bg-error transition-all duration-300';
+          } else if (score === 2) {
+            strengthLabel.textContent = 'Fair';
+            strengthLabel.className = 'font-caption text-caption text-secondary-container uppercase tracking-wide font-semibold';
+            bar1.className = 'h-1 rounded-full bg-secondary-container transition-all duration-300';
+            bar2.className = 'h-1 rounded-full bg-secondary-container transition-all duration-300';
+          } else if (score === 3) {
+            strengthLabel.textContent = 'Good';
+            strengthLabel.className = 'font-caption text-caption text-primary uppercase tracking-wide font-semibold';
+            bar1.className = 'h-1 rounded-full bg-primary transition-all duration-300';
+            bar2.className = 'h-1 rounded-full bg-primary transition-all duration-300';
+            bar3.className = 'h-1 rounded-full bg-primary transition-all duration-300';
+          } else if (score >= 4) {
+            strengthLabel.textContent = 'Strong';
+            strengthLabel.className = 'font-caption text-caption text-primary uppercase tracking-wide font-bold';
+            bars.forEach(b => {
+              b.className = 'h-1 rounded-full bg-primary transition-all duration-300';
+            });
+          }
+        });
+      }
+    })();
+  </script>
+</div></main>
+<!-- Login with Phone/Email Modal Overlay -->
+<div class="hidden fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-center justify-center p-4" id="phoneLoginModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-outline-variant/30 flex flex-col relative animate-fade-in">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors" id="closePhoneModal" type="button">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+<div class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-xl">phonelink_lock</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface mb-1">Sign in with phone or email</h3>
+<p class="text-xs text-on-surface-variant mb-6">Enter your phone number or registered email to receive a 6-digit confirmation code.</p>
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Country / Region</label>
+<div class="w-full px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-xl text-sm text-on-surface flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<span class="">United States (+1)</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-on-surface-variant mb-1.5">Phone number or Email</label>
+<div class="flex">
+<span class="inline-flex items-center px-3.5 rounded-l-xl bg-surface-container border border-r-0 border-outline-variant/40 text-sm text-on-surface-variant font-medium">+1</span>
+<input class="flex-1 px-3.5 py-2.5 bg-surface-container-low border border-outline-variant/40 rounded-r-xl text-sm text-on-surface placeholder:text-outline-variant outline-none focus:border-primary focus:bg-surface-container-lowest transition-all" placeholder="(555) 234-5678" type="text">
+</div>
+</div>
+<button class="w-full py-3 mt-3 bg-primary hover:bg-primary-container text-on-primary rounded-xl text-sm font-semibold transition-all shadow-md shadow-primary/20 active:scale-[0.98]" type="submit">
+          Send Verification Code
+        </button>
+</form>
+</div>
+</div>
+<!-- Minimal Interactive Script -->
+<script>
+    (function() {
+      // Modal Handlers
+      const toggleBtn = document.getElementById('togglePhoneLoginBtn');
+      const modal = document.getElementById('phoneLoginModal');
+      const closeBtn = document.getElementById('closePhoneModal');
+
+      if (toggleBtn && modal && closeBtn) {
+        toggleBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+        });
+        closeBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+        });
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+      }
+
+      // Refresh QR simulation
+      const refreshBtn = document.getElementById('refreshBtn');
+      const reloadBackdrop = document.getElementById('reloadBackdrop');
+      if (refreshBtn && reloadBackdrop) {
+        refreshBtn.addEventListener('click', () => {
+          reloadBackdrop.classList.add('hidden');
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>
