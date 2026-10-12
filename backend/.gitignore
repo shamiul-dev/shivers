@@ -1,2 +1,15 @@
+node_modules/
+dist/
+
+# Environment variables
 .env
-node_modules
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
