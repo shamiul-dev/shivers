@@ -1,0 +1,69 @@
+"use server";
+
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+
+const signUpSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+});
+
+export async function signUpAction(formData: FormData) {
+  const rawData = {
+    name: formData.get("name") as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
+
+  const validation = signUpSchema.safeParse(rawData);
+  if (!validation.success) {
+    const firstError = validation.error.issues[0]?.message || "Invalid input";
+    redirect(`/signup?error=${encodeURIComponent(firstError)}`);
+  }
+
+  const backendUrl =
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:4000";
+
+  let success = false;
+  let errorMessage: string | null = null;
+
+  try {
+    const res = await fetch(`${backendUrl}/api/auth/sign-up/email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validation.data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      errorMessage =
+        errorData?.message || "Failed to create account. Please try again.";
+    } else {
+      success = true;
+      // Forward session cookies from backend to Next.js cookie store
+      const cookieStore = await cookies();
+      const setCookieHeaders = res.headers.getSetCookie();
+      for (const cookieStr of setCookieHeaders) {
+        const [nameValue, ...options] = cookieStr.split(";");
+        const [name, val] = nameValue.split("=");
+        if (name && val) {
+          cookieStore.set(name.trim(), val.trim(), {
+            path: "/",
+            httpOnly: true,
+            sameSite: "lax",
+          });
+        }
+      }
+    }
+  } catch (err: unknown) {
+    errorMessage = "Could not connect to authentication server.";
+  }
+
+  if (!success && errorMessage) {
+    redirect(`/signup?error=${encodeURIComponent(errorMessage)}`);
+  }
+
+  redirect("/chat");
+}
