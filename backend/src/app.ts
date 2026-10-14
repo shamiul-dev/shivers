@@ -5,6 +5,8 @@ import { toNodeHandler } from "better-auth/node";
 
 import { env } from "@/config/env";
 import { auth } from "@/auth";
+import { profileRouter } from "@/routes/profile";
+
 export const app = express();
 
 // 1. Security headers and CORS
@@ -22,6 +24,9 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 // 3. Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// API Routes
+app.use("/api/profile", profileRouter)
 
 // 4. Health check endpoint
 app.get("/health", (req, res) => {

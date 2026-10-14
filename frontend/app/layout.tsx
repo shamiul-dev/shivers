@@ -12,7 +12,16 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Shivers — Real-Time Chat",
   description: "Real-time conversational platform with channels, DMs, presence, and photos.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
+
 
 export default function RootLayout({
   children,

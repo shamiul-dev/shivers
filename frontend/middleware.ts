@@ -21,6 +21,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Handle root / route
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL(sessionToken ? "/chat" : "/login", request.url));
+  }
+
   // If already authenticated and visiting login/signup, redirect to chat
   if (isAuthRoute && sessionToken) {
     const chatUrl = new URL("/chat", request.url);
