@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { LucideIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input, type InputProps } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface AuthInputProps extends InputProps {
   name: string;
   label: string;
   icon?: LucideIcon;
@@ -13,6 +13,8 @@ export function AuthInput({
   name,
   label,
   icon: Icon,
+  inputSize = "lg",
+  variant = "default",
   className,
   ...props
 }: AuthInputProps) {
@@ -31,6 +33,8 @@ export function AuthInput({
         <Input
           id={name}
           name={name}
+          variant={variant}
+          inputSize={inputSize}
           className={Icon ? "pl-10" : undefined}
           {...props}
         />

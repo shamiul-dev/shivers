@@ -71,8 +71,10 @@ export async function signUpAction(formData: FormData) {
     redirect(`/signup?error=${encodeURIComponent(errorMessage)}`);
   }
 
-  redirect("/chat");
+  // New accounts must claim their username handle first
+  redirect("/onboarding");
 }
+
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),

@@ -37,6 +37,8 @@ export function PasswordField({
           placeholder={placeholder}
           autoComplete={autoComplete}
           required={required}
+          variant="default"
+          inputSize="lg"
           className="pl-10 pr-10"
         />
         <button
