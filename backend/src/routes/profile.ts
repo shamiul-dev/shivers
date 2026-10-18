@@ -3,7 +3,7 @@ import { z } from "zod";
 import { eq, and, ne } from "drizzle-orm";
 
 import { db } from "@/db";
-import { profiles } from "@/db/schema";
+import { profiles, user } from "@/db/schema";
 import { requireAuth, type AuthenticatedRequest } from "@/middleware/requireAuth";
 
 
@@ -30,8 +30,11 @@ const RESERVED_USERNAMES = new Set([
 
 //Validation schema for updating profiles
 const updateProfileSchema = z.object({
+    name: z.string().trim().min(1, "Name cannot be empty").max(50, "Name must be at most 50 characters").optional(),
     username: z
     .string()
+    .trim()
+    .toLowerCase()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username must be at most 20 characters")
     .regex(
@@ -41,7 +44,7 @@ const updateProfileSchema = z.object({
     .refine((val) => !RESERVED_USERNAMES.has(val.toLowerCase()), {
         message: "This username is reserved and cannot be chosen",
     }),
-    bio: z.string().max(160, "Bio cannot exceed 160 characters").optional().nullable(),
+    bio: z.string().trim().max(160, "Bio cannot exceed 160 characters").optional().nullable(),
 });
 
 // 1. Fetch current user's profile
@@ -85,9 +88,15 @@ profileRouter.patch("/me", requireAuth, async (req, res: Response) => {
         return;
     }
 
-    const { username, bio } = parsed.data;
+    const { name, username, bio } = parsed.data;
 
     try {
+        if (name) {
+            await db
+                .update(user)
+                .set({ name, updatedAt: new Date() })
+                .where(eq(user.id, authReq.user.id));
+        }
         //Check if another user has already claimed this username
         const existing = await db
             .select({ id: profiles.userId })

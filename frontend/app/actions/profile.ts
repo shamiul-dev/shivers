@@ -23,6 +23,12 @@ const RESERVED_USERNAMES = new Set([
 ]);
 
 const updateProfileSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Display name cannot be empty")
+    .max(50, "Display name must be at most 50 characters")
+    .optional(),
   username: z
     .string()
     .trim()
@@ -207,3 +213,54 @@ export async function checkUsernameAction(username: string): Promise<{
     return { available: false, message: "Unable to verify username" };
   }
 }
+
+/**
+ * Server Action to update user settings from /settings/profile.
+ * Handles display name, handle, and bio updates.
+ */
+export async function updateProfileSettingsAction(formData: FormData) {
+  const rawData = {
+    name: (formData.get("name") as string) || undefined,
+    username: (formData.get("username") as string) || "",
+    bio: (formData.get("bio") as string) || undefined,
+  };
+
+  const validation = updateProfileSchema.safeParse(rawData);
+  if (!validation.success) {
+    const firstError = validation.error.issues[0]?.message || "Invalid input";
+    redirect(`/settings/profile?error=${encodeURIComponent(firstError)}`);
+  }
+
+  const backendUrl = getBackendUrl();
+  let success = false;
+  let errorMessage: string | null = null;
+
+  try {
+    const authHeaders = await getForwardedHeaders();
+
+    const res = await fetch(`${backendUrl}/api/profile/me`, {
+      method: "PATCH",
+      headers: authHeaders,
+      body: JSON.stringify(validation.data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      errorMessage =
+        errorData?.error ||
+        errorData?.issues?.[0] ||
+        "Failed to update profile. Please try again.";
+    } else {
+      success = true;
+    }
+  } catch (err) {
+    errorMessage = "Could not connect to the server.";
+  }
+
+  if (!success && errorMessage) {
+    redirect(`/settings/profile?error=${encodeURIComponent(errorMessage)}`);
+  }
+
+  redirect("/settings/profile?saved=true");
+}
+
