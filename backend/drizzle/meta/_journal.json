@@ -15,6 +15,20 @@
       "when": 1791954760467,
       "tag": "0001_gifted_sharon_ventura",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793162343129,
+      "tag": "0002_mute_blue_shield",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793163308234,
+      "tag": "0003_friendly_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

@@ -6,6 +6,9 @@ import { toNodeHandler } from "better-auth/node";
 import { env } from "@/config/env";
 import { auth } from "@/auth";
 import { profileRouter } from "@/routes/profile";
+import { usersRouter } from "@/routes/users";
+import { conversationsRouter } from "@/routes/conversations";
+import { messagesRouter } from "@/routes/messages";
 
 export const app = express();
 
@@ -26,7 +29,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API Routes
-app.use("/api/profile", profileRouter)
+app.use("/api/profile", profileRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/conversations", conversationsRouter);
+app.use("/api/conversations/:conversationId/messages", messagesRouter)
 
 // 4. Health check endpoint
 app.get("/health", (req, res) => {
