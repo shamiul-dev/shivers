@@ -1,4 +1,4 @@
-import { asc, desc, eq, gt, lt, or, and } from "drizzle-orm";
+import { asc, desc, eq, gt, lt, and } from "drizzle-orm";
 
 import { db } from "@/db"
 import { messages } from "@/db/schema";
@@ -72,4 +72,25 @@ export async function fetchHistory(
     const page = hasOlder ? rows.slice(0, limit): rows;
     // Return chronological order to the client
     return { messages: page.reverse(), hasOlder }
+}
+
+export async function createMessage(conversationId: string, senderId: string, clientId: string, body: string) {
+    const id = crypto.randomUUID();
+    try {
+        const [message] = await db
+            .insert(messages)
+            .values({ id, conversationId, senderId, type: "text", body, clientId })
+            .returning();
+            return { message, duplicated: false };
+    } catch (error: any) {
+        if (error?.code === "23505") {
+            const [existing] = await db
+                .select()
+                .from(messages)
+                .where(and(eq(messages.conversationId, conversationId), eq(messages.clientId, clientId)))
+                .limit(1);
+            if(existing) return { message: existing, duplicated: true };
+        }
+        throw error;
+    }
 }

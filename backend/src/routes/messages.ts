@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { z } from "zod";
 
-import { requireAuth } from '@/middleware/requireAuth';
+import { requireAuth, type AuthenticatedRequest } from '@/middleware/requireAuth';
 import { getConversationForUser } from "@/services/conversation.service";
 import { fetchHistory } from "@/services/message.service";
 
@@ -22,7 +22,7 @@ function getConversationId(req: Request): string {
 // GET /api/conversations/:conversationId/messages?before=&limit= (and ?after=)
 
 messagesRouter.get("/", requireAuth, async (req, res: Response) => {
-    const authReq = req as typeof req & { user: { id: string } };
+    const authReq = req as AuthenticatedRequest;
     const conversationId = getConversationId(req);
 
     const parsed = historyQuerySchema.safeParse(req.query);
