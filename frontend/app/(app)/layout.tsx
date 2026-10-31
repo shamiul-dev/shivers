@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { Providers } from "./providers";
+
 export const metadata: Metadata = {
   title: "Shivers",
 };
@@ -9,5 +11,5 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <Providers>{children}</Providers>;
 }

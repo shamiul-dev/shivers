@@ -1,8 +1,9 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
+import { serverFetch } from "@/lib/server-api";
 
 const RESERVED_USERNAMES = new Set([
   "admin",
@@ -50,49 +51,13 @@ const updateProfileSchema = z.object({
     .nullable(),
 });
 
-function getBackendUrl(): string {
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-}
-
-async function getForwardedHeaders(): Promise<Record<string, string>> {
-  const reqHeaders = await headers();
-  const origin = reqHeaders.get("origin") || "http://localhost:3000";
-  const cookieStore = await cookies();
-
-  // Forward all existing cookies so requireAuth can authenticate the session
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join("; ");
-
-  return {
-    "Content-Type": "application/json",
-    Origin: origin,
-    Cookie: cookieHeader,
-  };
-}
-
 /**
  * Fetch the current authenticated user and their profile from the backend.
  * Returns null if unauthenticated or request fails.
  */
 export async function getProfile() {
-  const backendUrl = getBackendUrl();
-
   try {
-    const authHeaders = await getForwardedHeaders();
-    const res = await fetch(`${backendUrl}/api/profile/me`, {
-      method: "GET",
-      headers: authHeaders,
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      return null;
-    }
-
-    const data = await res.json();
-    return data as {
+    const result = await serverFetch<{
       user: {
         id: string;
         name: string;
@@ -107,7 +72,13 @@ export async function getProfile() {
         createdAt: string;
         updatedAt: string;
       } | null;
-    };
+    }>("/api/profile/me");
+
+    if (!result.ok || !result.data) {
+      return null;
+    }
+
+    return result.data;
   } catch (err: unknown) {
     if (typeof err === "object" && err !== null && "digest" in err) {
       throw err;
@@ -133,24 +104,22 @@ export async function updateProfileAction(formData: FormData) {
     redirect(`/onboarding?error=${encodeURIComponent(firstError)}`);
   }
 
-  const backendUrl = getBackendUrl();
   let success = false;
   let errorMessage: string | null = null;
 
   try {
-    const authHeaders = await getForwardedHeaders();
-
-    const res = await fetch(`${backendUrl}/api/profile/me`, {
+    const result = await serverFetch<{
+      error?: string;
+      issues?: string[];
+    }>("/api/profile/me", {
       method: "PATCH",
-      headers: authHeaders,
       body: JSON.stringify(validation.data),
     });
 
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => null);
+    if (!result.ok) {
       errorMessage =
-        errorData?.error ||
-        errorData?.issues?.[0] ||
+        result.data?.error ||
+        result.data?.issues?.[0] ||
         "Failed to update profile. Please try again.";
     } else {
       success = true;
@@ -188,26 +157,19 @@ export async function checkUsernameAction(username: string): Promise<{
     return { available: false, message: "This username is reserved" };
   }
 
-  const backendUrl = getBackendUrl();
   try {
-    const authHeaders = await getForwardedHeaders();
-    const res = await fetch(
-      `${backendUrl}/api/profile/check-username?q=${encodeURIComponent(clean)}`,
-      {
-        method: "GET",
-        headers: authHeaders,
-        cache: "no-store",
-      }
-    );
+    const result = await serverFetch<{
+      available: boolean;
+      message?: string;
+    }>(`/api/profile/check-username?q=${encodeURIComponent(clean)}`);
 
-    if (!res.ok) {
+    if (!result.ok || !result.data) {
       return { available: false, message: "Error checking username" };
     }
 
-    const data = await res.json();
     return {
-      available: !!data.available,
-      message: data.message,
+      available: !!result.data.available,
+      message: result.data.message,
     };
   } catch {
     return { available: false, message: "Unable to verify username" };
@@ -231,24 +193,22 @@ export async function updateProfileSettingsAction(formData: FormData) {
     redirect(`/settings/profile?error=${encodeURIComponent(firstError)}`);
   }
 
-  const backendUrl = getBackendUrl();
   let success = false;
   let errorMessage: string | null = null;
 
   try {
-    const authHeaders = await getForwardedHeaders();
-
-    const res = await fetch(`${backendUrl}/api/profile/me`, {
+    const result = await serverFetch<{
+      error?: string;
+      issues?: string[];
+    }>("/api/profile/me", {
       method: "PATCH",
-      headers: authHeaders,
       body: JSON.stringify(validation.data),
     });
 
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => null);
+    if (!result.ok) {
       errorMessage =
-        errorData?.error ||
-        errorData?.issues?.[0] ||
+        result.data?.error ||
+        result.data?.issues?.[0] ||
         "Failed to update profile. Please try again.";
     } else {
       success = true;

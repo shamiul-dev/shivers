@@ -1,6 +1,11 @@
 import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
 import { getProfile } from "@/app/actions/profile";
+import { serverFetch } from "@/lib/server-api";
+import { conversationsCache } from "@/hooks/conversations-cache";
+import type { Conversation } from "@/types/chat";
 import { ChatRail } from "@/components/chat/chat-rail";
 import { ChatSidebar } from "@/components/chat/chat-sidebar";
 
@@ -15,11 +20,22 @@ async function ChatNavigation() {
     redirect("/onboarding");
   }
 
+  // Server-side initial list: hydrated straight into the TanStack cache
+  const conversationsResult = await serverFetch<{ conversations: Conversation[] }>(
+    "/api/conversations"
+  );
+
+  const queryClient = new QueryClient();
+  queryClient.setQueryData(conversationsCache.key, {
+    conversations: conversationsResult.data?.conversations ?? [],
+  });
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <>
+    <HydrationBoundary state={dehydratedState}>
       <ChatRail user={profileData.user} profile={profileData.profile} />
       <ChatSidebar user={profileData.user} profile={profileData.profile} />
-    </>
+    </HydrationBoundary>
   );
 }
 
