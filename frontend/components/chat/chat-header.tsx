@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft, Phone, Video, Search, Info, Hash } from "lucide-react";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Badge } from "@/components/ui/badge";
+import { usePresenceStore } from "@/store/presenceStore";
+import { ChannelMembersDialog } from "@/components/chat/channel-members-dialog";
 import type { Conversation } from "@/types/chat";
 
 interface ChatHeaderProps {
@@ -11,13 +15,17 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ conversation }: ChatHeaderProps) {
   const isDm = conversation.type === "dm";
+  const onlineUserIds = usePresenceStore((s) => s.onlineUserIds);
+  const peerId = conversation.otherUser?.userId || conversation.otherUser?.id;
+  const isOnline = Boolean(isDm && peerId && onlineUserIds[peerId]);
+
   const title = isDm
     ? conversation.otherUser?.name || "Direct Message"
     : conversation.name || "Channel";
   const subtitle = isDm
-    ? conversation.otherUser?.username
-      ? `@${conversation.otherUser.username}`
-      : "Active now"
+    ? isOnline
+      ? "Active now"
+      : "Offline"
     : "Channel room";
 
   return (
@@ -41,7 +49,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
               image={conversation.otherUser?.image}
               size="md"
               showPresence
-              presenceStatus="online"
+              presenceStatus={isOnline ? "online" : "offline"}
             />
           ) : (
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#4338CA] to-[#2563EB] text-white flex items-center justify-center font-bold text-sm shadow-xs shadow-[#4338CA]/20">
@@ -62,8 +70,24 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
               </Badge>
             )}
           </div>
-          <p className="text-[11.5px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+          <p
+            className={`text-[11.5px] font-medium flex items-center gap-1 mt-0.5 ${
+              isDm
+                ? isOnline
+                  ? "text-emerald-600"
+                  : "text-slate-400"
+                : "text-indigo-600"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                isDm
+                  ? isOnline
+                    ? "bg-emerald-500"
+                    : "bg-slate-300"
+                  : "bg-indigo-500"
+              }`}
+            />
             <span>{subtitle}</span>
           </p>
         </div>
@@ -71,6 +95,12 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
 
       {/* Header Actions */}
       <div className="flex items-center gap-1 text-slate-500">
+        {!isDm && (
+          <ChannelMembersDialog
+            conversationId={conversation.id}
+            channelName={conversation.name || "channel"}
+          />
+        )}
         <button
           type="button"
           className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] flex items-center justify-center transition-colors cursor-pointer"

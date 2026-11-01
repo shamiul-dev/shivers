@@ -11,7 +11,8 @@ export type Message = {
 };
 
 export type UserSummary = {
-    id: string;
+    id?: string;
+    userId?: string;
     name: string;
     image: string | null;
     username: string | null;
@@ -36,6 +37,16 @@ export type Conversation = {
         createdAt: string;
     } | null;
     unreadCount?: number;
+};
+
+export type ChannelMember = {
+    userId: string;
+    name: string;
+    image: string | null;
+    username: string | null;
+    avatarKey: string | null;
+    role: "owner" | "admin" | "member";
+    joinedAt: string;
 };
 
 export type SendMessageAck = 

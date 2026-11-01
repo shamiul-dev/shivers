@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { getProfile } from "@/app/actions/profile";
@@ -12,6 +13,12 @@ import { ChatSidebar } from "@/components/chat/chat-sidebar";
 import { SocketManager } from "@/components/chat/socket-manager";
 
 async function ChatNavigation() {
+  await connection();
+  const cookieStore = await cookies();
+  const sessionToken =
+    cookieStore.get("better-auth.session_token")?.value ||
+    cookieStore.get("__Secure-better-auth.session_token")?.value;
+
   const profileData = await getProfile();
 
   if (!profileData?.user) {
@@ -32,11 +39,6 @@ async function ChatNavigation() {
     conversations: conversationsResult.data?.conversations ?? [],
   });
   const dehydratedState = dehydrate(queryClient);
-
-  const cookieStore = await cookies();
-  const sessionToken =
-    cookieStore.get("better-auth.session_token")?.value ||
-    cookieStore.get("__Secure-better-auth.session_token")?.value;
 
   return (
     <HydrationBoundary state={dehydratedState}>

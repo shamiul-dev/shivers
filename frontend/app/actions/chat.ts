@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
-import type { Conversation, Message } from "@/types/chat";
+import type { Conversation, Message, ChannelMember } from "@/types/chat";
 
 type BackendEnvelope = {
   conversation?: Conversation;
@@ -231,5 +231,40 @@ export async function markConversationReadAction(
     }
   );
   return { ok: result.ok };
+}
+
+/**
+ * Fetch all members of a channel.
+ */
+export async function fetchChannelMembersAction(
+  conversationId: string
+): Promise<{ ok: boolean; members: ChannelMember[] }> {
+  const result = await serverFetch<{ members: ChannelMember[] }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/members`
+  );
+  if (!result.ok || !result.data?.members) {
+    return { ok: false, members: [] };
+  }
+  return { ok: true, members: result.data.members };
+}
+
+/**
+ * Add a member to a channel.
+ */
+export async function addChannelMemberAction(
+  conversationId: string,
+  targetUserId: string
+): Promise<{ ok: true; membership: unknown } | { ok: false; error: string }> {
+  const result = await serverFetch<{ membership?: unknown; error?: string }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/members`,
+    {
+      method: "POST",
+      body: JSON.stringify({ userId: targetUserId }),
+    }
+  );
+  if (!result.ok) {
+    return { ok: false, error: result.data?.error || "Failed to add member" };
+  }
+  return { ok: true, membership: result.data?.membership };
 }
 

@@ -9,6 +9,7 @@ import { Search, MessageSquare, Hash } from "lucide-react";
 import { conversationsCache, type ConversationsData } from "@/hooks/conversations-cache";
 import { markConversationReadAction } from "@/app/actions/chat";
 import { socket } from "@/lib/socket";
+import { usePresenceStore } from "@/store/presenceStore";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import type { Conversation, Message } from "@/types/chat";
@@ -36,6 +37,7 @@ export function SidebarConversationList() {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<"all" | "dm" | "room">("all");
   const [search, setSearch] = useState("");
+  const onlineUserIds = usePresenceStore((s) => s.onlineUserIds);
 
   const { data } = useQuery(conversationsCache.options());
   const conversations: Conversation[] = data?.conversations ?? [];
@@ -234,7 +236,12 @@ export function SidebarConversationList() {
                     image={c.otherUser?.image}
                     size="md"
                     showPresence
-                    presenceStatus="online"
+                    presenceStatus={
+                      (c.otherUser?.userId && onlineUserIds[c.otherUser.userId]) ||
+                      (c.otherUser?.id && onlineUserIds[c.otherUser.id])
+                        ? "online"
+                        : "offline"
+                    }
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 text-[#4338CA] flex items-center justify-center shrink-0 font-bold text-sm shadow-xs">

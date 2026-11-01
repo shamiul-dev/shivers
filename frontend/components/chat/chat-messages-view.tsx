@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useMemo } from "react";
 import { MessageSquare } from "lucide-react";
 
 import { useMessages } from "@/hooks/useMessages";
+import { useTyping } from "@/hooks/useTyping";
 import { ChatBubble } from "@/components/ui/chat-bubble";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { ChatComposer } from "@/components/chat/chat-composer";
@@ -67,12 +68,17 @@ export function ChatMessagesView({
     sessionToken,
   });
 
+  const { typingUsers, handleKeystroke, stopTyping } = useTyping(
+    conversationId,
+    currentUserId
+  );
+
   const scrollAnchorRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll on new message
+  // Auto-scroll on new message or when peer starts typing
   useEffect(() => {
     scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [committed.length, pending.length]);
+  }, [committed.length, pending.length, typingUsers.length]);
 
   // Combine committed + pending messages for unified display
   const allMessages = useMemo(() => {
@@ -198,6 +204,28 @@ export function ChatMessagesView({
                 </React.Fragment>
               );
             })}
+
+            {/* Peer Typing Indicator Bubble */}
+            {typingUsers.length > 0 && (
+              <div className="flex items-end gap-2.5 w-full justify-start mt-2">
+                <UserAvatar
+                  name={otherUser?.name}
+                  username={otherUser?.username}
+                  image={otherUser?.image}
+                  size="sm"
+                  className="mb-1"
+                />
+                <div className="bg-slate-100 text-slate-500 rounded-2xl rounded-bl-sm px-3.5 py-2 flex items-center gap-1.5 shadow-xs border border-slate-200/60">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" />
+                  <span className="text-[11px] font-medium text-slate-500 ml-1">
+                    {otherUser?.name ? `${otherUser.name} is typing...` : "typing..."}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div ref={scrollAnchorRef} />
           </div>
         ) : (
@@ -218,7 +246,12 @@ export function ChatMessagesView({
       </div>
 
       {/* Floating Message Composer Dock */}
-      <ChatComposer onSend={send} disabled={joinState === "not_found"} />
+      <ChatComposer
+        onSend={send}
+        onTyping={handleKeystroke}
+        onStopTyping={stopTyping}
+        disabled={joinState === "not_found"}
+      />
     </div>
   );
 }

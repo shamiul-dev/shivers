@@ -322,3 +322,104 @@ export async function markRead(conversationId: string, userId: string, messageId
         .returning({ lastReadMessageId: conversationMembers.lastReadMessageId })
     return updated ?? null;
 }
+
+/**
+ * List all members of a conversation. Caller must be a member.
+ */
+export async function listMembers(conversationId: string, callerUserId: string) {
+    if (!(await isMember(conversationId, callerUserId))) {
+        return null;
+    }
+
+    const rows = await db
+        .select({
+            userId: user.id,
+            name: user.name,
+            image: user.image,
+            username: profiles.username,
+            avatarKey: profiles.avatarKey,
+            role: conversationMembers.role,
+            joinedAt: conversationMembers.joinedAt,
+        })
+        .from(conversationMembers)
+        .innerJoin(user, eq(conversationMembers.userId, user.id))
+        .leftJoin(profiles, eq(profiles.userId, user.id))
+        .where(eq(conversationMembers.conversationId, conversationId));
+
+    return rows;
+}
+
+/**
+ * Add a member to a channel room.
+ */
+export async function addMember(
+    conversationId: string,
+    callerUserId: string,
+    targetUserId: string,
+    role: "member" | "admin" = "member"
+) {
+    // 1. Caller must be a member of the conversation
+    if (!(await isMember(conversationId, callerUserId))) {
+        return { error: "forbidden" as const, message: "You are not a member of this conversation" };
+    }
+
+    // 2. Conversation must exist and be a channel room
+    const [conv] = await db
+        .select()
+        .from(conversations)
+        .where(eq(conversations.id, conversationId))
+        .limit(1);
+
+    if (!conv) {
+        return { error: "not_found" as const, message: "Conversation not found" };
+    }
+
+    if (conv.type !== "room") {
+        return { error: "bad_request" as const, message: "Cannot add members to a direct message" };
+    }
+
+    // 3. Target user must exist
+    const [target] = await db
+        .select({ id: user.id })
+        .from(user)
+        .where(eq(user.id, targetUserId))
+        .limit(1);
+
+    if (!target) {
+        return { error: "not_found" as const, message: "Target user not found" };
+    }
+
+    // 4. Target already a member?
+    if (await isMember(conversationId, targetUserId)) {
+        return { error: "conflict" as const, message: "User is already a member of this channel" };
+    }
+
+    // 5. Insert membership row
+    const [membership] = await db
+        .insert(conversationMembers)
+        .values({
+            conversationId,
+            userId: targetUserId,
+            role,
+        })
+        .returning();
+
+    // 6. Real-time socket sync
+    const io = getIO();
+    if (io) {
+        // Auto-join newly added user's connected sockets to this room
+        io.in(`user:${targetUserId}`).socketsJoin(conversationId);
+
+        // Notify the added user so the channel appears live in their sidebar
+        io.to(`user:${targetUserId}`).emit("conversation:created", conv);
+
+        // Notify existing room members that someone joined
+        io.to(conversationId).emit("conversation:member_joined", {
+            conversationId,
+            userId: targetUserId,
+            role,
+        });
+    }
+
+    return { ok: true as const, membership, conversation: conv };
+}

@@ -8,6 +8,8 @@ import {
     createOrGetDm,
     getConversationForUser,
     markRead,
+    listMembers,
+    addMember,
 } from "@/services/conversation.service";
 
 export const conversationsRouter = Router();
@@ -124,5 +126,62 @@ conversationsRouter.post("/:id/read", requireAuth, async (req, res: Response) =>
     } catch (error) {
         console.error("Error marking conversation read", error);
         res.status(500).json({ error: "Failed to mark conversation read" });
+    }
+});
+
+const addMemberSchema = z.object({
+    userId: z.string().min(1, "userId is required"),
+});
+
+// GET /api/conversations/:id/members
+conversationsRouter.get("/:id/members", requireAuth, async (req, res: Response) => {
+    const authReq = req as AuthenticatedRequest;
+    const { id } = req.params;
+    const conversationId = String(id);
+
+    try {
+        const members = await listMembers(conversationId, authReq.user.id);
+        if (members === null) {
+            res.status(404).json({ error: "Conversation not found or not a member" });
+            return;
+        }
+        res.status(200).json({ members });
+    } catch (error) {
+        console.error("Error listing conversation members:", error);
+        res.status(500).json({ error: "Failed to list members" });
+    }
+});
+
+// POST /api/conversations/:id/members
+conversationsRouter.post("/:id/members", requireAuth, async (req, res: Response) => {
+    const authReq = req as AuthenticatedRequest;
+    const { id } = req.params;
+    const conversationId = String(id);
+
+    const parsed = addMemberSchema.safeParse(req.body);
+    if (!parsed.success) {
+        res.status(400).json({ error: parsed.error.issues[0].message });
+        return;
+    }
+
+    try {
+        const result = await addMember(conversationId, authReq.user.id, parsed.data.userId);
+        if ("error" in result) {
+            const status =
+                result.error === "forbidden"
+                    ? 403
+                    : result.error === "not_found"
+                    ? 404
+                    : result.error === "conflict"
+                    ? 409
+                    : 400;
+            res.status(status).json({ error: result.message });
+            return;
+        }
+
+        res.status(201).json({ membership: result.membership, conversation: result.conversation });
+    } catch (error) {
+        console.error("Error adding member:", error);
+        res.status(500).json({ error: "Failed to add member" });
     }
 });

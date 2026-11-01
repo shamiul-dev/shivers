@@ -7,10 +7,17 @@ import { Button } from "@/components/ui/button";
 
 interface ChatComposerProps {
   onSend: (body: string) => void;
+  onTyping?: () => void;
+  onStopTyping?: () => void;
   disabled?: boolean;
 }
 
-export function ChatComposer({ onSend, disabled = false }: ChatComposerProps) {
+export function ChatComposer({
+  onSend,
+  onTyping,
+  onStopTyping,
+  disabled = false,
+}: ChatComposerProps) {
   const [text, setText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -25,6 +32,7 @@ export function ChatComposer({ onSend, disabled = false }: ChatComposerProps) {
   const handleSubmit = () => {
     const trimmed = text.trim();
     if (!trimmed || disabled) return;
+    onStopTyping?.();
     onSend(trimmed);
     setText("");
     if (textareaRef.current) {
@@ -59,7 +67,14 @@ export function ChatComposer({ onSend, disabled = false }: ChatComposerProps) {
             ref={textareaRef}
             rows={1}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (e.target.value.trim().length > 0) {
+                onTyping?.();
+              } else {
+                onStopTyping?.();
+              }
+            }}
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder="Type a message..."

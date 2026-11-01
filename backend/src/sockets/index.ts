@@ -10,6 +10,8 @@ import { session as sessionTable, user as userTable, conversationMembers } from 
 import { isMember, markRead } from "@/services/conversation.service";
 import { createSocketRateLimit } from "./socketRateLimit";
 import { registerMessageHandlers } from "./messageHandlers";
+import { registerTypingHandlers } from "./typingHandlers";
+import { presenceManager } from "./presenceManager";
 import { setIO, getIO } from "./io";
 
 export { getIO };
@@ -98,12 +100,18 @@ export function createSocketServer(httpServer: HttpServer) {
     // One limiter for the whole server; per-socket buckets inside
     const limiter = createSocketRateLimit({
         "message:send": { max: 10, windowMs: 5000 },
+        "typing:start": { max: 10, windowMs: 5000 },
     });
 
     io.on("connection", async (socket) => {
         const user = socket.data.user as { id: string } | undefined;
         if (user?.id) {
             socket.join(`user:${user.id}`);
+            const { isFirstConnection } = presenceManager.trackConnection(user.id, socket.id);
+            if (isFirstConnection) {
+                socket.broadcast.emit("presence:update", { userId: user.id, status: "online" });
+            }
+
             try {
                 const myConvs = await db
                     .select({ conversationId: conversationMembers.conversationId })
@@ -116,6 +124,15 @@ export function createSocketServer(httpServer: HttpServer) {
                 console.error("Auto-join error:", err);
             }
         }
+
+        // Bulk presence lookup for peer users
+        socket.on("presence:query", (payload: unknown, ack?: (result: unknown) => void) => {
+            const respond = (data: unknown) => (typeof ack === "function" ? ack(data) : undefined);
+            const userIds = (payload as { userIds?: unknown })?.userIds;
+            if (!Array.isArray(userIds)) return respond({ onlineUserIds: [] });
+            const validIds = userIds.filter((id): id is string => typeof id === "string").slice(0, 100);
+            respond({ onlineUserIds: presenceManager.getOnlineUserIds(validIds) });
+        });
 
         // Membership-gated server-side room join
         socket.on("conversation:join", async (payload: unknown, ack?: (result: unknown) => void) => {
@@ -168,8 +185,17 @@ export function createSocketServer(httpServer: HttpServer) {
         });
 
         registerMessageHandlers(io, socket, limiter);
+        registerTypingHandlers(io, socket, limiter);
 
-        socket.on("disconnect", () => limiter.clear(socket.id));
+        socket.on("disconnect", () => {
+            limiter.clear(socket.id);
+            if (user?.id) {
+                const { isLastConnection } = presenceManager.untrackConnection(user.id, socket.id);
+                if (isLastConnection) {
+                    socket.broadcast.emit("presence:update", { userId: user.id, status: "offline" });
+                }
+            }
+        });
     });
 
     return io;
