@@ -16,8 +16,9 @@ export type JoinState = "idle" | "joined" | "not_found";
 export function useMessages(input: {
   conversationId: string;
   initialHistory?: Message[];
+  sessionToken?: string;
 }) {
-  const { conversationId, initialHistory } = input;
+  const { conversationId, initialHistory, sessionToken } = input;
 
   const committed = useChatStore(
     (state) => selectConversationMessages(state, conversationId).committed
@@ -37,8 +38,15 @@ export function useMessages(input: {
   }, [conversationId, initialHistory]);
 
   useEffect(() => {
-    // One connection app-wide; every mounted thread joins only its own room
-    socket.connect();
+    // If socket is connected under a stale token, force disconnect so it reconnects with the current user
+    const currentSocketToken = (socket.auth as { token?: string })?.token;
+    if (sessionToken && currentSocketToken && currentSocketToken !== sessionToken && socket.connected) {
+      socket.disconnect();
+    }
+
+    if (sessionToken) {
+      socket.auth = { token: sessionToken };
+    }
 
     const joinAndResync = () => {
       socket.emit("conversation:join", { conversationId }, (ack?: { ok: boolean }) => {
@@ -73,13 +81,19 @@ export function useMessages(input: {
 
     socket.on("connect", joinAndResync);
     socket.on("message:new", handleNewMessage);
-    if (socket.connected) joinAndResync();
+
+    // If socket is disconnected, connect now with token
+    if (!socket.connected) {
+      socket.connect();
+    } else {
+      joinAndResync();
+    }
 
     return () => {
       socket.off("connect", joinAndResync);
       socket.off("message:new", handleNewMessage);
     };
-  }, [conversationId]);
+  }, [conversationId, sessionToken]);
 
   const send = useCallback(
     (body: string): string => {
@@ -101,10 +115,14 @@ export function useMessages(input: {
     [conversationId]
   );
 
-  const grouped = useMemo(
-    () => ({ committed, pending: pending as PendingMessage[] }),
-    [committed, pending]
+  return useMemo(
+    () => ({
+      committed,
+      pending,
+      send,
+      joinState,
+    }),
+    [committed, pending, send, joinState]
   );
-
-  return { ...grouped, joinState, send };
 }
+export type { PendingMessage };

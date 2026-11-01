@@ -1,9 +1,9 @@
-import Link from "next/link";
+import React from "react";
 import Image from "next/image";
-import { Settings } from "lucide-react";
 
 import { NewChatDialog } from "@/components/chat/new-chat-dialog";
 import { SidebarConversationList } from "@/components/chat/sidebar-conversation-list";
+import { UserMenuDropdown } from "@/components/chat/user-menu-dropdown";
 
 interface ChatSidebarProps {
   user: {
@@ -15,7 +15,7 @@ interface ChatSidebarProps {
   } | null;
 }
 
-export function ChatSidebar({ profile }: ChatSidebarProps) {
+export function ChatSidebar({ user, profile }: ChatSidebarProps) {
   return (
     <aside className="w-full md:w-[340px] lg:w-[360px] h-screen bg-white border-r border-slate-200/80 flex flex-col shrink-0 select-none">
       {/* Mobile-only header bar */}
@@ -33,12 +33,12 @@ export function ChatSidebar({ profile }: ChatSidebarProps) {
           <span className="font-bold text-base text-[#0F172A]">Shivers</span>
         </div>
 
-        <Link
-          href="/settings/profile"
-          className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200/60 transition-colors"
-        >
-          <Settings className="w-4 h-4" />
-        </Link>
+        <UserMenuDropdown
+          user={user}
+          profile={profile}
+          side="bottom"
+          align="end"
+        />
       </div>
 
       {/* Sidebar Header & New Chat Trigger */}

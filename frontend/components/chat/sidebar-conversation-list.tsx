@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { Search, MessageSquare, Users, Hash } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Search, MessageSquare, Hash } from "lucide-react";
 
-import { conversationsCache } from "@/hooks/conversations-cache";
+import { conversationsCache, type ConversationsData } from "@/hooks/conversations-cache";
+import { socket } from "@/lib/socket";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Badge } from "@/components/ui/badge";
-import type { Conversation } from "@/types/chat";
+import type { Conversation, Message } from "@/types/chat";
 
 function formatTimestamp(isoString: string): string {
   try {
@@ -31,11 +32,87 @@ function formatTimestamp(isoString: string): string {
 
 export function SidebarConversationList() {
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<"all" | "dm" | "room">("all");
   const [search, setSearch] = useState("");
 
   const { data } = useQuery(conversationsCache.options());
   const conversations: Conversation[] = data?.conversations ?? [];
+
+  // Clear unread count for the active conversation
+  useEffect(() => {
+    if (!pathname.startsWith("/chat/")) return;
+    const activeId = pathname.replace("/chat/", "");
+    if (!activeId) return;
+
+    queryClient.setQueryData<ConversationsData>(conversationsCache.key, (old) => {
+      if (!old?.conversations) return old;
+      const target = old.conversations.find((c) => c.id === activeId);
+      if (!target || !target.unreadCount) return old;
+
+      return {
+        conversations: old.conversations.map((c) =>
+          c.id === activeId ? { ...c, unreadCount: 0 } : c
+        ),
+      };
+    });
+  }, [pathname, queryClient]);
+
+  // Real-time listener for incoming messages across all conversations
+  useEffect(() => {
+    const handleNewMessage = (msg: Message) => {
+      if (!msg?.conversationId) return;
+
+      queryClient.setQueryData<ConversationsData>(conversationsCache.key, (old) => {
+        if (!old?.conversations) return old;
+
+        const targetIndex = old.conversations.findIndex(
+          (c) => c.id === msg.conversationId
+        );
+
+        if (targetIndex === -1) {
+          // If a message arrives for a conversation not yet in sidebar, refetch the list
+          void queryClient.invalidateQueries({ queryKey: conversationsCache.key });
+          return old;
+        }
+
+        const target = old.conversations[targetIndex];
+        const isCurrentActive = pathname === `/chat/${target.id}`;
+
+        const updated: Conversation = {
+          ...target,
+          lastMessage: {
+            id: msg.id,
+            body: msg.body,
+            senderId: msg.senderId,
+            type: msg.type,
+            createdAt: msg.createdAt,
+          },
+          unreadCount: isCurrentActive ? 0 : (target.unreadCount ?? 0) + 1,
+        };
+
+        // Bump to the top of the sidebar list
+        const remaining = old.conversations.filter(
+          (c) => c.id !== msg.conversationId
+        );
+
+        return {
+          conversations: [updated, ...remaining],
+        };
+      });
+    };
+
+    const handleConversationCreated = () => {
+      void queryClient.invalidateQueries({ queryKey: conversationsCache.key });
+    };
+
+    socket.on("message:new", handleNewMessage);
+    socket.on("conversation:created", handleConversationCreated);
+    return () => {
+      socket.off("message:new", handleNewMessage);
+      socket.off("conversation:created", handleConversationCreated);
+    };
+  }, [queryClient, pathname]);
 
   const filteredConversations = useMemo(() => {
     return conversations.filter((c) => {
@@ -58,8 +135,8 @@ export function SidebarConversationList() {
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* Search Bar & Filter Chips */}
-      <div className="px-4 pb-3 space-y-3 shrink-0">
+      {/* Search Input & Filter Tabs */}
+      <div className="px-4 py-2 space-y-2 shrink-0">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           <input
@@ -72,7 +149,7 @@ export function SidebarConversationList() {
         </div>
 
         {/* Filter Chips */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto">
+        <div className="flex items-center space-x-1.5 pt-0.5">
           <button
             type="button"
             onClick={() => setFilter("all")}
@@ -118,12 +195,16 @@ export function SidebarConversationList() {
               c.type === "dm"
                 ? c.otherUser?.name || "Direct Message"
                 : c.name || "Channel";
-            const subtitle =
-              c.type === "dm"
+            const previewText =
+              c.lastMessage?.body ||
+              (c.type === "dm"
                 ? c.otherUser?.username
                   ? `@${c.otherUser.username}`
                   : "Private chat"
-                : "Channel thread";
+                : "Channel thread");
+            const timestamp = c.lastMessage
+              ? formatTimestamp(c.lastMessage.createdAt)
+              : formatTimestamp(c.createdAt);
 
             return (
               <Link
@@ -167,13 +248,18 @@ export function SidebarConversationList() {
                       {title}
                     </span>
                     <span className="text-[10px] text-slate-400 font-medium shrink-0 ml-1">
-                      {formatTimestamp(c.createdAt)}
+                      {timestamp}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <p className="text-[11px] text-[#64748B] truncate font-normal">
-                      {subtitle}
+                      {previewText}
                     </p>
+                    {c.unreadCount && c.unreadCount > 0 ? (
+                      <Badge variant="indigo" size="counter" className="shrink-0">
+                        {c.unreadCount > 99 ? "99+" : c.unreadCount}
+                      </Badge>
+                    ) : null}
                   </div>
                 </div>
               </Link>
@@ -200,4 +286,3 @@ export function SidebarConversationList() {
     </div>
   );
 }
-

@@ -5,7 +5,7 @@ import { Check, CheckCheck, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const chatBubbleVariants = cva(
-  "relative max-w-[85%] md:max-w-[72%] text-[14px] leading-relaxed transition-all select-text break-words",
+  "relative w-fit min-w-[3.5rem] max-w-full text-[14px] leading-relaxed transition-all select-text break-words whitespace-pre-wrap",
   {
     variants: {
       variant: {
@@ -99,12 +99,12 @@ export function ChatBubble({
       className={cn(chatBubbleVariants({ variant, podPosition }), "px-4 py-2.5", className)}
       {...props}
     >
-      <div className="leading-relaxed">{children}</div>
+      <div className="leading-relaxed break-words">{children}</div>
 
       {(time || status) && (
         <div
           className={cn(
-            "flex items-center justify-end gap-1 mt-1 text-[11px] select-none",
+            "flex items-center justify-end gap-1 mt-1 text-[11px] select-none shrink-0",
             isOutbound ? "text-white/75" : "text-slate-400"
           )}
         >
@@ -136,4 +136,3 @@ export function ChatBubble({
 }
 
 export { chatBubbleVariants };
-

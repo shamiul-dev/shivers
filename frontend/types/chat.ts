@@ -28,6 +28,14 @@ export type Conversation = {
     role: string;
     joinedAt: string;
     otherUser?: UserSummary | null;
+    lastMessage?: {
+        id: string;
+        body: string;
+        senderId: string;
+        type: "text" | "image";
+        createdAt: string;
+    } | null;
+    unreadCount?: number;
 };
 
 export type SendMessageAck = 

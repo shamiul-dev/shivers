@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
@@ -81,7 +82,38 @@ export async function createRoomAction(formData: FormData) {
     redirect(`/chat?error=${encodeURIComponent(message)}`);
   }
 
+  revalidatePath("/chat", "layout");
   redirect(`/chat/${result.data.conversation.id}`);
+}
+
+/**
+ * Value-returning channel creation for live dialog feedback and immediate cache invalidation.
+ */
+export async function createChannelAction(name: string): Promise<
+  { ok: true; conversationId: string } | { ok: false; error: string }
+> {
+  const validation = createRoomSchema.safeParse({ name });
+  if (!validation.success) {
+    return { ok: false, error: validation.error.issues[0]?.message || "Invalid input" };
+  }
+
+  const result = await serverFetch<BackendEnvelope>("/api/conversations", {
+    method: "POST",
+    body: JSON.stringify({ name: validation.data.name }),
+  });
+
+  if (!result.ok || !result.data?.conversation) {
+    return {
+      ok: false,
+      error:
+        result.data?.error ||
+        result.data?.message ||
+        "Failed to create channel. Please try again.",
+    };
+  }
+
+  revalidatePath("/chat", "layout");
+  return { ok: true, conversationId: result.data.conversation.id };
 }
 
 /**

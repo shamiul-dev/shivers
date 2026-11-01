@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { getProfile } from "@/app/actions/profile";
 import {
@@ -64,6 +65,11 @@ async function ConversationContent({
   const conversation = detailsResult.conversation;
   const initialMessages = messagesResult.data?.messages ?? [];
 
+  const cookieStore = await cookies();
+  const sessionToken =
+    cookieStore.get("better-auth.session_token")?.value ||
+    cookieStore.get("__Secure-better-auth.session_token")?.value;
+
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       <ChatHeader conversation={conversation} />
@@ -72,6 +78,7 @@ async function ConversationContent({
         currentUserId={profileData.user.id}
         initialHistory={initialMessages}
         otherUser={conversation.otherUser}
+        sessionToken={sessionToken}
       />
     </div>
   );

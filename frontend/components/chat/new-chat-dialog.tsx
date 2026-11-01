@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { Plus, Search, MessageSquare, Users, Sparkles, Loader2 } from "lucide-react";
 
 import {
@@ -15,13 +16,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { searchUsersAction, startDmAction, createRoomAction } from "@/app/actions/chat";
+import { searchUsersAction, startDmAction, createChannelAction } from "@/app/actions/chat";
+import { conversationsCache } from "@/hooks/conversations-cache";
 
 export function NewChatDialog() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<"dm" | "room">("dm");
   const [query, setQuery] = useState("");
+  const [channelName, setChannelName] = useState("");
   const [searchResults, setSearchResults] = useState<
     Array<{ id: string; name: string; username: string; image?: string | null; bio?: string | null }>
   >([]);
@@ -53,7 +57,26 @@ export function NewChatDialog() {
     startTransition(async () => {
       const res = await startDmAction(targetUserId);
       if (res.ok) {
+        await queryClient.invalidateQueries({ queryKey: conversationsCache.key });
         setOpen(false);
+        router.push(`/chat/${res.conversationId}`);
+        router.refresh();
+      } else {
+        setError(res.error);
+      }
+    });
+  };
+
+  const handleCreateChannel = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!channelName.trim()) return;
+    setError(null);
+    startTransition(async () => {
+      const res = await createChannelAction(channelName.trim());
+      if (res.ok) {
+        await queryClient.invalidateQueries({ queryKey: conversationsCache.key });
+        setOpen(false);
+        setChannelName("");
         router.push(`/chat/${res.conversationId}`);
         router.refresh();
       } else {
@@ -68,7 +91,7 @@ export function NewChatDialog() {
         <Button
           size="sm"
           variant="gradient"
-          className="h-8 px-2.5 rounded-xl text-xs gap-1 shadow-xs"
+          className="h-8 px-2.5 rounded-xl text-xs gap-1 shadow-xs cursor-pointer"
           title="Start new conversation"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -140,28 +163,30 @@ export function NewChatDialog() {
               )}
             </div>
 
-            <div className="max-h-60 overflow-y-auto space-y-1 -mx-1 px-1">
+            {/* Results List */}
+            <div className="max-h-60 overflow-y-auto space-y-1">
               {searchResults.length > 0 ? (
                 searchResults.map((u) => (
                   <button
                     key={u.id}
-                    disabled={isPending}
+                    type="button"
                     onClick={() => handleSelectUser(u.id)}
-                    className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all text-left cursor-pointer disabled:opacity-50"
+                    disabled={isPending}
+                    className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-100 transition-colors text-left cursor-pointer group disabled:opacity-50"
                   >
                     <UserAvatar
                       name={u.name}
                       username={u.username}
                       image={u.image}
-                      size="sm"
+                      size="md"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-[#0F172A] truncate">
+                      <p className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#4338CA]">
                         {u.name}
-                      </div>
-                      <div className="text-[11px] text-[#4338CA] font-medium">
+                      </p>
+                      <p className="text-[11px] text-slate-500 truncate">
                         @{u.username}
-                      </div>
+                      </p>
                     </div>
                   </button>
                 ))
@@ -177,7 +202,7 @@ export function NewChatDialog() {
             </div>
           </div>
         ) : (
-          <form action={createRoomAction} className="space-y-4 pt-1">
+          <form onSubmit={handleCreateChannel} className="space-y-4 pt-1">
             <div className="space-y-1.5">
               <label htmlFor="room-name" className="text-xs font-semibold text-[#0F172A]">
                 Channel Name
@@ -185,6 +210,8 @@ export function NewChatDialog() {
               <Input
                 id="room-name"
                 name="name"
+                value={channelName}
+                onChange={(e) => setChannelName(e.target.value)}
                 placeholder="e.g. general, design-guild, random"
                 required
                 className="h-10 text-xs rounded-xl"
@@ -201,7 +228,7 @@ export function NewChatDialog() {
                 variant="outline"
                 size="sm"
                 onClick={() => setOpen(false)}
-                className="rounded-xl text-xs"
+                className="rounded-xl text-xs cursor-pointer"
               >
                 Cancel
               </Button>
@@ -209,10 +236,15 @@ export function NewChatDialog() {
                 type="submit"
                 variant="gradient"
                 size="sm"
-                className="rounded-xl text-xs gap-1.5"
+                disabled={isPending || !channelName.trim()}
+                className="rounded-xl text-xs gap-1.5 cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Create Channel</span>
+                {isPending ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5" />
+                )}
+                <span>{isPending ? "Creating..." : "Create Channel"}</span>
               </Button>
             </div>
           </form>
@@ -221,4 +253,3 @@ export function NewChatDialog() {
     </Dialog>
   );
 }
-

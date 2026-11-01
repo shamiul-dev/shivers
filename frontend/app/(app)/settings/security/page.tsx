@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Shield, KeyRound, Lock } from "lucide-react";
+import { Shield, KeyRound, Lock, LogOut } from "lucide-react";
 
 import { getProfile } from "@/app/actions/profile";
+import { signOutAction } from "@/app/actions/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SettingsLoading from "../loading";
@@ -78,6 +79,30 @@ async function SecuritySettingsContent() {
           <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 self-start sm:self-auto">
             Active & Protected
           </span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200/60 gap-4">
+          <div className="space-y-0.5">
+            <span className="text-xs font-semibold text-[#0F172A] flex items-center space-x-1.5">
+              <LogOut className="w-3.5 h-3.5 text-rose-600" />
+              <span>Current Session</span>
+            </span>
+            <p className="text-xs text-[#64748B]">
+              Sign out of your active session on this device.
+            </p>
+          </div>
+
+          <form action={signOutAction}>
+            <Button
+              type="submit"
+              variant="outline"
+              size="sm"
+              className="text-xs rounded-xl border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 self-start sm:self-auto cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5 mr-1" />
+              <span>Sign Out</span>
+            </Button>
+          </form>
         </div>
       </CardContent>
     </Card>

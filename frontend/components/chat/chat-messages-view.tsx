@@ -14,6 +14,7 @@ interface ChatMessagesViewProps {
   currentUserId: string;
   initialHistory?: Message[];
   otherUser?: UserSummary | null;
+  sessionToken?: string;
 }
 
 function formatTime(isoString?: string): string {
@@ -58,10 +59,12 @@ export function ChatMessagesView({
   currentUserId,
   initialHistory = [],
   otherUser,
+  sessionToken,
 }: ChatMessagesViewProps) {
   const { committed, pending, send, joinState } = useMessages({
     conversationId,
     initialHistory,
+    sessionToken,
   });
 
   const scrollAnchorRef = useRef<HTMLDivElement>(null);
@@ -105,7 +108,7 @@ export function ChatMessagesView({
       {/* Scrollable Message Timeline */}
       <div className="flex-1 overflow-y-auto px-4 md:px-8 py-4 space-y-4">
         {allMessages.length > 0 ? (
-          <div className="max-w-[760px] mx-auto space-y-3">
+          <div className="w-full max-w-4xl mx-auto space-y-3">
             {allMessages.map((msg, i) => {
               const isOutbound = msg.senderId === currentUserId;
               const prevMsg = allMessages[i - 1];
@@ -144,7 +147,7 @@ export function ChatMessagesView({
                   )}
 
                   <div
-                    className={`flex items-end gap-2.5 ${
+                    className={`flex items-end gap-2.5 w-full ${
                       isOutbound ? "justify-end" : "justify-start"
                     } ${sameSenderAsPrev ? "mt-1" : "mt-3"}`}
                   >
@@ -165,7 +168,7 @@ export function ChatMessagesView({
                     <div
                       className={`flex flex-col ${
                         isOutbound ? "items-end" : "items-start"
-                      } max-w-[85%] md:max-w-[72%]`}
+                      } w-fit max-w-[85%] md:max-w-[72%]`}
                     >
                       {/* Sender name for first message in inbound group */}
                       {!isOutbound && !sameSenderAsPrev && otherUser?.name && (

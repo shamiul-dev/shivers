@@ -42,7 +42,7 @@ export function ChatComposer({ onSend, disabled = false }: ChatComposerProps) {
 
   return (
     <div className="relative z-20 px-4 md:px-8 pb-4 pt-2 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/90 to-transparent shrink-0">
-      <div className="max-w-[760px] mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-[#4338CA]/40 focus-within:ring-2 focus-within:ring-[#4338CA]/10">
+      <div className="w-full max-w-4xl mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-[#4338CA]/40 focus-within:ring-2 focus-within:ring-[#4338CA]/10">
         {/* Attachment Button */}
         <button
           type="button"

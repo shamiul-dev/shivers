@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { getProfile } from "@/app/actions/profile";
@@ -8,6 +9,7 @@ import { conversationsCache } from "@/hooks/conversations-cache";
 import type { Conversation } from "@/types/chat";
 import { ChatRail } from "@/components/chat/chat-rail";
 import { ChatSidebar } from "@/components/chat/chat-sidebar";
+import { SocketManager } from "@/components/chat/socket-manager";
 
 async function ChatNavigation() {
   const profileData = await getProfile();
@@ -31,8 +33,14 @@ async function ChatNavigation() {
   });
   const dehydratedState = dehydrate(queryClient);
 
+  const cookieStore = await cookies();
+  const sessionToken =
+    cookieStore.get("better-auth.session_token")?.value ||
+    cookieStore.get("__Secure-better-auth.session_token")?.value;
+
   return (
     <HydrationBoundary state={dehydratedState}>
+      <SocketManager sessionToken={sessionToken} />
       <ChatRail user={profileData.user} profile={profileData.profile} />
       <ChatSidebar user={profileData.user} profile={profileData.profile} />
     </HydrationBoundary>

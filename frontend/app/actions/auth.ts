@@ -142,3 +142,32 @@ export async function signInAction(formData: FormData) {
 
   redirect("/chat");
 }
+
+export async function signOutAction() {
+  const cookieStore = await cookies();
+  const sessionToken =
+    cookieStore.get("better-auth.session_token")?.value ||
+    cookieStore.get("__Secure-better-auth.session_token")?.value;
+
+  const backendUrl =
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:4000";
+
+  if (sessionToken) {
+    try {
+      await fetch(`${backendUrl}/api/auth/sign-out`, {
+        method: "POST",
+        headers: {
+          cookie: `better-auth.session_token=${sessionToken}; __Secure-better-auth.session_token=${sessionToken}`,
+        },
+      });
+    } catch (err) {
+      console.error("Backend sign-out error:", err);
+    }
+  }
+
+  cookieStore.delete("better-auth.session_token");
+  cookieStore.delete("__Secure-better-auth.session_token");
+
+  redirect("/login");
+}
+

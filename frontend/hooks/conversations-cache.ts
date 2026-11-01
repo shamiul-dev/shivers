@@ -20,6 +20,6 @@ export const conversationsCache = {
         // Server Action proxy — browser never calls Express REST directly (house policy)
         return fetchConversationsAction();
       },
-      staleTime: 30_000,
+      staleTime: 5_000,
     }),
 };
