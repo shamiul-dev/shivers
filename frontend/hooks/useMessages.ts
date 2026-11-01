@@ -62,6 +62,8 @@ export function useMessages(input: {
             if (!res.ok || !res.data) return;
             const store = useChatStore.getState();
             for (const m of res.data.messages) store.addCommitted(conversationId, m);
+            const newest = res.data.messages[res.data.messages.length - 1]?.id;
+            socket.emit("conversation:read", { conversationId, messageId: newest });
           })
           .catch(() => {});
       });
@@ -77,6 +79,7 @@ export function useMessages(input: {
       } else {
         state.addCommitted(conversationId, message);
       }
+      socket.emit("conversation:read", { conversationId, messageId: message.id });
     };
 
     socket.on("connect", joinAndResync);

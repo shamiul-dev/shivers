@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search, MessageSquare, Hash } from "lucide-react";
 
 import { conversationsCache, type ConversationsData } from "@/hooks/conversations-cache";
+import { markConversationReadAction } from "@/app/actions/chat";
 import { socket } from "@/lib/socket";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +40,7 @@ export function SidebarConversationList() {
   const { data } = useQuery(conversationsCache.options());
   const conversations: Conversation[] = data?.conversations ?? [];
 
-  // Clear unread count for the active conversation
+  // Clear unread count for the active conversation & persist read status
   useEffect(() => {
     if (!pathname.startsWith("/chat/")) return;
     const activeId = pathname.replace("/chat/", "");
@@ -56,6 +57,10 @@ export function SidebarConversationList() {
         ),
       };
     });
+
+    // Persist read state in the database so background refetches preserve 0 unread
+    void markConversationReadAction(activeId);
+    socket.emit("conversation:read", { conversationId: activeId });
   }, [pathname, queryClient]);
 
   // Real-time listener for incoming messages across all conversations

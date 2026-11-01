@@ -114,7 +114,8 @@ conversationsRouter.post("/:id/read", requireAuth, async (req, res: Response) =>
     const conversationId = String(id);
 
     try {
-        const updated = await markRead(conversationId, authreq.user.id);
+        const messageId = typeof req.body?.messageId === "string" ? req.body.messageId : undefined;
+        const updated = await markRead(conversationId, authreq.user.id, messageId);
         if(!updated) {
             res.status(404).json({ error: "Conversation not found" });
             return;

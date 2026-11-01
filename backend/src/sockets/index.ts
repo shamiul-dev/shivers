@@ -7,7 +7,7 @@ import { env } from "@/config/env";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { session as sessionTable, user as userTable, conversationMembers } from "@/db/schema";
-import { isMember } from "@/services/conversation.service";
+import { isMember, markRead } from "@/services/conversation.service";
 import { createSocketRateLimit } from "./socketRateLimit";
 import { registerMessageHandlers } from "./messageHandlers";
 import { setIO, getIO } from "./io";
@@ -134,6 +134,35 @@ export function createSocketServer(httpServer: HttpServer) {
                 respond({ ok: true });
             } catch (err) {
                 console.error("conversation:join error", err);
+                respond({ ok: false, error: "server" });
+            }
+        });
+
+        // Mark conversation read
+        socket.on("conversation:read", async (payload: unknown, ack?: (result: unknown) => void) => {
+            const respond = (data: unknown) => (typeof ack === "function" ? ack(data) : undefined);
+            const user = socket.data.user as { id: string } | undefined;
+            if (!user) return respond({ ok: false, error: "unauthorized" });
+
+            const { conversationId, messageId } = (payload ?? {}) as {
+                conversationId?: unknown;
+                messageId?: unknown;
+            };
+
+            if (typeof conversationId !== "string" || !conversationId) {
+                return respond({ ok: false, error: "validation" });
+            }
+
+            try {
+                if (!(await isMember(conversationId, user.id))) {
+                    return respond({ ok: false, error: "not_found" });
+                }
+
+                const cursor = typeof messageId === "string" ? messageId : undefined;
+                const updated = await markRead(conversationId, user.id, cursor);
+                respond({ ok: true, lastReadMessageId: updated?.lastReadMessageId });
+            } catch (err) {
+                console.error("conversation:read error", err);
                 respond({ ok: false, error: "server" });
             }
         });

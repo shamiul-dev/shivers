@@ -216,3 +216,20 @@ export async function searchUsersAction(query: string): Promise<{
   return { users: result.data.users };
 }
 
+/**
+ * Persist read cursor to the database for the active conversation.
+ */
+export async function markConversationReadAction(
+  conversationId: string,
+  messageId?: string
+): Promise<{ ok: boolean }> {
+  const result = await serverFetch<{ lastReadMessageId: string }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/read`,
+    {
+      method: "POST",
+      body: JSON.stringify({ messageId }),
+    }
+  );
+  return { ok: result.ok };
+}
+

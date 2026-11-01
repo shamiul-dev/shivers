@@ -93,16 +93,22 @@ export async function listConversations(userId: string) {
     const lastMessageMap = new Map<string, (typeof recentMessages)[number]>();
     const unreadMap = new Map<string, number>();
     const membershipMap = new Map(myRows.map((r) => [r.conversationId, r]));
+    const readCursorReached = new Set<string>();
 
     for (const msg of recentMessages) {
         if (!lastMessageMap.has(msg.conversationId)) {
             lastMessageMap.set(msg.conversationId, msg);
         }
 
-        // Unread check (only for messages not sent by me)
-        if (msg.senderId !== userId) {
-            const membership = membershipMap.get(msg.conversationId);
-            if (!membership?.lastReadMessageId || msg.id > membership.lastReadMessageId) {
+        const membership = membershipMap.get(msg.conversationId);
+        // If we encountered the member's last read message, mark cursor reached for this conversation
+        if (membership?.lastReadMessageId && msg.id === membership.lastReadMessageId) {
+            readCursorReached.add(msg.conversationId);
+        }
+
+        // Count unread: only messages before the read cursor, and only messages sent by someone else
+        if (!readCursorReached.has(msg.conversationId)) {
+            if (msg.senderId !== userId) {
                 unreadMap.set(msg.conversationId, (unreadMap.get(msg.conversationId) ?? 0) + 1);
             }
         }
@@ -298,7 +304,7 @@ export async function markRead(conversationId: string, userId: string, messageId
             .select({ id: messages.id })
             .from(messages)
             .where(eq(messages.conversationId, conversationId))
-            .orderBy(desc(messages.id))
+            .orderBy(desc(messages.createdAt))
             .limit(1);
         if (!latest) return null; // nothing to read
         cursor = latest.id;
