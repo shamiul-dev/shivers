@@ -14,6 +14,15 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isExpired = request.nextUrl.searchParams.get("expired") === "true";
+
+  // If the session was marked expired/invalid by server-side validation, clear stale cookies and allow /login
+  if (isExpired) {
+    const response = NextResponse.next();
+    response.cookies.delete("better-auth.session_token");
+    response.cookies.delete("__Secure-better-auth.session_token");
+    return response;
+  }
 
   // If trying to access protected routes without a session, redirect to login
   if (isProtectedRoute && !sessionToken) {
@@ -26,8 +35,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(sessionToken ? "/chat" : "/login", request.url));
   }
 
-  // If already authenticated and visiting login/signup, redirect to chat
-  if (isAuthRoute && sessionToken) {
+  // If already authenticated and visiting login/signup, redirect to chat (unless error or expired)
+  const hasAuthBypass = isExpired || request.nextUrl.searchParams.has("error");
+  if (isAuthRoute && sessionToken && !hasAuthBypass) {
     const chatUrl = new URL("/chat", request.url);
     return NextResponse.redirect(chatUrl);
   }

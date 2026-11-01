@@ -19,7 +19,7 @@ async function OnboardingContent() {
 
   // If user session is invalid, redirect to login
   if (!profileData?.user) {
-    redirect("/login");
+    redirect("/login?expired=true");
   }
 
   // Gate check: If user already claimed a username, proceed straight to chat

@@ -1,0 +1,203 @@
+"use client";
+
+import React, { useState, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { Search, MessageSquare, Users, Hash } from "lucide-react";
+
+import { conversationsCache } from "@/hooks/conversations-cache";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import { Badge } from "@/components/ui/badge";
+import type { Conversation } from "@/types/chat";
+
+function formatTimestamp(isoString: string): string {
+  try {
+    const date = new Date(isoString);
+    const now = new Date();
+    const isToday =
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear();
+
+    if (isToday) {
+      return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+    return date.toLocaleDateString([], { month: "short", day: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
+export function SidebarConversationList() {
+  const pathname = usePathname();
+  const [filter, setFilter] = useState<"all" | "dm" | "room">("all");
+  const [search, setSearch] = useState("");
+
+  const { data } = useQuery(conversationsCache.options());
+  const conversations: Conversation[] = data?.conversations ?? [];
+
+  const filteredConversations = useMemo(() => {
+    return conversations.filter((c) => {
+      // Type filter
+      if (filter === "dm" && c.type !== "dm") return false;
+      if (filter === "room" && c.type !== "room") return false;
+
+      // Text search
+      if (search.trim()) {
+        const query = search.toLowerCase().trim();
+        const title = (c.type === "dm" ? c.otherUser?.name : c.name) || "";
+        const handle = c.otherUser?.username || "";
+        return (
+          title.toLowerCase().includes(query) || handle.toLowerCase().includes(query)
+        );
+      }
+      return true;
+    });
+  }, [conversations, filter, search]);
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Search Bar & Filter Chips */}
+      <div className="px-4 pb-3 space-y-3 shrink-0">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search conversations..."
+            className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-[#0F172A] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338CA]/20 focus:border-[#4338CA] transition-all"
+          />
+        </div>
+
+        {/* Filter Chips */}
+        <div className="flex items-center space-x-1.5 overflow-x-auto">
+          <button
+            type="button"
+            onClick={() => setFilter("all")}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              filter === "all"
+                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
+                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+            }`}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter("dm")}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              filter === "dm"
+                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
+                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+            }`}
+          >
+            Direct
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter("room")}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              filter === "room"
+                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
+                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+            }`}
+          >
+            Channels
+          </button>
+        </div>
+      </div>
+
+      {/* Scrollable Conversation Items */}
+      <div className="flex-1 overflow-y-auto px-2 space-y-1">
+        {filteredConversations.length > 0 ? (
+          filteredConversations.map((c) => {
+            const isActive = pathname === `/chat/${c.id}`;
+            const title =
+              c.type === "dm"
+                ? c.otherUser?.name || "Direct Message"
+                : c.name || "Channel";
+            const subtitle =
+              c.type === "dm"
+                ? c.otherUser?.username
+                  ? `@${c.otherUser.username}`
+                  : "Private chat"
+                : "Channel thread";
+
+            return (
+              <Link
+                key={c.id}
+                href={`/chat/${c.id}`}
+                className={`relative flex items-center gap-3 p-2.5 rounded-2xl transition-all select-none group cursor-pointer ${
+                  isActive
+                    ? "bg-[#EEF2FF] border border-[#4338CA]/20 text-[#0F172A]"
+                    : "hover:bg-slate-50 border border-transparent text-slate-700 hover:text-[#0F172A]"
+                }`}
+              >
+                {/* Active Indicator Bar */}
+                {isActive && (
+                  <span className="absolute left-0 top-3 bottom-3 w-1 bg-[#4338CA] rounded-r-full" />
+                )}
+
+                {/* Avatar / Icon */}
+                {c.type === "dm" ? (
+                  <UserAvatar
+                    name={c.otherUser?.name}
+                    username={c.otherUser?.username}
+                    image={c.otherUser?.image}
+                    size="md"
+                    showPresence
+                    presenceStatus="online"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 text-[#4338CA] flex items-center justify-center shrink-0 font-bold text-sm shadow-xs">
+                    <Hash className="w-4 h-4" />
+                  </div>
+                )}
+
+                {/* Info Text */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span
+                      className={`text-xs font-bold truncate ${
+                        isActive ? "text-[#4338CA]" : "text-[#0F172A]"
+                      }`}
+                    >
+                      {title}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium shrink-0 ml-1">
+                      {formatTimestamp(c.createdAt)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] text-[#64748B] truncate font-normal">
+                      {subtitle}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+              <MessageSquare className="w-6 h-6 text-slate-400" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-[#0F172A]">
+                {search ? "No matching conversations" : "No conversations yet"}
+              </p>
+              <p className="text-xs text-[#64748B] max-w-[200px]">
+                {search
+                  ? "Try searching for a different handle or name."
+                  : "Click 'New' above to start a direct message or create a channel."}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+

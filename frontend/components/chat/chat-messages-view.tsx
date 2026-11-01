@@ -1,0 +1,222 @@
+"use client";
+
+import React, { useRef, useEffect, useMemo } from "react";
+import { MessageSquare } from "lucide-react";
+
+import { useMessages } from "@/hooks/useMessages";
+import { ChatBubble } from "@/components/ui/chat-bubble";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import { ChatComposer } from "@/components/chat/chat-composer";
+import type { Message, UserSummary } from "@/types/chat";
+
+interface ChatMessagesViewProps {
+  conversationId: string;
+  currentUserId: string;
+  initialHistory?: Message[];
+  otherUser?: UserSummary | null;
+}
+
+function formatTime(isoString?: string): string {
+  if (!isoString) return "";
+  try {
+    return new Date(isoString).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
+
+function formatDateHeader(isoString?: string): string {
+  if (!isoString) return "";
+  try {
+    const d = new Date(isoString);
+    const now = new Date();
+    const isToday =
+      d.getDate() === now.getDate() &&
+      d.getMonth() === now.getMonth() &&
+      d.getFullYear() === now.getFullYear();
+
+    if (isToday) return "Today";
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday =
+      d.getDate() === yesterday.getDate() &&
+      d.getMonth() === yesterday.getMonth() &&
+      d.getFullYear() === yesterday.getFullYear();
+
+    if (isYesterday) return "Yesterday";
+    return d.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
+export function ChatMessagesView({
+  conversationId,
+  currentUserId,
+  initialHistory = [],
+  otherUser,
+}: ChatMessagesViewProps) {
+  const { committed, pending, send, joinState } = useMessages({
+    conversationId,
+    initialHistory,
+  });
+
+  const scrollAnchorRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll on new message
+  useEffect(() => {
+    scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [committed.length, pending.length]);
+
+  // Combine committed + pending messages for unified display
+  const allMessages = useMemo(() => {
+    const list: Array<{
+      id: string;
+      senderId: string;
+      body: string;
+      createdAt?: string;
+      isPending?: boolean;
+      failed?: boolean;
+    }> = committed.map((m) => ({
+      id: m.id,
+      senderId: m.senderId,
+      body: m.body,
+      createdAt: m.createdAt,
+    }));
+
+    for (const p of pending) {
+      list.push({
+        id: p.clientId,
+        senderId: currentUserId,
+        body: p.body,
+        isPending: true,
+        failed: p.failed,
+      });
+    }
+
+    return list;
+  }, [committed, pending, currentUserId]);
+
+  return (
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC]">
+      {/* Scrollable Message Timeline */}
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-4 space-y-4">
+        {allMessages.length > 0 ? (
+          <div className="max-w-[760px] mx-auto space-y-3">
+            {allMessages.map((msg, i) => {
+              const isOutbound = msg.senderId === currentUserId;
+              const prevMsg = allMessages[i - 1];
+              const nextMsg = allMessages[i + 1];
+
+              const sameSenderAsPrev = prevMsg && prevMsg.senderId === msg.senderId;
+              const sameSenderAsNext = nextMsg && nextMsg.senderId === msg.senderId;
+
+              // Calculate podPosition for asymmetric corners
+              let podPosition: "single" | "first" | "middle" | "last" = "single";
+              if (!sameSenderAsPrev && sameSenderAsNext) podPosition = "first";
+              else if (sameSenderAsPrev && sameSenderAsNext) podPosition = "middle";
+              else if (sameSenderAsPrev && !sameSenderAsNext) podPosition = "last";
+
+              // Date divider
+              const showDateHeader =
+                !prevMsg ||
+                formatDateHeader(prevMsg.createdAt) !== formatDateHeader(msg.createdAt);
+
+              const bubbleVariant = msg.failed
+                ? "failed"
+                : msg.isPending
+                ? "pending"
+                : isOutbound
+                ? "outbound"
+                : "inbound";
+
+              return (
+                <React.Fragment key={msg.id}>
+                  {showDateHeader && msg.createdAt && (
+                    <div className="flex justify-center my-3">
+                      <span className="px-3 py-1 rounded-full bg-slate-200/60 border border-slate-300/40 text-[10px] font-semibold text-slate-600 select-none">
+                        {formatDateHeader(msg.createdAt)}
+                      </span>
+                    </div>
+                  )}
+
+                  <div
+                    className={`flex items-end gap-2.5 ${
+                      isOutbound ? "justify-end" : "justify-start"
+                    } ${sameSenderAsPrev ? "mt-1" : "mt-3"}`}
+                  >
+                    {/* Inbound Sender Avatar */}
+                    {!isOutbound && (
+                      <div className="w-8 shrink-0">
+                        {!sameSenderAsNext && (
+                          <UserAvatar
+                            name={otherUser?.name}
+                            username={otherUser?.username}
+                            image={otherUser?.image}
+                            size="sm"
+                          />
+                        )}
+                      </div>
+                    )}
+
+                    <div
+                      className={`flex flex-col ${
+                        isOutbound ? "items-end" : "items-start"
+                      } max-w-[85%] md:max-w-[72%]`}
+                    >
+                      {/* Sender name for first message in inbound group */}
+                      {!isOutbound && !sameSenderAsPrev && otherUser?.name && (
+                        <span className="text-[11px] font-semibold text-[#0F172A] ml-1 mb-1">
+                          {otherUser.name}
+                        </span>
+                      )}
+
+                      <ChatBubble
+                        variant={bubbleVariant}
+                        podPosition={podPosition}
+                        time={formatTime(msg.createdAt)}
+                        status={
+                          msg.failed
+                            ? "failed"
+                            : msg.isPending
+                            ? "pending"
+                            : isOutbound
+                            ? "sent"
+                            : undefined
+                        }
+                      >
+                        {msg.body}
+                      </ChatBubble>
+                    </div>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+            <div ref={scrollAnchorRef} />
+          </div>
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-[#4338CA]">
+              <MessageSquare className="w-6 h-6 text-[#4338CA]" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-[#0F172A]">
+                No messages yet
+              </p>
+              <p className="text-xs text-[#64748B] max-w-xs">
+                Send the first message below to start the conversation in real time.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Floating Message Composer Dock */}
+      <ChatComposer onSend={send} disabled={joinState === "not_found"} />
+    </div>
+  );
+}
+

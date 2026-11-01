@@ -15,7 +15,7 @@ async function ProfileSettingsContent() {
   const profileData = await getProfile();
 
   if (!profileData?.user) {
-    redirect("/login");
+    redirect("/login?expired=true");
   }
 
   // Identity gate: if no username claimed yet, redirect to onboarding

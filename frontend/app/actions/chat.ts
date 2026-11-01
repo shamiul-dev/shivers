@@ -132,3 +132,55 @@ export async function createDmAction(formData: FormData) {
 
   redirect(`/chat/${result.conversationId}`);
 }
+
+/**
+ * Fetch details of a single conversation (name, type, members).
+ */
+export async function fetchConversationDetailsAction(
+  conversationId: string
+): Promise<{ ok: boolean; conversation: Conversation | null }> {
+  const result = await serverFetch<{ conversation: Conversation }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}`
+  );
+
+  if (!result.ok || !result.data?.conversation) {
+    return { ok: false, conversation: null };
+  }
+
+  return { ok: true, conversation: result.data.conversation };
+}
+
+/**
+ * Search users by username or display name for the New Chat dialog.
+ */
+export async function searchUsersAction(query: string): Promise<{
+  users: Array<{
+    id: string;
+    name: string;
+    image?: string | null;
+    username: string;
+    bio?: string | null;
+  }>;
+}> {
+  const clean = query.trim();
+  if (clean.length < 2) {
+    return { users: [] };
+  }
+
+  const result = await serverFetch<{
+    users: Array<{
+      id: string;
+      name: string;
+      image?: string | null;
+      username: string;
+      bio?: string | null;
+    }>;
+  }>(`/api/users/search?q=${encodeURIComponent(clean)}`);
+
+  if (!result.ok || !result.data?.users) {
+    return { users: [] };
+  }
+
+  return { users: result.data.users };
+}
+

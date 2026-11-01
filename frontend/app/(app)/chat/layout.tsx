@@ -13,7 +13,7 @@ async function ChatNavigation() {
   const profileData = await getProfile();
 
   if (!profileData?.user) {
-    redirect("/login");
+    redirect("/login?expired=true");
   }
 
   if (!profileData.profile?.username) {
