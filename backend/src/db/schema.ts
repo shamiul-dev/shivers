@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, primaryKey, index, unique, } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, primaryKey, index, unique, integer } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
@@ -128,5 +128,35 @@ export const messages = pgTable(
       table.conversationId,
       table.clientId
     ),
+  ]
+);
+
+/**
+ * Attachments
+ */
+export const attachments = pgTable(
+  "attachments",
+  {
+    id: text("id").primaryKey(),
+    messageId: text("message_id").references(() => messages.id, { onDelete: "cascade" }),
+    conversationId: text("conversation_id")
+      .notNull()
+      .references(() => conversations.id, { onDelete: "cascade" }),
+    uploaderId: text("uploader_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    storageKey: text("storage_key").notNull(),
+    thumbKey: text("thumb_key"),
+    fileName: text("file_name").notNull(),
+    mime: text("mime").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    width: integer("width"),
+    height: integer("height"),
+    status: text("status").notNull().default("ready"), // 'pending' | 'ready' | 'deleted'
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("attachments_message_id_idx").on(table.messageId),
+    index("attachments_conversation_id_idx").on(table.conversationId),
   ]
 );

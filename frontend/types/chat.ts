@@ -1,13 +1,32 @@
+export type Attachment = {
+    id: string;
+    messageId?: string | null;
+    conversationId: string;
+    uploaderId: string;
+    storageKey: string;
+    thumbKey?: string | null;
+    fileName: string;
+    mime: string;
+    sizeBytes: number;
+    width?: number | null;
+    height?: number | null;
+    status: "pending" | "ready" | "deleted";
+    createdAt: string;
+    url?: string;
+    thumbUrl?: string | null;
+};
+
 export type Message = {
     id: string;
     conversationId: string;
     senderId: string;
-    type: "text" | "image";
+    type: "text" | "image" | "file";
     body: string;
     clientId: string;
     createdAt: string;
     editedAt: string | null;
     deletedAt: string | null;
+    attachment?: Attachment | null;
 };
 
 export type UserSummary = {
@@ -33,7 +52,7 @@ export type Conversation = {
         id: string;
         body: string;
         senderId: string;
-        type: "text" | "image";
+        type: "text" | "image" | "file";
         createdAt: string;
     } | null;
     unreadCount?: number;

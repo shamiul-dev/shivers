@@ -1,7 +1,8 @@
-import { asc, desc, eq, gt, lt, and } from "drizzle-orm";
+import { asc, desc, eq, gt, lt, and, inArray } from "drizzle-orm";
 
-import { db } from "@/db"
-import { messages } from "@/db/schema";
+import { db } from "@/db";
+import { messages, attachments } from "@/db/schema";
+import { attachSignedUrls } from "@/services/signedUrl.service";
 
 /**
  * Cursor pagination for message history.
@@ -25,7 +26,7 @@ export async function fetchHistory(
             .where(eq(messages.id, after))
             .limit(1);
         
-        if (!cursor) return { messages: [], hasOlder: false};
+        if (!cursor) return { messages: [], hasOlder: false };
 
         const rows = await db
             .select()
@@ -40,18 +41,40 @@ export async function fetchHistory(
             .limit(limit + 1);
         
         const hasOlder = rows.length > limit;
-        return { messages: hasOlder ? rows.slice(0, limit) : rows, hasOlder: false };
+        const page = hasOlder ? rows.slice(0, limit) : rows;
+
+        // Attach attachments
+        const messageIds = page.map((m) => m.id);
+        const attachmentsMap: Record<string, typeof attachments.$inferSelect> = {};
+        if (messageIds.length > 0) {
+            const attRows = await db
+                .select()
+                .from(attachments)
+                .where(inArray(attachments.messageId, messageIds));
+            for (const att of attRows) {
+                if (att.messageId) {
+                    attachmentsMap[att.messageId] = att;
+                }
+            }
+        }
+
+        return {
+            messages: page.map((m) => ({
+                ...m,
+                attachment: attachmentsMap[m.id] ? attachSignedUrls(attachmentsMap[m.id]) : null,
+            })),
+            hasOlder: false,
+        };
     }
 
     // Standard history: newest up to cursor, descending fetch
-
     let cursorRow: { createdAt: Date } | undefined;
     if (before) {
         [cursorRow] = await db
-        .select({ createdAt: messages.createdAt })
-        .from(messages)
-        .where(eq(messages.id, before))
-        .limit(1);
+            .select({ createdAt: messages.createdAt })
+            .from(messages)
+            .where(eq(messages.id, before))
+            .limit(1);
         if (!cursorRow) return { messages: [], hasOlder: false };
     }
 
@@ -68,20 +91,60 @@ export async function fetchHistory(
         )
         .orderBy(desc(messages.createdAt), desc(messages.id))
         .limit(limit + 1);
+
     const hasOlder = rows.length > limit;
-    const page = hasOlder ? rows.slice(0, limit): rows;
+    const page = hasOlder ? rows.slice(0, limit) : rows;
+
+    // Attach attachments
+    const messageIds = page.map((m) => m.id);
+    const attachmentsMap: Record<string, typeof attachments.$inferSelect> = {};
+    if (messageIds.length > 0) {
+        const attRows = await db
+            .select()
+            .from(attachments)
+            .where(inArray(attachments.messageId, messageIds));
+        for (const att of attRows) {
+            if (att.messageId) {
+                attachmentsMap[att.messageId] = att;
+            }
+        }
+    }
+
+    const messagesWithAttachments = page.map((m) => ({
+        ...m,
+        attachment: attachmentsMap[m.id] ? attachSignedUrls(attachmentsMap[m.id]) : null,
+    }));
+
     // Return chronological order to the client
-    return { messages: page.reverse(), hasOlder }
+    return { messages: messagesWithAttachments.reverse(), hasOlder };
 }
 
-export async function createMessage(conversationId: string, senderId: string, clientId: string, body: string) {
+export async function createMessage(
+    conversationId: string,
+    senderId: string,
+    clientId: string,
+    body: string,
+    type: string = "text",
+    attachmentId?: string
+) {
     const id = crypto.randomUUID();
     try {
         const [message] = await db
             .insert(messages)
-            .values({ id, conversationId, senderId, type: "text", body, clientId })
+            .values({ id, conversationId, senderId, type, body, clientId })
             .returning();
-            return { message, duplicated: false };
+
+        let attachment = null;
+        if (attachmentId) {
+            const [linked] = await db
+                .update(attachments)
+                .set({ messageId: id })
+                .where(eq(attachments.id, attachmentId))
+                .returning();
+            attachment = linked ? attachSignedUrls(linked) : null;
+        }
+
+        return { message: { ...message, attachment }, duplicated: false };
     } catch (error: any) {
         if (error?.code === "23505") {
             const [existing] = await db
@@ -89,7 +152,20 @@ export async function createMessage(conversationId: string, senderId: string, cl
                 .from(messages)
                 .where(and(eq(messages.conversationId, conversationId), eq(messages.clientId, clientId)))
                 .limit(1);
-            if(existing) return { message: existing, duplicated: true };
+            if (existing) {
+                const [att] = await db
+                    .select()
+                    .from(attachments)
+                    .where(eq(attachments.messageId, existing.id))
+                    .limit(1);
+                return {
+                    message: {
+                        ...existing,
+                        attachment: att ? attachSignedUrls(att) : null,
+                    },
+                    duplicated: true,
+                };
+            }
         }
         throw error;
     }

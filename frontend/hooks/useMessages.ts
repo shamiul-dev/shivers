@@ -9,7 +9,7 @@ import {
   useChatStore,
   type PendingMessage,
 } from "@/store/chatStore";
-import type { Message, SendMessageAck } from "@/types/chat";
+import type { Message, SendMessageAck, Attachment } from "@/types/chat";
 
 export type JoinState = "idle" | "joined" | "not_found";
 
@@ -99,12 +99,19 @@ export function useMessages(input: {
   }, [conversationId, sessionToken]);
 
   const send = useCallback(
-    (body: string): string => {
+    (body: string, attachment?: Attachment): string => {
       const clientId = crypto.randomUUID();
-      useChatStore.getState().addPending(conversationId, clientId, body);
+      const type = attachment ? (attachment.mime.startsWith("image/") ? "image" : "file") : "text";
+      useChatStore.getState().addPending(conversationId, clientId, body, type, attachment);
       socket.emit(
         "message:send",
-        { conversationId, clientId, body: body.trim() },
+        {
+          conversationId,
+          clientId,
+          body: body.trim(),
+          type,
+          attachmentId: attachment?.id,
+        },
         (ack: SendMessageAck) => {
           if (ack.ok) {
             useChatStore.getState().resolvePending(conversationId, clientId, ack.message);

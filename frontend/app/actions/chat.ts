@@ -2,10 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
-import type { Conversation, Message, ChannelMember } from "@/types/chat";
+import type { Conversation, Message, ChannelMember, Attachment } from "@/types/chat";
 
 type BackendEnvelope = {
   conversation?: Conversation;
@@ -266,5 +267,44 @@ export async function addChannelMemberAction(
     return { ok: false, error: result.data?.error || "Failed to add member" };
   }
   return { ok: true, membership: result.data?.membership };
+}
+
+/**
+ * Upload an attachment file for a conversation.
+ */
+export async function uploadAttachmentAction(
+  conversationId: string,
+  formData: FormData
+): Promise<{ ok: true; attachment: Attachment } | { ok: false; error: string }> {
+  const cookieStore = await cookies();
+  const sessionCookie =
+    cookieStore.get("better-auth.session_token") ||
+    cookieStore.get("__Secure-better-auth.session_token");
+
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+  try {
+    const res = await fetch(
+      `${backendUrl}/api/conversations/${encodeURIComponent(conversationId)}/attachments`,
+      {
+        method: "POST",
+        headers: {
+          Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : "",
+        },
+        body: formData,
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      return { ok: false, error: err?.error || "Failed to upload file" };
+    }
+
+    const data = await res.json();
+    return { ok: true, attachment: data.attachment };
+  } catch (err) {
+    console.error("uploadAttachmentAction error:", err);
+    return { ok: false, error: "Network error during upload" };
+  }
 }
 

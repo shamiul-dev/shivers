@@ -9,11 +9,16 @@ import { profileRouter } from "@/routes/profile";
 import { usersRouter } from "@/routes/users";
 import { conversationsRouter } from "@/routes/conversations";
 import { messagesRouter } from "@/routes/messages";
+import { attachmentsRouter } from "@/routes/attachments";
 
 export const app = express();
 
 // 1. Security headers and CORS
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+);
 app.use(
     cors({
         origin: env.FRONTEND_URL,
@@ -32,7 +37,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/profile", profileRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/conversations", conversationsRouter);
-app.use("/api/conversations/:conversationId/messages", messagesRouter)
+app.use("/api/conversations/:conversationId/messages", messagesRouter);
+app.use("/api", attachmentsRouter);
 
 // 4. Health check endpoint
 app.get("/health", (req, res) => {
@@ -44,7 +50,6 @@ app.get("/health", (req, res) => {
 });
 
 // 5. Global error handling
-
 app.use((err: unknown, req: express.Request, res: express.Response,
     next: express.NextFunction) => {
     console.error("Unhandled Error", err);

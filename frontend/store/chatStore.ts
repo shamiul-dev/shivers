@@ -2,12 +2,14 @@
 
 import { create } from "zustand";
 
-import type { Message } from "@/types/chat";
+import type { Message, Attachment } from "@/types/chat";
 
 export type PendingMessage = {
   clientId: string;
   body: string;
   failed?: boolean;
+  type?: "text" | "image" | "file";
+  attachment?: Attachment;
 };
 
 type ConversationMessages = {
@@ -19,7 +21,13 @@ type ChatState = {
   messages: Record<string, ConversationMessages>;
   setHistory: (conversationId: string, msgs: Message[]) => void;
   addCommitted: (conversationId: string, msg: Message) => void;
-  addPending: (conversationId: string, clientId: string, body: string) => void;
+  addPending: (
+    conversationId: string,
+    clientId: string,
+    body: string,
+    type?: "text" | "image" | "file",
+    attachment?: Attachment
+  ) => void;
   resolvePending: (
     conversationId: string,
     clientId: string,
@@ -71,7 +79,7 @@ export const useChatStore = create<ChatState>()((set) => ({
       };
     }),
 
-  addPending: (conversationId, clientId, body) =>
+  addPending: (conversationId, clientId, body, type = "text", attachment) =>
     set((state) => {
       const entry = ensureEntry(state.messages, conversationId);
       return {
@@ -79,7 +87,7 @@ export const useChatStore = create<ChatState>()((set) => ({
           ...state.messages,
           [conversationId]: {
             committed: entry.committed,
-            pending: [...entry.pending, { clientId, body }],
+            pending: [...entry.pending, { clientId, body, type, attachment }],
           },
         },
       };

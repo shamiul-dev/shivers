@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { MessageSquare } from "lucide-react";
 
 import { useMessages } from "@/hooks/useMessages";
@@ -8,7 +8,8 @@ import { useTyping } from "@/hooks/useTyping";
 import { ChatBubble } from "@/components/ui/chat-bubble";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { ChatComposer } from "@/components/chat/chat-composer";
-import type { Message, UserSummary } from "@/types/chat";
+import { ImageLightbox } from "@/components/chat/image-lightbox";
+import type { Message, UserSummary, Attachment } from "@/types/chat";
 
 interface ChatMessagesViewProps {
   conversationId: string;
@@ -73,6 +74,8 @@ export function ChatMessagesView({
     currentUserId
   );
 
+  const [lightboxMedia, setLightboxMedia] = useState<{ url: string; fileName?: string } | null>(null);
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollAnchorRef = useRef<HTMLDivElement>(null);
   const isInitialMountRef = useRef(true);
@@ -91,11 +94,13 @@ export function ChatMessagesView({
       createdAt?: string;
       isPending?: boolean;
       failed?: boolean;
+      attachment?: Attachment | null;
     }> = committed.map((m) => ({
       id: m.id,
       senderId: m.senderId,
       body: m.body,
       createdAt: m.createdAt,
+      attachment: m.attachment,
     }));
 
     for (const p of pending) {
@@ -105,6 +110,7 @@ export function ChatMessagesView({
         body: p.body,
         isPending: true,
         failed: p.failed,
+        attachment: p.attachment,
       });
     }
 
@@ -218,6 +224,8 @@ export function ChatMessagesView({
                             ? "sent"
                             : undefined
                         }
+                        attachment={msg.attachment}
+                        onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
                       >
                         {msg.body}
                       </ChatBubble>
@@ -269,12 +277,19 @@ export function ChatMessagesView({
 
       {/* Floating Message Composer Dock */}
       <ChatComposer
+        conversationId={conversationId}
         onSend={send}
         onTyping={handleKeystroke}
         onStopTyping={stopTyping}
         disabled={joinState === "not_found"}
       />
+
+      {/* Fullscreen Photo Lightbox Modal */}
+      <ImageLightbox
+        url={lightboxMedia?.url ?? null}
+        fileName={lightboxMedia?.fileName}
+        onClose={() => setLightboxMedia(null)}
+      />
     </div>
   );
 }
-
