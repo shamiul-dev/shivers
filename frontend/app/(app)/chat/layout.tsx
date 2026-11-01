@@ -11,6 +11,7 @@ import type { Conversation } from "@/types/chat";
 import { ChatRail } from "@/components/chat/chat-rail";
 import { ChatSidebar } from "@/components/chat/chat-sidebar";
 import { SocketManager } from "@/components/chat/socket-manager";
+import { ChatShell } from "@/components/chat/chat-shell";
 
 async function ChatNavigation() {
   await connection();
@@ -51,7 +52,7 @@ async function ChatNavigation() {
 
 function ChatNavigationSkeleton() {
   return (
-    <>
+    <div className="h-screen w-screen overflow-hidden flex bg-white text-[#0F172A]">
       {/* Rail Skeleton */}
       <div className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-white border-r border-slate-100 shrink-0 animate-pulse">
         <div className="w-10 h-10 rounded-xl bg-slate-200" />
@@ -78,7 +79,12 @@ function ChatNavigationSkeleton() {
           <div className="h-16 w-full bg-slate-50 rounded-2xl border border-slate-100" />
         </div>
       </div>
-    </>
+
+      {/* Main Stage Skeleton for desktop */}
+      <div className="hidden md:flex flex-1 h-screen bg-slate-50/50 items-center justify-center animate-pulse">
+        <div className="w-12 h-12 rounded-2xl bg-slate-200" />
+      </div>
+    </div>
   );
 }
 
@@ -88,14 +94,10 @@ export default function ChatLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-white text-[#0F172A]">
-      <Suspense fallback={<ChatNavigationSkeleton />}>
-        <ChatNavigation />
-      </Suspense>
-
-      <main className="flex-1 flex h-full overflow-hidden">
+    <Suspense fallback={<ChatNavigationSkeleton />}>
+      <ChatShell navigation={<ChatNavigation />}>
         {children}
-      </main>
-    </div>
+      </ChatShell>
+    </Suspense>
   );
 }

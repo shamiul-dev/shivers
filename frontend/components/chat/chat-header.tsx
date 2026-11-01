@@ -59,7 +59,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         </div>
 
         {/* Title and Meta */}
-        <div className="min-w-0">
+        <div className="min-w-0 max-w-[160px] xs:max-w-[200px] sm:max-w-none">
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-[15px] text-[#0F172A] leading-tight truncate">
               {title}
@@ -94,7 +94,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
       </div>
 
       {/* Header Actions */}
-      <div className="flex items-center gap-1 text-slate-500">
+      <div className="flex items-center gap-1 text-slate-500 shrink-0">
         {!isDm && (
           <ChannelMembersDialog
             conversationId={conversation.id}
@@ -103,14 +103,14 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         )}
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] flex items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] items-center justify-center transition-colors cursor-pointer"
           title="Audio call"
         >
           <Phone className="w-4 h-4" />
         </button>
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] flex items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] items-center justify-center transition-colors cursor-pointer"
           title="Video meeting"
         >
           <Video className="w-4 h-4" />
@@ -122,7 +122,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         >
           <Search className="w-4 h-4" />
         </button>
-        <div className="h-4 w-px bg-slate-200 mx-1" />
+        <div className="hidden sm:block h-4 w-px bg-slate-200 mx-1" />
         <button
           type="button"
           className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"

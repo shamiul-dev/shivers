@@ -21,7 +21,7 @@ export function SettingsSubmitButton({
       variant="gradient"
       size="pill"
       disabled={pending}
-      className="min-w-[140px]"
+      className="w-full sm:w-auto min-w-[140px]"
     >
       {pending ? (
         <>

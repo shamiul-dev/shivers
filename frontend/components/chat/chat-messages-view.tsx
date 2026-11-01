@@ -73,12 +73,14 @@ export function ChatMessagesView({
     currentUserId
   );
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollAnchorRef = useRef<HTMLDivElement>(null);
+  const isInitialMountRef = useRef(true);
 
-  // Auto-scroll on new message or when peer starts typing
+  // Reset initial mount flag whenever switching conversation threads
   useEffect(() => {
-    scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [committed.length, pending.length, typingUsers.length]);
+    isInitialMountRef.current = true;
+  }, [conversationId]);
 
   // Combine committed + pending messages for unified display
   const allMessages = useMemo(() => {
@@ -109,10 +111,30 @@ export function ChatMessagesView({
     return list;
   }, [committed, pending, currentUserId]);
 
+  // Position at recent message: instant snap on load, smooth animation on new messages
+  useEffect(() => {
+    if (allMessages.length === 0) return;
+
+    if (isInitialMountRef.current) {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      } else {
+        scrollAnchorRef.current?.scrollIntoView({ behavior: "instant" });
+      }
+      isInitialMountRef.current = false;
+      return;
+    }
+
+    scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [committed.length, pending.length, typingUsers.length, allMessages.length]);
+
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC]">
       {/* Scrollable Message Timeline */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-4 space-y-4">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto px-4 md:px-8 py-4 space-y-4"
+      >
         {allMessages.length > 0 ? (
           <div className="w-full max-w-4xl mx-auto space-y-3">
             {allMessages.map((msg, i) => {

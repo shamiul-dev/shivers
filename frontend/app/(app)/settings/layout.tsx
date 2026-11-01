@@ -15,7 +15,7 @@ export default function SettingsLayout({
       <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-[#E5EEFF] via-[#EFF4FF] to-transparent -z-10 pointer-events-none" />
 
       {/* Global Header */}
-      <header className="w-full max-w-5xl mx-auto px-6 pt-7 pb-4 flex items-center justify-between">
+      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7 pb-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4338CA] to-[#2563EB] flex items-center justify-center shadow-lg shadow-[#4338CA]/20 p-2">
             <Image
@@ -47,7 +47,7 @@ export default function SettingsLayout({
       </header>
 
       {/* Main Settings Stage */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-6 space-y-6">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
