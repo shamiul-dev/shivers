@@ -117,22 +117,29 @@ export function ChatMessagesView({
     return list;
   }, [committed, pending, currentUserId]);
 
+  // Scroll helper
+  const scrollToBottom = React.useCallback((behavior: "instant" | "smooth" = "instant") => {
+    if (scrollContainerRef.current) {
+      if (behavior === "instant") {
+        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      } else {
+        scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   // Position at recent message: instant snap on load, smooth animation on new messages
   useEffect(() => {
     if (allMessages.length === 0) return;
 
     if (isInitialMountRef.current) {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-      } else {
-        scrollAnchorRef.current?.scrollIntoView({ behavior: "instant" });
-      }
+      scrollToBottom("instant");
       isInitialMountRef.current = false;
       return;
     }
 
-    scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [committed.length, pending.length, typingUsers.length, allMessages.length]);
+    scrollToBottom("smooth");
+  }, [committed.length, pending.length, typingUsers.length, allMessages.length, scrollToBottom]);
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC]">
@@ -226,6 +233,14 @@ export function ChatMessagesView({
                         }
                         attachment={msg.attachment}
                         onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
+                        onMediaLoad={() => {
+                          const el = scrollContainerRef.current;
+                          if (!el) return;
+                          const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 400;
+                          if (isNearBottom) {
+                            scrollToBottom("instant");
+                          }
+                        }}
                       >
                         {msg.body}
                       </ChatBubble>
@@ -256,7 +271,7 @@ export function ChatMessagesView({
               </div>
             )}
 
-            <div ref={scrollAnchorRef} />
+            <div ref={scrollAnchorRef} className="h-2 shrink-0" />
           </div>
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-3">

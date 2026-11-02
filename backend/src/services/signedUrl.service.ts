@@ -56,8 +56,18 @@ export function verifyAttachmentSignature(
  * Decorates an attachment record with direct signed URLs.
  */
 export function attachSignedUrls<
-  T extends { id: string; thumbKey?: string | null }
+  T extends { id: string; storageKey?: string | null; thumbKey?: string | null }
 >(att: T): T & { url: string; thumbUrl: string | null } {
+  // Cloudinary / Cloud CDN direct URLs
+  if (att.storageKey && (att.storageKey.startsWith("http://") || att.storageKey.startsWith("https://"))) {
+    return {
+      ...att,
+      url: att.storageKey,
+      thumbUrl: att.thumbKey || att.storageKey,
+    };
+  }
+
+  // Local disk fallback with HMAC signature
   return {
     ...att,
     url: generateSignedAttachmentUrl(att.id, false),

@@ -93,6 +93,7 @@ export interface ChatBubbleProps
   status?: "pending" | "sent" | "delivered" | "read" | "failed";
   attachment?: Attachment | null;
   onImageClick?: (url: string, fileName?: string) => void;
+  onMediaLoad?: () => void;
 }
 
 export function ChatBubble({
@@ -104,6 +105,7 @@ export function ChatBubble({
   status,
   attachment,
   onImageClick,
+  onMediaLoad,
   ...props
 }: ChatBubbleProps) {
   const isOutbound = variant === "outbound" || variant === "pending";
@@ -113,6 +115,11 @@ export function ChatBubble({
     ? attachment.thumbUrl || attachment.url || ""
     : "";
   const fullUrl = attachment ? attachment.url || attachment.thumbUrl || "" : "";
+
+  const aspectRatio =
+    attachment?.width && attachment?.height
+      ? `${attachment.width} / ${attachment.height}`
+      : undefined;
 
   return (
     <div
@@ -124,14 +131,18 @@ export function ChatBubble({
         <div className="mb-2">
           {attachment.mime.startsWith("image/") && !imageError ? (
             <div
-              className="rounded-xl overflow-hidden cursor-pointer max-w-[280px] sm:max-w-[340px] max-h-[340px] bg-black/5"
+              className="rounded-xl overflow-hidden cursor-pointer w-full max-w-[280px] sm:max-w-[340px] max-h-[340px] bg-black/5"
+              style={aspectRatio ? { aspectRatio } : undefined}
               onClick={() => onImageClick?.(fullUrl, attachment.fileName)}
             >
               <img
                 src={thumbUrl}
                 alt={attachment.fileName}
+                width={attachment.width || undefined}
+                height={attachment.height || undefined}
                 className="w-full h-full object-cover transition-transform hover:scale-102"
                 loading="lazy"
+                onLoad={onMediaLoad}
                 onError={() => setImageError(true)}
               />
             </div>

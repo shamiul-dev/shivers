@@ -78,6 +78,12 @@ attachmentsRouter.get("/attachments/:id", async (req: Request, res: Response) =>
       return;
     }
 
+    // Cloudinary redirect
+    if (data.attachment.storageKey.startsWith("http://") || data.attachment.storageKey.startsWith("https://")) {
+      res.redirect(data.attachment.storageKey);
+      return;
+    }
+
     res.setHeader("Content-Type", data.attachment.mime);
     res.setHeader(
       "Content-Disposition",
@@ -130,7 +136,18 @@ attachmentsRouter.get("/attachments/:id/thumb", async (req: Request, res: Respon
     }
 
     const data = await getAttachmentDiskPathsById(attachmentId);
-    if (!data || !data.thumbPath) {
+    if (!data) {
+      res.status(404).json({ error: "Thumbnail not found" });
+      return;
+    }
+
+    // Cloudinary redirect
+    if (data.attachment.thumbKey?.startsWith("http://") || data.attachment.thumbKey?.startsWith("https://")) {
+      res.redirect(data.attachment.thumbKey);
+      return;
+    }
+
+    if (!data.thumbPath) {
       res.status(404).json({ error: "Thumbnail not found" });
       return;
     }
