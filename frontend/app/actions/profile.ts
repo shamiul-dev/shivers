@@ -1,6 +1,8 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
@@ -223,4 +225,79 @@ export async function updateProfileSettingsAction(formData: FormData) {
 
   redirect("/settings/profile?saved=true");
 }
+
+/**
+ * Upload a new profile avatar to Cloudinary via Express backend.
+ */
+export async function uploadAvatarAction(
+  formData: FormData
+): Promise<{ ok: true; avatarUrl: string } | { ok: false; error: string }> {
+  const cookieStore = await cookies();
+  const sessionCookie =
+    cookieStore.get("better-auth.session_token") ||
+    cookieStore.get("__Secure-better-auth.session_token");
+
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+  try {
+    const res = await fetch(`${backendUrl}/api/profile/avatar`, {
+      method: "POST",
+      headers: {
+        Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : "",
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      return { ok: false, error: err?.error || "Failed to upload avatar" };
+    }
+
+    const data = await res.json();
+    revalidatePath("/settings/profile");
+    revalidatePath("/chat", "layout");
+    revalidatePath("/", "layout");
+    return { ok: true, avatarUrl: data.avatarUrl };
+  } catch (err) {
+    console.error("uploadAvatarAction error:", err);
+    return { ok: false, error: "Network error during avatar upload" };
+  }
+}
+
+/**
+ * Remove current user's profile avatar.
+ */
+export async function deleteAvatarAction(): Promise<
+  { ok: true } | { ok: false; error: string }
+> {
+  const cookieStore = await cookies();
+  const sessionCookie =
+    cookieStore.get("better-auth.session_token") ||
+    cookieStore.get("__Secure-better-auth.session_token");
+
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+  try {
+    const res = await fetch(`${backendUrl}/api/profile/avatar`, {
+      method: "DELETE",
+      headers: {
+        Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : "",
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      return { ok: false, error: err?.error || "Failed to remove avatar" };
+    }
+
+    revalidatePath("/settings/profile");
+    revalidatePath("/chat", "layout");
+    revalidatePath("/", "layout");
+    return { ok: true };
+  } catch (err) {
+    console.error("deleteAvatarAction error:", err);
+    return { ok: false, error: "Network error during avatar removal" };
+  }
+}
+
 
