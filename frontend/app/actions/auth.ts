@@ -4,6 +4,11 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import {
+  SESSION_COOKIE_NAME,
+  SESSION_COOKIE_SECURE_NAME,
+} from "@/lib/auth-constants";
+
 const signUpSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
@@ -146,8 +151,8 @@ export async function signInAction(formData: FormData) {
 export async function signOutAction() {
   const cookieStore = await cookies();
   const sessionToken =
-    cookieStore.get("better-auth.session_token")?.value ||
-    cookieStore.get("__Secure-better-auth.session_token")?.value;
+    cookieStore.get(SESSION_COOKIE_NAME)?.value ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME)?.value;
 
   const backendUrl =
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:4000";
@@ -157,7 +162,7 @@ export async function signOutAction() {
       await fetch(`${backendUrl}/api/auth/sign-out`, {
         method: "POST",
         headers: {
-          cookie: `better-auth.session_token=${sessionToken}; __Secure-better-auth.session_token=${sessionToken}`,
+          cookie: `${SESSION_COOKIE_NAME}=${sessionToken}; ${SESSION_COOKIE_SECURE_NAME}=${sessionToken}`,
         },
       });
     } catch (err) {
@@ -165,8 +170,8 @@ export async function signOutAction() {
     }
   }
 
-  cookieStore.delete("better-auth.session_token");
-  cookieStore.delete("__Secure-better-auth.session_token");
+  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.delete(SESSION_COOKIE_SECURE_NAME);
 
   redirect("/login");
 }

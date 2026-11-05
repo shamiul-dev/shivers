@@ -6,7 +6,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
+import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECURE_NAME } from "@/lib/auth-constants";
 
+// KEEP IN SYNC with backend/src/routes/profile.ts (authoritative server check)
 const RESERVED_USERNAMES = new Set([
   "admin",
   "administrator",
@@ -234,8 +236,8 @@ export async function uploadAvatarAction(
 ): Promise<{ ok: true; avatarUrl: string } | { ok: false; error: string }> {
   const cookieStore = await cookies();
   const sessionCookie =
-    cookieStore.get("better-auth.session_token") ||
-    cookieStore.get("__Secure-better-auth.session_token");
+    cookieStore.get(SESSION_COOKIE_NAME) ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME);
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -272,8 +274,8 @@ export async function deleteAvatarAction(): Promise<
 > {
   const cookieStore = await cookies();
   const sessionCookie =
-    cookieStore.get("better-auth.session_token") ||
-    cookieStore.get("__Secure-better-auth.session_token");
+    cookieStore.get(SESSION_COOKIE_NAME) ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME);
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 

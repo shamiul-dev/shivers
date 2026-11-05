@@ -11,6 +11,7 @@ const envSchema = z.object({
     CLOUDINARY_CLOUD_NAME: z.string().min(1, "Cloudinary cloud name is required"),
     CLOUDINARY_API_KEY: z.string().min(1, "Cloudinary API key is required"),
     CLOUDINARY_API_SECRET: z.string().min(1, "Cloudinary API secret is required"),
+    UPLOAD_FOLDER_PREFIX: z.string().default("shivers"),
 });
 
 export const env = envSchema.parse(process.env);

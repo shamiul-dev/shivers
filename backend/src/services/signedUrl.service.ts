@@ -1,8 +1,17 @@
 import crypto from "node:crypto";
 import { env } from "@/config/env";
 
-const SECRET = env.BETTER_AUTH_SECRET;
+// Purpose-specific signing key derived via HKDF so a leak in one context never
+// enables forgery in the other. Label must stay stable or old URLs invalidate.
+const SIGNING_KEY = hkdfKey(env.BETTER_AUTH_SECRET, "shivers-media-signing-v1");
 const DEFAULT_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
+
+/** Derive a 32-byte key for a given purpose from the master auth secret. */
+function hkdfKey(masterSecret: string, purpose: string): Buffer {
+  const secret = Buffer.from(masterSecret, "utf8");
+  const info = Buffer.from(purpose, "utf8");
+  return Buffer.from(crypto.hkdfSync("sha256", secret, Buffer.alloc(0), info, 32));
+}
 
 /**
  * Generate a cryptographically signed direct URL for an attachment or thumbnail.
@@ -16,7 +25,7 @@ export function generateSignedAttachmentUrl(
   const expiresAt = Math.floor(Date.now() / 1000) + ttlSeconds;
   const kind = isThumb ? "thumb" : "full";
   const payload = `${attachmentId}:${kind}:${expiresAt}`;
-  const sig = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+  const sig = crypto.createHmac("sha256", SIGNING_KEY).update(payload).digest("hex");
 
   const baseUrl = env.BETTER_AUTH_URL || "http://localhost:4000";
   const path = isThumb
@@ -42,7 +51,7 @@ export function verifyAttachmentSignature(
 
   const kind = isThumb ? "thumb" : "full";
   const payload = `${attachmentId}:${kind}:${exp}`;
-  const expectedSig = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+  const expectedSig = crypto.createHmac("sha256", SIGNING_KEY).update(payload).digest("hex");
 
   const a = Buffer.from(sig);
   const b = Buffer.from(expectedSig);

@@ -6,6 +6,7 @@ import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query
 
 import { getProfile } from "@/app/actions/profile";
 import { serverFetch } from "@/lib/server-api";
+import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECURE_NAME } from "@/lib/auth-constants";
 import { conversationsCache } from "@/hooks/conversations-cache";
 import type { Conversation } from "@/types/chat";
 import { ChatRail } from "@/components/chat/chat-rail";
@@ -17,8 +18,8 @@ async function ChatNavigation() {
   await connection();
   const cookieStore = await cookies();
   const sessionToken =
-    cookieStore.get("better-auth.session_token")?.value ||
-    cookieStore.get("__Secure-better-auth.session_token")?.value;
+    cookieStore.get(SESSION_COOKIE_NAME)?.value ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME)?.value;
 
   const profileData = await getProfile();
 

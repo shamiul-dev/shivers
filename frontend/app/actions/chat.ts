@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 
 import { serverFetch } from "@/lib/server-api";
+import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECURE_NAME } from "@/lib/auth-constants";
 import type { Conversation, Message, ChannelMember, Attachment } from "@/types/chat";
 
 type BackendEnvelope = {
@@ -278,8 +279,8 @@ export async function uploadAttachmentAction(
 ): Promise<{ ok: true; attachment: Attachment } | { ok: false; error: string }> {
   const cookieStore = await cookies();
   const sessionCookie =
-    cookieStore.get("better-auth.session_token") ||
-    cookieStore.get("__Secure-better-auth.session_token");
+    cookieStore.get(SESSION_COOKIE_NAME) ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME);
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 

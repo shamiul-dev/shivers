@@ -1,12 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECURE_NAME } from "@/lib/auth-constants";
 
 const protectedRoutes = ["/chat", "/onboarding", "/settings"];
 const authRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
 export function middleware(request: NextRequest) {
   const sessionToken =
-    request.cookies.get("better-auth.session_token")?.value ||
-    request.cookies.get("__Secure-better-auth.session_token")?.value;
+    request.cookies.get(SESSION_COOKIE_NAME)?.value ||
+    request.cookies.get(SESSION_COOKIE_SECURE_NAME)?.value;
 
   const { pathname } = request.nextUrl;
 
@@ -19,8 +20,8 @@ export function middleware(request: NextRequest) {
   // If the session was marked expired/invalid by server-side validation, clear stale cookies and allow /login
   if (isExpired) {
     const response = NextResponse.next();
-    response.cookies.delete("better-auth.session_token");
-    response.cookies.delete("__Secure-better-auth.session_token");
+    response.cookies.delete(SESSION_COOKIE_NAME);
+    response.cookies.delete(SESSION_COOKIE_SECURE_NAME);
     return response;
   }
 

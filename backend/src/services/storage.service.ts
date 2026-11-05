@@ -53,7 +53,7 @@ export async function processAndStoreFile(
 
   if (isImage) {
     const result = await uploadToCloudinaryStream(buffer, {
-      folder: "shivers/attachments",
+      folder: `${env.UPLOAD_FOLDER_PREFIX}/attachments`,
       resource_type: "image",
     });
 
@@ -79,7 +79,7 @@ export async function processAndStoreFile(
 
   // Non-image files (documents, pdfs, audio, zip)
   const result = await uploadToCloudinaryStream(buffer, {
-    folder: "shivers/attachments/files",
+    folder: `${env.UPLOAD_FOLDER_PREFIX}/attachments/files`,
     resource_type: "raw",
     use_filename: true,
     filename_override: originalName,

@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import { db } from "@/db";
 import { profiles, user } from "@/db/schema";
+import { env } from "@/config/env";
 import { requireAuth, type AuthenticatedRequest } from "@/middleware/requireAuth";
 
 const uploadAvatar = multer({
@@ -23,6 +24,7 @@ const uploadAvatar = multer({
 export const profileRouter = Router();
 
 // Reserved usernames that cannot be claimed
+// KEEP IN SYNC with frontend/app/actions/profile.ts (static client-side check)
 const RESERVED_USERNAMES = new Set([
   "admin",
   "administrator",
@@ -212,7 +214,7 @@ profileRouter.post(
       const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
-            folder: "shivers/avatars",
+            folder: `${env.UPLOAD_FOLDER_PREFIX}/avatars`,
             transformation: [
               { width: 400, height: 400, crop: "fill", gravity: "face" },
               { quality: "auto", fetch_format: "auto" },

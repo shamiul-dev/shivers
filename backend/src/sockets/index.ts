@@ -16,6 +16,10 @@ import { setIO, getIO } from "./io";
 
 export { getIO };
 
+// better-auth default session cookie (must match the auth config; mirrors
+// frontend/lib/auth-constants.ts)
+const SESSION_COOKIE_NAME = "better-auth.session_token";
+
 export function createSocketServer(httpServer: HttpServer) {
     const io = new Server(httpServer, {
         cors: {
@@ -41,7 +45,7 @@ export function createSocketServer(httpServer: HttpServer) {
             const cookieValue = rawCookie
                 ? rawCookie
                 : authToken
-                ? `better-auth.session_token=${authToken}`
+                ? `${SESSION_COOKIE_NAME}=${authToken}`
                 : "";
 
             if (cookieValue) {

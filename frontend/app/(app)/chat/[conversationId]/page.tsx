@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { getProfile } from "@/app/actions/profile";
+import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECURE_NAME } from "@/lib/auth-constants";
 import {
   fetchConversationDetailsAction,
   fetchMessagesAction,
@@ -67,8 +68,8 @@ async function ConversationContent({
 
   const cookieStore = await cookies();
   const sessionToken =
-    cookieStore.get("better-auth.session_token")?.value ||
-    cookieStore.get("__Secure-better-auth.session_token")?.value;
+    cookieStore.get(SESSION_COOKIE_NAME)?.value ||
+    cookieStore.get(SESSION_COOKIE_SECURE_NAME)?.value;
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
