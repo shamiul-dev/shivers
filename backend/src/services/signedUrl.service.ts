@@ -44,6 +44,10 @@ export function verifyAttachmentSignature(
   sig: string,
   isThumb = false
 ): boolean {
+  if (typeof expStr !== "string" || !expStr || typeof sig !== "string") {
+    return false;
+  }
+
   const exp = parseInt(expStr, 10);
   if (isNaN(exp) || Math.floor(Date.now() / 1000) > exp) {
     return false;
