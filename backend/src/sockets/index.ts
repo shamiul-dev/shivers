@@ -8,6 +8,7 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { session as sessionTable, user as userTable, conversationMembers } from "@/db/schema";
 import { isMember, markRead } from "@/services/conversation.service";
+import { chatEvents, type ConversationCreatedEvent, type ConversationMemberJoinedEvent } from "@/services/chatEvents";
 import { createSocketRateLimit } from "./socketRateLimit";
 import { registerMessageHandlers } from "./messageHandlers";
 import { registerTypingHandlers } from "./typingHandlers";
@@ -105,6 +106,44 @@ export function createSocketServer(httpServer: HttpServer) {
     const limiter = createSocketRateLimit({
         "message:send": { max: 10, windowMs: 5000 },
         "typing:start": { max: 10, windowMs: 5000 },
+    });
+
+    // Subscribe to service-layer domain events; room naming lives here only.
+    // (Room names: "user:{id}" for personal rooms, conversation id as room id)
+    const userRoom = (userId: string) => `user:${userId}`;
+
+    const onConversationCreated = ({ conversation, userIds }: ConversationCreatedEvent) => {
+        for (const userId of userIds) {
+            try {
+                io.in(userRoom(userId)).socketsJoin(conversation.id);
+                io.to(userRoom(userId)).emit("conversation:created", conversation);
+            } catch (err) {
+                console.error("conversation:created socket sync error:", err);
+            }
+        }
+    };
+
+    const onConversationMemberJoined = ({ conversationId, userId, role }: ConversationMemberJoinedEvent) => {
+        try {
+            io.to(conversationId).emit("conversation:member_joined", {
+                conversationId,
+                userId,
+                role,
+            });
+        } catch (err) {
+            console.error("conversation:member_joined socket sync error:", err);
+        }
+    };
+
+    chatEvents.on("conversation:created", onConversationCreated);
+    chatEvents.on("conversation:member_joined", onConversationMemberJoined);
+
+    // Instance-scoped listeners on the shared emitter: detach exactly ours
+    // when this server dies — concurrent servers keep their own handlers and
+    // no event is ever delivered twice to one io.
+    httpServer.once("close", () => {
+        chatEvents.off("conversation:created", onConversationCreated);
+        chatEvents.off("conversation:member_joined", onConversationMemberJoined);
     });
 
     io.on("connection", async (socket) => {

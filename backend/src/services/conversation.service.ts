@@ -2,7 +2,7 @@ import { and, desc, eq, inArray, ne } from "drizzle-orm";
 
 import { db } from "@/db";
 import { conversations, conversationMembers, messages, profiles, user } from "@/db/schema";
-import { getIO } from "@/sockets/io";
+import { chatEvents } from "./chatEvents";
 
 /**
  * Membership check — used by REST routes and (later) socket handlers.
@@ -160,11 +160,10 @@ export async function createRoom(userId: string, name: string) {
         role: "owner",
     });
 
-    const io = getIO();
-    if (io) {
-        io.in(`user:${userId}`).socketsJoin(id);
-        io.to(`user:${userId}`).emit("conversation:created", conversation);
-    }
+    chatEvents.emit("conversation:created", {
+        conversation,
+        userIds: [userId],
+    });
 
     return conversation;
 }
@@ -216,13 +215,10 @@ export async function createOrGetDm(userId: string, targetUserId: string) {
         { conversationId: id, userId: targetUserId, role: "owner" },
     ]);
 
-    const io = getIO();
-    if (io) {
-        io.in(`user:${userId}`).socketsJoin(id);
-        io.in(`user:${targetUserId}`).socketsJoin(id);
-        io.to(`user:${userId}`).emit("conversation:created", conversation);
-        io.to(`user:${targetUserId}`).emit("conversation:created", conversation);
-    }
+    chatEvents.emit("conversation:created", {
+        conversation,
+        userIds: [userId, targetUserId],
+    });
 
     return { conversation, created: true };
 }
@@ -404,22 +400,16 @@ export async function addMember(
         })
         .returning();
 
-    // 6. Real-time socket sync
-    const io = getIO();
-    if (io) {
-        // Auto-join newly added user's connected sockets to this room
-        io.in(`user:${targetUserId}`).socketsJoin(conversationId);
-
-        // Notify the added user so the channel appears live in their sidebar
-        io.to(`user:${targetUserId}`).emit("conversation:created", conv);
-
-        // Notify existing room members that someone joined
-        io.to(conversationId).emit("conversation:member_joined", {
-            conversationId,
-            userId: targetUserId,
-            role,
-        });
-    }
+    // 6. Real-time socket sync (published as domain events; sockets subscribe)
+    chatEvents.emit("conversation:created", {
+        conversation: conv,
+        userIds: [targetUserId],
+    });
+    chatEvents.emit("conversation:member_joined", {
+        conversationId,
+        userId: targetUserId,
+        role,
+    });
 
     return { ok: true as const, membership, conversation: conv };
 }
