@@ -1,64 +1,9 @@
-import { pgTable, text, timestamp, boolean, primaryKey, index, unique, integer } from "drizzle-orm/pg-core";
+// Chat schema: conversations, members, messages, attachments.
+// Table/group extraction from the former monolithic schema.ts — column
+// definitions preserved verbatim so migrations stay byte-identical.
+import { pgTable, text, timestamp, primaryKey, index, unique, integer } from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
-    id: text("id").primaryKey(),
-    name: text("name").notNull(),
-    email: text("email").notNull().unique(),
-    emailVerified: boolean("email_verified").notNull().default(false),
-    image: text("image"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
-export const profiles = pgTable("profiles", {
-    userId: text("user_id").primaryKey().references(() => user.id, { onDelete: "cascade" }),
-    username: text("username").notNull().unique(),
-    bio: text("bio"),
-    avatarKey: text("avatar_key"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
-export const session = pgTable("session", {
-    id: text("id").primaryKey(),
-    expiresAt: timestamp("expires_at").notNull(),
-    token: text("token").notNull().unique(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-    ipAddress: text("ip_address"),
-    userAgent: text("user_agent"),
-    userId: text("user_id").notNull().references(() => user.id, {
-        onDelete: "cascade"
-    }),
-});
-
-export const account = pgTable("account", {
-    id: text("id").primaryKey(),
-    accountId: text("account_id").notNull(),
-    providerId: text("provider_id").notNull(),
-    userId: text("user_id").notNull().references(() => user.id, {
-        onDelete: "cascade"
-    }),
-    accessToken: text("access_token"),
-    refreshToken: text("refresh_token"),
-    idToken: text("id_token"),
-    refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-    accessTokenExpiresAt: timestamp("access_token_expires_at"),
-    tokenType: text("token_type"),
-    scope: text("scope"),
-    password: text("password"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
-export const verification = pgTable("verification", {
-    id: text("id").primaryKey(),
-    identifier: text("identifier").notNull(),
-    value: text("value").notNull(),
-    expiresAt: timestamp("expires_at").notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+import { user } from "./auth";
 
 /**
  * Conversations (Rooms and 1:1 Direct Messages)
