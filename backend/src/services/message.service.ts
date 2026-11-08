@@ -119,6 +119,21 @@ export async function fetchHistory(
     return { messages: messagesWithAttachments.reverse(), hasOlder };
 }
 
+/**
+ * Drizzle wraps driver errors in DrizzleQueryError; the real Postgres error
+ * (with its code, e.g. 23505 unique_violation) hangs off .cause. Walk the
+ * cause chain to find the code.
+ */
+function findPostgresErrorCode(error: unknown): string | undefined {
+    let chain: unknown = error;
+    while (chain && typeof chain === "object") {
+        const code = (chain as { code?: unknown }).code;
+        if (typeof code === "string" && /^\d{5}$/.test(code)) return code;
+        chain = (chain as { cause?: unknown }).cause;
+    }
+    return undefined;
+}
+
 export async function createMessage(
     conversationId: string,
     senderId: string,
@@ -146,7 +161,7 @@ export async function createMessage(
 
         return { message: { ...message, attachment }, duplicated: false };
     } catch (error: any) {
-        if (error?.code === "23505") {
+        if (findPostgresErrorCode(error) === "23505") {
             const [existing] = await db
                 .select()
                 .from(messages)
