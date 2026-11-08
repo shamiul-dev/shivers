@@ -1,0 +1,70 @@
+# Backend tests run against the dedicated Neon TEST database (same contract
+# as local runs): tests/helpers/test-env.ts swaps TEST_DATABASE_URL into
+# DATABASE_URL and throws if it is missing — a misconfigured CI run fails
+# red immediately instead of silently skipping.
+#
+# The suite performs ONE real Cloudinary upload (a generated 2x2 PNG, destroyed
+# immediately afterwards), so real Cloudinary credentials are required here.
+#
+# Secrets needed (repo Settings -> Secrets and variables -> Actions):
+#   TEST_DATABASE_URL           - direct (non-pooled) Neon connection string
+#   CLOUDINARY_CLOUD_NAME       - real values; only one throwaway asset is
+#   CLOUDINARY_API_KEY            uploaded then deleted per run
+#   CLOUDINARY_API_SECRET
+#
+# BETTER_AUTH_SECRET is NOT a secret: it is a throwaway test value that only
+# keys auth sessions and HKDF signature derivations created *inside* the suite,
+# against the disposable test DB. Nothing in production ever sees it.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Superseded runs on the same branch/PR are cancelled. Jobs on DIFFERENT
+# refs (e.g. two open PRs) can still overlap on the same test DB — both
+# truncate its tables at file start. Use a dedicated Neon instance for CI
+# if that ever becomes a problem.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm test
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          BETTER_AUTH_SECRET: ci-test-only-throwaway-shivers-0000000000
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # NEXT_PUBLIC_* vars all have localhost fallbacks, so the build needs no env.
+      - run: npm ci
+      - run: npm run build
