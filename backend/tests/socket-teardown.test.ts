@@ -1,3 +1,9 @@
+// Same env contract as the other suites: swap DATABASE_URL to the dedicated
+// test database BEFORE any src/ module loads. This file never queries the DB,
+// but src/sockets reaches src/config/env.ts at module load, which requires
+// DATABASE_URL (CI has no backend/.env to fall back on).
+import "./helpers/test-env";
+
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Server as HttpServer } from "node:http";
