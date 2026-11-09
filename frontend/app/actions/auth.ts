@@ -63,6 +63,10 @@ export async function signUpAction(formData: FormData) {
           cookieStore.set(name.trim(), val.trim(), {
             path: "/",
             httpOnly: true,
+            // Better Auth issues __Secure-prefixed cookies when the backend
+            // baseURL is https; browsers drop __Secure- cookies unless the
+            // Secure attribute is present (localhost dev accepts Secure).
+            secure: true,
             sameSite: "lax",
           });
         }
@@ -132,6 +136,9 @@ export async function signInAction(formData: FormData) {
           cookieStore.set(name.trim(), val.trim(), {
             path: "/",
             httpOnly: true,
+            // __Secure-prefixed cookies require the Secure attribute (see
+            // the signUp copy above).
+            secure: true,
             sameSite: "lax",
           });
         }
