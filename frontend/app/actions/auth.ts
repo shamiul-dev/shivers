@@ -183,3 +183,20 @@ export async function signOutAction() {
   redirect("/login");
 }
 
+/**
+ * Clears stale session cookies without touching the backend session.
+ *
+ * Used when the server side has already determined the session is dead
+ * (redirect to /login?expired=true). Middleware deletes cookies too, but
+ * that only works on full document loads; when the bounce chain happens
+ * via client-side navigation, browsers ignore Set-Cookie on RSC fetches,
+ * so this Server Action is the guaranteed clear path.
+ */
+export async function clearSessionCookiesAction() {
+  const cookieStore = await cookies();
+  if (cookieStore.get(SESSION_COOKIE_NAME) || cookieStore.get(SESSION_COOKIE_SECURE_NAME)) {
+    cookieStore.delete(SESSION_COOKIE_NAME);
+    cookieStore.delete(SESSION_COOKIE_SECURE_NAME);
+  }
+}
+
