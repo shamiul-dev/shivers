@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shivers Frontend
 
-## Getting Started
+Next.js 16 (App Router) + React 19 client for the Shivers real-time chat platform. Talks to the Express/Socket.IO backend in `../backend` over REST, auth (Better Auth), and a Socket.IO gateway.
 
-First, run the development server:
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # dev server on :3000
+npm run build   # type-check + production build
+npm run start   # serve the production build
+npm run lint    # eslint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_SOCKET_URL` all default to `http://localhost:4000` (see `.env.example` → `.env.local`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/           App Router pages: (public) auth routes, (app) chat/onboarding/settings,
+               server actions in app/actions/
+components/    chat/ layout/ profile/ settings/ — app components
+components/ui/ design-system primitives (Radix + CVA)
+hooks/ lib/ store/ types/   client logic, API/auth/socket clients, Zustand stores
+```
 
-## Learn More
+## Styling & theming
 
-To learn more about Next.js, take a look at the following resources:
+All styling flows through semantic design tokens in `app/globals.css` — zero raw
+hex in components. Light is the default; dark is a `[data-theme="dark"]` override
+block; themes are switched per device under **Settings → Appearance**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Adding a theme, token reference, and the maintenance rules:
+**[`THEMING.md`](./THEMING.md)**.
