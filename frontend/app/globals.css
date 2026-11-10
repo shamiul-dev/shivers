@@ -28,6 +28,13 @@
   --decor-glow: #dce9ff;              /* elevated-card shadow tint */
   --selection-tint: #e3dfff;          /* ::selection background */
   --selection-contrast: #100069;      /* ::selection text */
+  /* shadcn-compat tokens (referenced by ui primitives) */
+  --destructive: #dc2626;             /* red-600 */
+  --destructive-foreground: #ffffff;
+  --accent: #f1f5f9;                  /* slate-100 — hover wash */
+  --accent-foreground: #0f172a;       /* slate-900 */
+  --input: #e2e8f0;                   /* slate-200 — outline borders */
+  --ring: var(--primary);             /* focus ring = brand */
 }
 
 @theme inline {
@@ -47,6 +54,12 @@
   --color-decor-glow: var(--decor-glow);
   --color-selection-tint: var(--selection-tint);
   --color-selection-contrast: var(--selection-contrast);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-border: var(--border);
 }
 
