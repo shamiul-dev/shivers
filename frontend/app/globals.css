@@ -96,6 +96,21 @@
   --ring: var(--primary);             /* focus ring = brand */
 }
 
+/* emoji-mart skin — our emoji-picker.tsx instantiates the picker with
+   theme:"light", so the host element carries data-theme="light" no matter
+   what the app theme is. These host-level RGB triplets inherit into the
+   shadow root and override the light defaults. Scoped to em-emoji-picker
+   so the --color-border* overrides (which collide with the theme token
+   namespace) never touch the page. */
+[data-theme="dark"] em-emoji-picker {
+  --rgb-color: 241, 245, 249;         /* slate-100 — text + category icons */
+  --rgb-accent: 129, 140, 248;        /* indigo-400 — active category / controls */
+  --rgb-background: 15, 23, 42;       /* slate-900 — picker surface */
+  --rgb-input: 30, 41, 59;            /* slate-800 — search field */
+  --color-border: rgba(148, 163, 184, 0.12);
+  --color-border-over: rgba(148, 163, 184, 0.24);
+}
+
 @theme inline {
   --font-sans: var(--font-jakarta);
   --color-background: var(--background);
@@ -136,6 +151,19 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Chromium paints autofilled controls in its own native color, above our
+   backgrounds — force the fill and caret to follow the current theme. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+  -webkit-box-shadow: 0 0 0 1024px var(--surface) inset;
+  transition: background-color 99999s ease-in-out 0s;
 }
 
 /* Scrollbar styles */

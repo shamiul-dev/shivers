@@ -83,7 +83,7 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
   };
 
   return (
-    <CardHeader className="border-b border-line-soft bg-gradient-to-r from-slate-50/60 to-surface pb-6">
+    <CardHeader className="border-b border-line-soft bg-gradient-to-r from-background/60 to-surface pb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div className="flex items-center space-x-4">
           <div className="relative group">

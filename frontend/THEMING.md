@@ -101,6 +101,29 @@ That's the whole process. If a screen looks wrong in the new theme, the fix
 always belongs in tokens, never in the component — that rule is what keeps the
 promise.
 
+**Step 4 — verify the third-party islands.** New themes must be eyeballed on
+every surface in the [keep-set](#keep-set-stock-values-that-are-constant-by-design)
+*and* every [island](#third-party-islands-self-skinned-components) below —
+those don't follow token utilities, so they're the ones that break silently.
+
+## Third-party islands (self-skinned components)
+
+Some components render their own DOM with their own theming surface — our token
+utilities can't reach inside. They are **skinned from the theme blocks** via the
+CSS variables they expose, scoped to their root element, and they break
+silently when a new theme ships. Known islands:
+
+| Island | Exposed skin | Where it lives |
+|---|---|---|
+| **emoji-mart** picker (`em-emoji-picker`) | `--rgb-color/-accent/-background/-input`, `--color-border(-over)` RGB triplets set in the `[data-theme="dark"]` block | `emoji-picker.tsx` hard-codes `theme: "light"` on purpose; the dark skin comes from `globals.css` |
+| **Chromium autofill** | native white fill above our backgrounds; neutralized via `input:-webkit-autofill` rules in `globals.css` (follows tokens everywhere) | any autofilled `<input>` |
+| **Native controls** (scrollbars, `<select>`, date pickers) | `color-scheme` set per theme block | all pages |
+
+Rule of thumb: if a UI fragment keeps its colors after a theme change, it is
+either an island (skin it from the theme block) or keep-set (leave it alone).
+Adding a new island = document it in this table and touch its skin in the theme
+blocks only.
+
 ## Keep-set: stock values that are constant by design
 
 These intentionally do **not** participate in themes:

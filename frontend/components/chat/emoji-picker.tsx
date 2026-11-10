@@ -25,6 +25,10 @@ export function EmojiPicker({ onSelect }: EmojiPickerProps) {
           onSelect(emoji.native);
         }
       },
+      // Deliberately hard-coded: do NOT read the app theme here. Skins come
+      // from the theme blocks in globals.css ([data-theme="dark"]
+      // em-emoji-picker { --rgb-* }) — components never branch on theme.
+      // See THEMING.md -> "Third-party islands".
       theme: "light",
       previewPosition: "none",
       skinTonePosition: "search",
