@@ -17,7 +17,7 @@ const themeOptions = [
   {
     value: "dark",
     label: "Dark",
-    description: "Dimmed for late-night conversations. Arrives with the next update.",
+    description: "Deep ink surfaces with lifted cards and brighter brand accents.",
     icon: Moon,
   },
   {
@@ -59,7 +59,6 @@ export function ThemePicker() {
         >
           {themeOptions.map((option) => {
             const Icon = option.icon;
-            const isDarkPlaceholder = option.value === "dark";
             const selected = mounted && theme === option.value;
 
             return (
@@ -70,14 +69,11 @@ export function ThemePicker() {
                 aria-checked={selected}
                 data-theme-option={option.value}
                 onClick={() => setTheme(option.value)}
-                disabled={isDarkPlaceholder}
                 className={cn(
-                  "relative flex flex-col items-start space-y-3 rounded-2xl border p-4 text-left transition-all",
-                  isDarkPlaceholder
-                    ? "border-line/40 bg-surface-muted/40 opacity-60 cursor-not-allowed"
-                    : selected
-                      ? "border-primary/60 bg-primary/5 shadow-xs ring-1 ring-primary/20 cursor-pointer"
-                      : "border-line/80 bg-surface hover:border-line-strong/60 hover:bg-background cursor-pointer"
+                  "relative flex flex-col items-start space-y-3 rounded-2xl border p-4 text-left transition-all cursor-pointer",
+                  selected
+                    ? "border-primary/60 bg-primary/5 shadow-xs ring-1 ring-primary/20"
+                    : "border-line/80 bg-surface hover:border-line-strong/60 hover:bg-background"
                 )}
               >
                 {/* Selected indicator */}
@@ -91,21 +87,15 @@ export function ThemePicker() {
                 <span
                   className={cn(
                     "inline-flex w-11 h-11 items-center justify-center rounded-xl border",
-                    isDarkPlaceholder
-                      ? "border-line-strong bg-line-strong/60"
-                      : selected
-                        ? "border-primary/25 bg-primary/10"
-                        : "border-line-soft bg-surface-muted"
+                    selected
+                      ? "border-primary/25 bg-primary/10"
+                      : "border-line-soft bg-surface-muted"
                   )}
                 >
                   <Icon
                     className={cn(
                       "w-5 h-5",
-                      isDarkPlaceholder
-                        ? "text-muted-subtle"
-                        : selected
-                          ? "text-primary"
-                          : "text-muted"
+                      selected ? "text-primary" : "text-muted"
                     )}
                   />
                 </span>
@@ -116,12 +106,7 @@ export function ThemePicker() {
                     <span className="font-medium text-muted">{resolvedNote}</span>
                   )}
                 </span>
-                <span
-                  className={cn(
-                    "text-[11px] leading-relaxed",
-                    isDarkPlaceholder ? "text-muted-subtle" : "text-muted"
-                  )}
-                >
+                <span className="text-[11px] leading-relaxed text-muted">
                   {option.description}
                 </span>
               </button>
@@ -132,7 +117,7 @@ export function ThemePicker() {
         {mounted && theme === "system" && resolvedTheme === "dark" && (
           <p className="mt-5 flex items-center space-x-1.5 text-[11px] font-medium text-primary">
             <Moon className="w-3 h-3" />
-            <span>Your system is currently in dark mode — Shivers will follow automatically once the dark theme arrives.</span>
+            <span>Your system is currently in dark mode — Shivers follows along automatically.</span>
           </p>
         )}
       </CardContent>

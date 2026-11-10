@@ -4,12 +4,16 @@
  * Design tokens — single source of truth (Tailwind v4).
  *
  * All brand colors live in :root; @theme inline publishes them as
- * utilities (bg-primary, text-foreground, ...). To rebrand or add a
- * dark theme, override the :root values only — never edit @theme.
+ * utilities (bg-primary, text-foreground, ...). Themes are data blocks:
+ * the default light theme is :root, alternative themes are
+ * [data-theme="<name>"] override blocks below. To add a theme, write one
+ * of those blocks — never edit @theme or components.
  *
- * NOTE: components still carry hard-coded hex duplicates of these
- * values (mapped 1:1 to the tokens below); they are swept in a later
- * step. Until then the values here MUST match those literals.
+ * Keep-set exceptions (constant by design, work in both themes):
+ * - work-surface scrims over media (zoom box, avatar/editor overlay)
+ * - dialog scrim (bg-slate-900/40)
+ * - emerald-* presence/status accents
+ * - on-primary white (text on brand fills follows brand, not theme)
  */
 :root {
   /* core semantic */
@@ -45,6 +49,50 @@
   --accent: #f1f5f9;                  /* slate-100 — hover wash */
   --accent-foreground: #0f172a;       /* slate-900 */
   --input: #e2e8f0;                   /* slate-200 — outline borders */
+  --ring: var(--primary);             /* focus ring = brand */
+}
+
+/*
+ * Dark theme — the only theme-specific data. Components never branch on
+ * theme; every dark appearance decision lives in this block. Tiers are
+ * ordered by function: page ink darkest, surfaces lift above it, hover
+ * washes lighten (mirroring the light theme's contrast direction).
+ */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* core semantic */
+  --background: #0b1220;              /* deep ink, indigo-tinted (950/900 blend) */
+  --foreground: #f1f5f9;              /* slate-100 */
+  --primary: #6366f1;                 /* indigo-500 */
+  --primary-hover: #818cf8;           /* indigo-400 — hover brightens on dark */
+  --secondary: #3b82f6;               /* blue-500 */
+  --muted: #8296b0;                   /* slate-500/400 blend — secondary text */
+  --muted-subtle: #64748b;            /* slate-500 */
+  --border: rgba(148, 163, 184, 0.12); /* slate-400 @ 12% */
+  /* branding extras */
+  --primary-tint: rgba(99, 102, 241, 0.16);  /* translucent indigo badge wash */
+  --decor-mist: #1c2748;              /* page-header gradient, far stop */
+  --decor-haze: #131b33;              /* page-header gradient, near stop */
+  --decor-glow: rgba(79, 70, 229, 0.28); /* elevated-card glow (shadows need hue on dark) */
+  --selection-tint: rgba(99, 102, 241, 0.45); /* ::selection background */
+  --selection-contrast: #e0e7ff;      /* indigo-100 — ::selection text */
+  /* surface/semantic layer */
+  --on-primary: #ffffff;
+  --surface: #0f172a;                 /* slate-900 — cards, bubbles, dropdowns */
+  --surface-muted: #141e35;           /* slate-900/800 blend */
+  --surface-shade: #1e293b;           /* slate-800 — hover, lightest surface tier */
+  --line: #1e293b;                    /* slate-800 — standard hairlines */
+  --line-soft: #172036;               /* slate-900/800 blend */
+  --line-strong: #334155;             /* slate-700 */
+  --text-muted-strong: #94a3b8;       /* slate-400 */
+  --text-strong: #cbd5e1;             /* slate-300 */
+  /* shadcn-compat tokens */
+  --destructive: #ef4444;             /* red-500 — pops on ink */
+  --destructive-foreground: #ffffff;
+  --accent: #1e293b;                  /* slate-800 — hover wash */
+  --accent-foreground: #f1f5f9;       /* slate-100 */
+  --input: #334155;                   /* slate-700 — outline borders */
   --ring: var(--primary);             /* focus ring = brand */
 }
 
