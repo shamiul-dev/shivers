@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, Shield } from "lucide-react";
+import { User, Shield, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -15,6 +15,11 @@ const navItems = [
     name: "Security",
     href: "/settings/security",
     icon: Shield,
+  },
+  {
+    name: "Appearance",
+    href: "/settings/appearance",
+    icon: Sun,
   },
 ];
 
