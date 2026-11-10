@@ -42,7 +42,7 @@ export function SignUpForm() {
         required
       />
 
-      <AuthSubmitButton>Create Account</AuthSubmitButton>
+      <AuthSubmitButton pendingLabel="Creating account">Create Account</AuthSubmitButton>
 
       <p className="text-center text-xs text-slate-500 pt-3">
         Already have an account?{" "}

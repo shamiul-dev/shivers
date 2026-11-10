@@ -5,10 +5,12 @@ import { Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AuthSubmitButtonProps {
-  children?: React.ReactNode;
+  children: React.ReactNode;
+  /** Message shown while the formaction runs; "..." is appended. */
+  pendingLabel?: string;
 }
 
-export function AuthSubmitButton({ children = "Create Account" }: AuthSubmitButtonProps) {
+export function AuthSubmitButton({ children, pendingLabel }: AuthSubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
@@ -22,7 +24,7 @@ export function AuthSubmitButton({ children = "Create Account" }: AuthSubmitButt
       {pending ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin mr-2" />
-          <span>Creating account...</span>
+          <span>{pendingLabel ?? "Please wait"}...</span>
         </>
       ) : (
         <>

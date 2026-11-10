@@ -43,7 +43,7 @@ export function LoginForm() {
         </div>
       </div>
 
-      <AuthSubmitButton>Sign In</AuthSubmitButton>
+      <AuthSubmitButton pendingLabel="Signing in">Sign In</AuthSubmitButton>
 
       <p className="text-center text-xs text-slate-500 pt-3">
         Don&apos;t have an account?{" "}
