@@ -11,9 +11,9 @@ const badgeVariants = cva(
         default:
           "bg-slate-100 text-slate-700 hover:bg-slate-200/80",
         indigo:
-          "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20",
+          "bg-primary text-white shadow-xs shadow-primary/20",
         subtle:
-          "bg-[#EEF2FF] text-[#4338CA] border border-[#4338CA]/10",
+          "bg-primary-tint text-primary border border-primary/10",
         online:
           "bg-emerald-50 text-emerald-700 border border-emerald-500/20",
         outline:

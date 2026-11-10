@@ -53,7 +53,7 @@ async function ChatNavigation() {
 
 function ChatNavigationSkeleton() {
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-white text-[#0F172A]">
+    <div className="h-screen w-screen overflow-hidden flex bg-white text-foreground">
       {/* Rail Skeleton */}
       <div className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-white border-r border-slate-100 shrink-0 animate-pulse">
         <div className="w-10 h-10 rounded-xl bg-slate-200" />

@@ -49,7 +49,7 @@ export function UserMenuDropdown({
         <button
           type="button"
           aria-label="User account menu"
-          className="group relative rounded-full focus:outline-none focus:ring-2 focus:ring-[#4338CA]/40 cursor-pointer"
+          className="group relative rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
         >
           <UserAvatar
             name={user.name}
@@ -58,7 +58,7 @@ export function UserMenuDropdown({
             size="md"
             showPresence
             presenceStatus="online"
-            className="ring-2 ring-transparent group-hover:ring-[#4338CA]/30 transition-all"
+            className="ring-2 ring-transparent group-hover:ring-primary/30 transition-all"
           />
         </button>
       </DropdownMenuTrigger>
@@ -79,7 +79,7 @@ export function UserMenuDropdown({
               size="sm"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-[#0F172A] truncate">
+              <p className="text-xs font-bold text-foreground truncate">
                 {user.name}
               </p>
               <p className="text-[11px] font-medium text-slate-500 truncate">
@@ -99,7 +99,7 @@ export function UserMenuDropdown({
         <DropdownMenuItem asChild>
           <Link
             href="/settings/profile"
-            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-[#0F172A] hover:bg-slate-100 transition-colors"
+            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-slate-100 transition-colors"
           >
             <User className="w-4 h-4 text-slate-500" />
             <span>Profile Settings</span>
@@ -109,7 +109,7 @@ export function UserMenuDropdown({
         <DropdownMenuItem asChild>
           <Link
             href="/settings/security"
-            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-[#0F172A] hover:bg-slate-100 transition-colors"
+            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-slate-100 transition-colors"
           >
             <Shield className="w-4 h-4 text-slate-500" />
             <span>Security & Password</span>

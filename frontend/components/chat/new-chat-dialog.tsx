@@ -117,7 +117,7 @@ export function NewChatDialog() {
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "dm"
-                ? "bg-white text-[#4338CA] shadow-xs"
+                ? "bg-white text-primary shadow-xs"
                 : "text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -132,7 +132,7 @@ export function NewChatDialog() {
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "room"
-                ? "bg-white text-[#4338CA] shadow-xs"
+                ? "bg-white text-primary shadow-xs"
                 : "text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -181,7 +181,7 @@ export function NewChatDialog() {
                       size="md"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#4338CA]">
+                      <p className="text-xs font-bold text-foreground truncate group-hover:text-primary">
                         {u.name}
                       </p>
                       <p className="text-[11px] text-slate-500 truncate">
@@ -204,7 +204,7 @@ export function NewChatDialog() {
         ) : (
           <form onSubmit={handleCreateChannel} className="space-y-4 pt-1">
             <div className="space-y-1.5">
-              <label htmlFor="room-name" className="text-xs font-semibold text-[#0F172A]">
+              <label htmlFor="room-name" className="text-xs font-semibold text-foreground">
                 Channel Name
               </label>
               <Input
@@ -217,7 +217,7 @@ export function NewChatDialog() {
                 className="h-10 text-xs rounded-xl"
                 autoFocus
               />
-              <p className="text-[11px] text-[#64748B]">
+              <p className="text-[11px] text-muted">
                 Public or private group room for multiple members.
               </p>
             </div>

@@ -48,7 +48,7 @@ export function SignUpForm() {
         Already have an account?{" "}
         <Link
           href="/login"
-          className="font-semibold text-[#4338CA] hover:text-[#2563EB] transition-colors"
+          className="font-semibold text-primary hover:text-secondary transition-colors"
         >
           Sign in
         </Link>

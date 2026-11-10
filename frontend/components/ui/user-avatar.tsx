@@ -12,7 +12,7 @@ const avatarVariants = cva(
         sm: "w-8 h-8 text-xs",
         md: "w-10 h-10 text-sm",
         lg: "w-14 h-14 text-lg",
-        xl: "w-20 h-20 text-2xl shadow-lg shadow-[#4338CA]/20",
+        xl: "w-20 h-20 text-2xl shadow-lg shadow-primary/20",
       },
     },
     defaultVariants: { size: "md" },
@@ -49,7 +49,7 @@ export function UserAvatar({
       <div
         className={cn(
           avatarVariants({ size }),
-          !image && "bg-gradient-to-br from-[#4338CA] to-[#2563EB] text-white ring-1 ring-white/20",
+          !image && "bg-gradient-to-br from-primary to-secondary text-white ring-1 ring-white/20",
           className
         )}
         {...props}

@@ -52,7 +52,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
               presenceStatus={isOnline ? "online" : "offline"}
             />
           ) : (
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#4338CA] to-[#2563EB] text-white flex items-center justify-center font-bold text-sm shadow-xs shadow-[#4338CA]/20">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center font-bold text-sm shadow-xs shadow-primary/20">
               <Hash className="w-5 h-5" />
             </div>
           )}
@@ -61,7 +61,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         {/* Title and Meta */}
         <div className="min-w-0 max-w-[160px] xs:max-w-[200px] sm:max-w-none">
           <div className="flex items-center gap-2">
-            <h1 className="font-bold text-[15px] text-[#0F172A] leading-tight truncate">
+            <h1 className="font-bold text-[15px] text-foreground leading-tight truncate">
               {title}
             </h1>
             {!isDm && (
@@ -103,14 +103,14 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         )}
         <button
           type="button"
-          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary items-center justify-center transition-colors cursor-pointer"
           title="Audio call"
         >
           <Phone className="w-4 h-4" />
         </button>
         <button
           type="button"
-          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary items-center justify-center transition-colors cursor-pointer"
           title="Video meeting"
         >
           <Video className="w-4 h-4" />

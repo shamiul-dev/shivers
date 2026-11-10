@@ -13,7 +13,7 @@ export function ChatShell({ navigation, children }: ChatShellProps) {
   const isThreadActive = pathname.startsWith("/chat/") && pathname !== "/chat";
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-white text-[#0F172A]">
+    <div className="h-screen w-screen overflow-hidden flex bg-white text-foreground">
       {/* Sidebar / Navigation: on mobile, visible only when on /chat hub */}
       <div
         className={`h-full shrink-0 ${

@@ -104,17 +104,17 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
 
           <div>
             <div className="flex items-center space-x-2">
-              <CardTitle className="text-xl font-bold tracking-tight text-[#0F172A]">
+              <CardTitle className="text-xl font-bold tracking-tight text-foreground">
                 {user.name}
               </CardTitle>
               <span className="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                 Online
               </span>
             </div>
-            <p className="text-sm font-medium text-[#4338CA] mt-0.5">
+            <p className="text-sm font-medium text-primary mt-0.5">
               @{profile?.username || "no-handle"}
             </p>
-            <CardDescription className="text-xs text-[#64748B] mt-1">
+            <CardDescription className="text-xs text-muted mt-1">
               Manage your public persona and conversational presence.
             </CardDescription>
 
@@ -141,12 +141,12 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading || isDeleting}
-            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-[#0F172A] shadow-xs hover:bg-slate-50 transition-all cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-foreground shadow-xs hover:bg-slate-50 transition-all cursor-pointer disabled:opacity-50"
           >
             {isUploading ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#4338CA]" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
             ) : (
-              <Camera className="w-3.5 h-3.5 text-[#4338CA]" />
+              <Camera className="w-3.5 h-3.5 text-primary" />
             )}
             <span>{isUploading ? "Uploading..." : "Change Photo"}</span>
           </button>

@@ -116,7 +116,7 @@ export function ChannelMembersDialog({
       <DialogTrigger asChild>
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-[#4338CA] flex items-center justify-center transition-colors cursor-pointer text-slate-500"
+          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary flex items-center justify-center transition-colors cursor-pointer text-slate-500"
           title="Channel members"
         >
           <Users className="w-4 h-4" />
@@ -143,7 +143,7 @@ export function ChannelMembersDialog({
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "members"
-                ? "bg-white text-[#4338CA] shadow-xs"
+                ? "bg-white text-primary shadow-xs"
                 : "text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -158,7 +158,7 @@ export function ChannelMembersDialog({
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "add"
-                ? "bg-white text-[#4338CA] shadow-xs"
+                ? "bg-white text-primary shadow-xs"
                 : "text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -198,7 +198,7 @@ export function ChannelMembersDialog({
                       size="sm"
                     />
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold text-[#0F172A] truncate">
+                      <p className="text-xs font-semibold text-foreground truncate">
                         {member.name}
                       </p>
                       <p className="text-[11px] text-slate-400 truncate">
@@ -230,7 +230,7 @@ export function ChannelMembersDialog({
                 value={searchQuery}
                 onChange={(e) => void handleSearch(e.target.value)}
                 placeholder="Search by name or username..."
-                className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-[#0F172A] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338CA]/20 focus:border-[#4338CA] transition-all"
+                className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-foreground placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 autoFocus
               />
             </div>
@@ -265,7 +265,7 @@ export function ChannelMembersDialog({
                           size="sm"
                         />
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-[#0F172A] truncate">
+                          <p className="text-xs font-semibold text-foreground truncate">
                             {user.name}
                           </p>
                           <p className="text-[11px] text-slate-400 truncate">

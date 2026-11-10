@@ -125,7 +125,7 @@ export function ChatComposer({
     : "";
 
   return (
-    <div className="relative z-20 px-3 sm:px-4 md:px-8 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/90 to-transparent shrink-0">
+    <div className="relative z-20 px-3 sm:px-4 md:px-8 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 bg-gradient-to-t from-background via-background/90 to-transparent shrink-0">
       {/* Hidden File Picker Input */}
       <input
         ref={fileInputRef}
@@ -140,7 +140,7 @@ export function ChatComposer({
         <div className="w-full max-w-4xl mx-auto mb-2 px-1 flex items-center gap-2">
           {isUploading ? (
             <div className="flex items-center gap-2 bg-white border border-slate-200/80 rounded-2xl px-3.5 py-2 shadow-xs text-xs text-slate-600 animate-pulse">
-              <Loader2 className="w-4 h-4 animate-spin text-[#4338CA]" />
+              <Loader2 className="w-4 h-4 animate-spin text-primary" />
               <span>Uploading attachment...</span>
             </div>
           ) : pendingAttachment ? (
@@ -154,12 +154,12 @@ export function ChatComposer({
                   />
                 </div>
               ) : (
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 text-[#4338CA] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 text-primary flex items-center justify-center shrink-0">
                   <FileText className="w-5 h-5" />
                 </div>
               )}
               <div className="min-w-0 max-w-[200px] sm:max-w-[280px]">
-                <p className="text-xs font-semibold text-[#0F172A] truncate">
+                <p className="text-xs font-semibold text-foreground truncate">
                   {pendingAttachment.fileName}
                 </p>
                 <p className="text-[10px] text-slate-400">
@@ -180,12 +180,12 @@ export function ChatComposer({
       )}
 
       {/* Main Composer Box */}
-      <div className="w-full max-w-4xl mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-[#4338CA]/40 focus-within:ring-2 focus-within:ring-[#4338CA]/10">
+      <div className="w-full max-w-4xl mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10">
         {/* Attachment Button */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#4338CA] hover:bg-slate-100 transition-colors shrink-0 mb-0.5 cursor-pointer"
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-primary hover:bg-slate-100 transition-colors shrink-0 mb-0.5 cursor-pointer"
           title="Add photo or document"
           disabled={disabled || isUploading}
         >
@@ -209,7 +209,7 @@ export function ChatComposer({
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder={pendingAttachment ? "Add a caption..." : "Type a message..."}
-            className="w-full bg-transparent text-[14px] text-[#0F172A] placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed block max-h-32"
+            className="w-full bg-transparent text-[14px] text-foreground placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed block max-h-32"
           />
         </div>
 
@@ -222,7 +222,7 @@ export function ChatComposer({
                 type="button"
                 className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer ${
                   isEmojiOpen
-                    ? "bg-[#EEF2FF] text-[#4338CA]"
+                    ? "bg-primary-tint text-primary"
                     : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
                 }`}
                 title="Insert emoji"
@@ -235,7 +235,7 @@ export function ChatComposer({
               side="top"
               align="end"
               sideOffset={10}
-              className="p-0 border-slate-200/90 shadow-2xl shadow-[#4338CA]/15 rounded-2xl overflow-hidden w-auto"
+              className="p-0 border-slate-200/90 shadow-2xl shadow-primary/15 rounded-2xl overflow-hidden w-auto"
             >
               <EmojiPicker onSelect={handleInsertEmoji} />
             </PopoverContent>

@@ -142,7 +142,7 @@ export function ChatMessagesView({
   }, [committed.length, pending.length, typingUsers.length, allMessages.length, scrollToBottom]);
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-background">
       {/* Scrollable Message Timeline */}
       <div
         ref={scrollContainerRef}
@@ -213,7 +213,7 @@ export function ChatMessagesView({
                     >
                       {/* Sender name for first message in inbound group */}
                       {!isOutbound && !sameSenderAsPrev && otherUser?.name && (
-                        <span className="text-[11px] font-semibold text-[#0F172A] ml-1 mb-1">
+                        <span className="text-[11px] font-semibold text-foreground ml-1 mb-1">
                           {otherUser.name}
                         </span>
                       )}
@@ -275,14 +275,14 @@ export function ChatMessagesView({
           </div>
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-[#4338CA]">
-              <MessageSquare className="w-6 h-6 text-[#4338CA]" />
+            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-primary">
+              <MessageSquare className="w-6 h-6 text-primary" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-[#0F172A]">
+              <p className="text-sm font-semibold text-foreground">
                 No messages yet
               </p>
-              <p className="text-xs text-[#64748B] max-w-xs">
+              <p className="text-xs text-muted max-w-xs">
                 Send the first message below to start the conversation in real time.
               </p>
             </div>

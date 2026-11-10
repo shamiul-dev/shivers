@@ -36,7 +36,7 @@ export function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-xs font-medium text-[#4338CA] hover:text-[#2563EB] transition-colors"
+            className="text-xs font-medium text-primary hover:text-secondary transition-colors"
           >
             Forgot password?
           </Link>
@@ -49,7 +49,7 @@ export function LoginForm() {
         Don&apos;t have an account?{" "}
         <Link
           href="/signup"
-          className="font-semibold text-[#4338CA] hover:text-[#2563EB] transition-colors"
+          className="font-semibold text-primary hover:text-secondary transition-colors"
         >
           Sign up
         </Link>

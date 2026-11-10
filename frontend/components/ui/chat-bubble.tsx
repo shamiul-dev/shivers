@@ -20,11 +20,11 @@ const chatBubbleVariants = cva(
     variants: {
       variant: {
         outbound:
-          "bg-gradient-to-r from-[#4338CA] to-[#2563EB] text-white shadow-sm shadow-[#4338CA]/20",
+          "bg-gradient-to-r from-primary to-secondary text-white shadow-sm shadow-primary/20",
         inbound:
-          "bg-white border border-slate-200/80 text-[#0F172A] shadow-xs shadow-slate-900/5",
+          "bg-white border border-slate-200/80 text-foreground shadow-xs shadow-slate-900/5",
         pending:
-          "bg-gradient-to-r from-[#4338CA]/75 to-[#2563EB]/75 text-white/90 shadow-none animate-pulse",
+          "bg-gradient-to-r from-primary/75 to-secondary/75 text-white/90 shadow-none animate-pulse",
         failed:
           "bg-red-50 border border-red-200 text-red-900 shadow-xs",
       },

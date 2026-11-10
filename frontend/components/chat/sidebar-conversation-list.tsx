@@ -151,7 +151,7 @@ export function SidebarConversationList() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search conversations..."
-            className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-[#0F172A] placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338CA]/20 focus:border-[#4338CA] transition-all"
+            className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-foreground placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
         </div>
 
@@ -162,8 +162,8 @@ export function SidebarConversationList() {
             onClick={() => setFilter("all")}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               filter === "all"
-                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
-                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+                ? "bg-primary text-white shadow-xs shadow-primary/20"
+                : "bg-slate-100 text-muted hover:text-foreground hover:bg-slate-200/60"
             }`}
           >
             All
@@ -173,8 +173,8 @@ export function SidebarConversationList() {
             onClick={() => setFilter("dm")}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               filter === "dm"
-                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
-                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+                ? "bg-primary text-white shadow-xs shadow-primary/20"
+                : "bg-slate-100 text-muted hover:text-foreground hover:bg-slate-200/60"
             }`}
           >
             Direct
@@ -184,8 +184,8 @@ export function SidebarConversationList() {
             onClick={() => setFilter("room")}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               filter === "room"
-                ? "bg-[#4338CA] text-white shadow-xs shadow-[#4338CA]/20"
-                : "bg-slate-100 text-[#64748B] hover:text-[#0F172A] hover:bg-slate-200/60"
+                ? "bg-primary text-white shadow-xs shadow-primary/20"
+                : "bg-slate-100 text-muted hover:text-foreground hover:bg-slate-200/60"
             }`}
           >
             Channels
@@ -219,13 +219,13 @@ export function SidebarConversationList() {
                 href={`/chat/${c.id}`}
                 className={`relative flex items-center gap-3 p-2.5 rounded-2xl transition-all select-none group cursor-pointer ${
                   isActive
-                    ? "bg-[#EEF2FF] border border-[#4338CA]/20 text-[#0F172A]"
-                    : "hover:bg-slate-50 border border-transparent text-slate-700 hover:text-[#0F172A]"
+                    ? "bg-primary-tint border border-primary/20 text-foreground"
+                    : "hover:bg-slate-50 border border-transparent text-slate-700 hover:text-foreground"
                 }`}
               >
                 {/* Active Indicator Bar */}
                 {isActive && (
-                  <span className="absolute left-0 top-3 bottom-3 w-1 bg-[#4338CA] rounded-r-full" />
+                  <span className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-r-full" />
                 )}
 
                 {/* Avatar / Icon */}
@@ -244,7 +244,7 @@ export function SidebarConversationList() {
                     }
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 text-[#4338CA] flex items-center justify-center shrink-0 font-bold text-sm shadow-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 text-primary flex items-center justify-center shrink-0 font-bold text-sm shadow-xs">
                     <Hash className="w-4 h-4" />
                   </div>
                 )}
@@ -254,7 +254,7 @@ export function SidebarConversationList() {
                   <div className="flex items-center justify-between mb-0.5">
                     <span
                       className={`text-xs font-bold truncate ${
-                        isActive ? "text-[#4338CA]" : "text-[#0F172A]"
+                        isActive ? "text-primary" : "text-foreground"
                       }`}
                     >
                       {title}
@@ -264,7 +264,7 @@ export function SidebarConversationList() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[11px] text-[#64748B] truncate font-normal">
+                    <p className="text-[11px] text-muted truncate font-normal">
                       {previewText}
                     </p>
                     {c.unreadCount && c.unreadCount > 0 ? (
@@ -283,10 +283,10 @@ export function SidebarConversationList() {
               <MessageSquare className="w-6 h-6 text-slate-400" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-[#0F172A]">
+              <p className="text-sm font-semibold text-foreground">
                 {search ? "No matching conversations" : "No conversations yet"}
               </p>
-              <p className="text-xs text-[#64748B] max-w-[200px]">
+              <p className="text-xs text-muted max-w-[200px]">
                 {search
                   ? "Try searching for a different handle or name."
                   : "Click 'New' above to start a direct message or create a channel."}

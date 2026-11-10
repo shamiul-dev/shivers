@@ -22,7 +22,7 @@ export function ChatRail({ user, profile }: ChatRailProps) {
       <div className="flex flex-col items-center space-y-6">
         <Link
           href="/chat"
-          className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4338CA] to-[#2563EB] flex items-center justify-center shadow-md shadow-[#4338CA]/20 p-2 transition-transform hover:scale-105"
+          className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md shadow-primary/20 p-2 transition-transform hover:scale-105"
           title="Shivers Home"
         >
           <Image
@@ -38,11 +38,11 @@ export function ChatRail({ user, profile }: ChatRailProps) {
         <nav className="flex flex-col items-center space-y-2">
           <Link
             href="/chat"
-            className="relative w-11 h-11 rounded-2xl flex items-center justify-center bg-[#EEF2FF] text-[#4338CA] transition-colors group"
+            className="relative w-11 h-11 rounded-2xl flex items-center justify-center bg-primary-tint text-primary transition-colors group"
             title="Messages"
           >
-            <MessageSquare className="w-5 h-5 text-[#4338CA]" />
-            <span className="absolute left-0 w-1 h-5 bg-[#4338CA] rounded-r-full" />
+            <MessageSquare className="w-5 h-5 text-primary" />
+            <span className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />
           </Link>
         </nav>
       </div>

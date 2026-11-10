@@ -36,11 +36,11 @@ export function SettingsNav() {
             className={cn(
               "flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all",
               isActive
-                ? "bg-white text-[#0F172A] shadow-xs shadow-slate-200"
-                : "text-[#64748B] hover:text-[#0F172A] hover:bg-white/60"
+                ? "bg-white text-foreground shadow-xs shadow-slate-200"
+                : "text-muted hover:text-foreground hover:bg-white/60"
             )}
           >
-            <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#4338CA]" : "text-[#64748B]")} />
+            <Icon className={cn("w-3.5 h-3.5", isActive ? "text-primary" : "text-muted")} />
             <span>{item.name}</span>
           </Link>
         );

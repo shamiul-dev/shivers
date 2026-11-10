@@ -39,8 +39,8 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Display Name */}
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-xs font-semibold text-[#0F172A] flex items-center space-x-1.5">
-                <User className="w-3.5 h-3.5 text-[#4338CA]" />
+              <Label htmlFor="name" className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
+                <User className="w-3.5 h-3.5 text-primary" />
                 <span>Display Name</span>
               </Label>
               <Input
@@ -51,15 +51,15 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
                 required
                 className="h-10 text-sm"
               />
-              <p className="text-[11px] text-[#64748B]">
+              <p className="text-[11px] text-muted">
                 Your visible name in direct messages and channel threads.
               </p>
             </div>
 
             {/* Username */}
             <div className="space-y-1.5">
-              <Label htmlFor="username" className="text-xs font-semibold text-[#0F172A] flex items-center space-x-1.5">
-                <AtSign className="w-3.5 h-3.5 text-[#4338CA]" />
+              <Label htmlFor="username" className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
+                <AtSign className="w-3.5 h-3.5 text-primary" />
                 <span>Username Handle</span>
               </Label>
               <div className="relative">
@@ -75,7 +75,7 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
                   className="pl-8 h-10 text-sm lowercase"
                 />
               </div>
-              <p className="text-[11px] text-[#64748B]">
+              <p className="text-[11px] text-muted">
                 Unique handle (3–20 chars, lowercase letters, numbers, underscores).
               </p>
             </div>
@@ -83,8 +83,8 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
 
           {/* Bio */}
           <div className="space-y-1.5">
-            <Label htmlFor="bio" className="text-xs font-semibold text-[#0F172A] flex items-center space-x-1.5">
-              <AlignLeft className="w-3.5 h-3.5 text-[#4338CA]" />
+            <Label htmlFor="bio" className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
+              <AlignLeft className="w-3.5 h-3.5 text-primary" />
               <span>Bio</span>
             </Label>
             <Textarea
@@ -95,7 +95,7 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
               maxLength={160}
               className="min-h-[88px] text-sm resize-none"
             />
-            <div className="flex justify-between items-center text-[11px] text-[#64748B]">
+            <div className="flex justify-between items-center text-[11px] text-muted">
               <span>Brief summary shown in your profile card.</span>
               <span>Max 160 characters</span>
             </div>
