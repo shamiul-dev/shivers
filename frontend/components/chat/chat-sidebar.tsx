@@ -17,9 +17,9 @@ interface ChatSidebarProps {
 
 export function ChatSidebar({ user, profile }: ChatSidebarProps) {
   return (
-    <aside className="w-full md:w-[340px] lg:w-[360px] h-screen bg-white border-r border-slate-200/80 flex flex-col shrink-0 select-none">
+    <aside className="w-full md:w-[340px] lg:w-[360px] h-screen bg-surface border-r border-line/80 flex flex-col shrink-0 select-none">
       {/* Mobile-only header bar */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-background">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-line-soft bg-background">
         <div className="flex items-center space-x-2.5">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center p-1.5 shadow-xs">
             <Image

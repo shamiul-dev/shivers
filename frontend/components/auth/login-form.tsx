@@ -36,7 +36,7 @@ export function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-xs font-medium text-primary hover:text-secondary transition-colors"
+            className="text-xs font-medium text-primary hover:text-muted-strong transition-colors"
           >
             Forgot password?
           </Link>
@@ -45,11 +45,11 @@ export function LoginForm() {
 
       <AuthSubmitButton pendingLabel="Signing in">Sign In</AuthSubmitButton>
 
-      <p className="text-center text-xs text-slate-500 pt-3">
+      <p className="text-center text-xs text-muted pt-3">
         Don&apos;t have an account?{" "}
         <Link
           href="/signup"
-          className="font-semibold text-primary hover:text-secondary transition-colors"
+          className="font-semibold text-primary hover:text-muted-strong transition-colors"
         >
           Sign up
         </Link>

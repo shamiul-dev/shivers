@@ -19,7 +19,7 @@ const avatarVariants = cva(
   }
 );
 
-const presenceColors = { online: "bg-emerald-500", idle: "bg-amber-500", offline: "bg-slate-300" } as const;
+const presenceColors = { online: "bg-emerald-500", idle: "bg-amber-500", offline: "bg-line-strong" } as const;
 const presenceSizes = { xs: "w-1.5 h-1.5", sm: "w-2 h-2", md: "w-2.5 h-2.5", lg: "w-3.5 h-3.5", xl: "w-4 h-4" } as const;
 
 export interface UserAvatarProps
@@ -49,7 +49,7 @@ export function UserAvatar({
       <div
         className={cn(
           avatarVariants({ size }),
-          !image && "bg-gradient-to-br from-primary to-secondary text-white ring-1 ring-white/20",
+          !image && "bg-gradient-to-br from-primary to-secondary text-on-primary ring-1 ring-white/20",
           className
         )}
         {...props}
@@ -64,7 +64,7 @@ export function UserAvatar({
       {showPresence && (
         <span
           className={cn(
-            "absolute bottom-0 right-0 rounded-full ring-2 ring-white",
+            "absolute bottom-0 right-0 rounded-full ring-2 ring-surface",
             presenceColors[presenceStatus],
             presenceSizes[size || "md"]
           )}

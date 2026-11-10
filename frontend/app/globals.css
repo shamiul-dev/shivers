@@ -28,6 +28,17 @@
   --decor-glow: #dce9ff;              /* elevated-card shadow tint */
   --selection-tint: #e3dfff;          /* ::selection background */
   --selection-contrast: #100069;      /* ::selection text */
+  /* surface/semantic layer (former stock slate-* / white usages, slate-#
+     identity noted; equal values at every tier — pure renames, no shift) */
+  --on-primary: #ffffff;              /* text placed on brand fills */
+  --surface: #ffffff;                 /* cards, bubbles, dropdowns (white) */
+  --surface-muted: #f1f5f9;           /* slate-100 */
+  --surface-shade: #e2e8f0;           /* slate-200 */
+  --line: #e2e8f0;                    /* slate-200 — standard hairlines */
+  --line-soft: #f1f5f9;               /* slate-100 */
+  --line-strong: #cbd5e1;             /* slate-300 */
+  --text-muted-strong: #475569;       /* slate-600 — "text-secondary" would collide with shadcn --color-secondary */
+  --text-strong: #334155;             /* slate-700 */
   /* shadcn-compat tokens (referenced by ui primitives) */
   --destructive: #dc2626;             /* red-600 */
   --destructive-foreground: #ffffff;
@@ -61,6 +72,14 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-border: var(--border);
+  --color-on-primary: var(--on-primary);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-shade: var(--surface-shade);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-line-strong: var(--line-strong);
+  --color-muted-strong: var(--text-muted-strong);  --color-strong: var(--text-strong);
 }
 
 body {

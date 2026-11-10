@@ -67,7 +67,7 @@ export function UserMenuDropdown({
         side={side}
         align={align}
         sideOffset={14}
-        className="w-64 p-2 bg-white rounded-2xl border border-slate-200/80 shadow-xl shadow-slate-900/10"
+        className="w-64 p-2 bg-surface rounded-2xl border border-line/80 shadow-xl shadow-foreground/10"
       >
         {/* User Identity Header */}
         <DropdownMenuLabel className="p-2 pb-2.5">
@@ -82,7 +82,7 @@ export function UserMenuDropdown({
               <p className="text-xs font-bold text-foreground truncate">
                 {user.name}
               </p>
-              <p className="text-[11px] font-medium text-slate-500 truncate">
+              <p className="text-[11px] font-medium text-muted truncate">
                 @{profile?.username || "me"}
               </p>
             </div>
@@ -99,9 +99,9 @@ export function UserMenuDropdown({
         <DropdownMenuItem asChild>
           <Link
             href="/settings/profile"
-            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-slate-100 transition-colors"
+            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-surface-muted transition-colors"
           >
-            <User className="w-4 h-4 text-slate-500" />
+            <User className="w-4 h-4 text-muted" />
             <span>Profile Settings</span>
           </Link>
         </DropdownMenuItem>
@@ -109,9 +109,9 @@ export function UserMenuDropdown({
         <DropdownMenuItem asChild>
           <Link
             href="/settings/security"
-            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-slate-100 transition-colors"
+            className="flex items-center space-x-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-foreground hover:bg-surface-muted transition-colors"
           >
-            <Shield className="w-4 h-4 text-slate-500" />
+            <Shield className="w-4 h-4 text-muted" />
             <span>Security & Password</span>
           </Link>
         </DropdownMenuItem>

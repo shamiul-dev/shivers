@@ -139,14 +139,14 @@ export function ChatComposer({
       {(pendingAttachment || isUploading) && (
         <div className="w-full max-w-4xl mx-auto mb-2 px-1 flex items-center gap-2">
           {isUploading ? (
-            <div className="flex items-center gap-2 bg-white border border-slate-200/80 rounded-2xl px-3.5 py-2 shadow-xs text-xs text-slate-600 animate-pulse">
+            <div className="flex items-center gap-2 bg-surface border border-line/80 rounded-2xl px-3.5 py-2 shadow-xs text-xs text-muted-strong animate-pulse">
               <Loader2 className="w-4 h-4 animate-spin text-primary" />
               <span>Uploading attachment...</span>
             </div>
           ) : pendingAttachment ? (
-            <div className="flex items-center gap-2.5 bg-white border border-slate-200/80 rounded-2xl p-1.5 pr-3 shadow-md shadow-slate-900/5 group">
+            <div className="flex items-center gap-2.5 bg-surface border border-line/80 rounded-2xl p-1.5 pr-3 shadow-md shadow-foreground/5 group">
               {pendingAttachment.mime.startsWith("image/") ? (
-                <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/60">
+                <div className="w-10 h-10 rounded-xl overflow-hidden bg-surface-muted shrink-0 border border-line/60">
                   <img
                     src={previewUrl}
                     alt={pendingAttachment.fileName}
@@ -162,14 +162,14 @@ export function ChatComposer({
                 <p className="text-xs font-semibold text-foreground truncate">
                   {pendingAttachment.fileName}
                 </p>
-                <p className="text-[10px] text-slate-400">
+                <p className="text-[10px] text-muted-subtle">
                   {formatBytes(pendingAttachment.sizeBytes)}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setPendingAttachment(null)}
-                className="w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer ml-1"
+                className="w-6 h-6 rounded-full hover:bg-surface-muted flex items-center justify-center text-muted-subtle hover:text-strong transition-colors cursor-pointer ml-1"
                 title="Remove attachment"
               >
                 <X className="w-3.5 h-3.5" />
@@ -180,12 +180,12 @@ export function ChatComposer({
       )}
 
       {/* Main Composer Box */}
-      <div className="w-full max-w-4xl mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10">
+      <div className="w-full max-w-4xl mx-auto bg-surface border border-line/80 rounded-2xl shadow-[0_4px_20px_rgba(11,28,48,0.06)] p-1.5 flex items-end gap-1.5 transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10">
         {/* Attachment Button */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-primary hover:bg-slate-100 transition-colors shrink-0 mb-0.5 cursor-pointer"
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-muted-subtle hover:text-primary hover:bg-surface-muted transition-colors shrink-0 mb-0.5 cursor-pointer"
           title="Add photo or document"
           disabled={disabled || isUploading}
         >
@@ -209,7 +209,7 @@ export function ChatComposer({
             onKeyDown={handleKeyDown}
             disabled={disabled}
             placeholder={pendingAttachment ? "Add a caption..." : "Type a message..."}
-            className="w-full bg-transparent text-[14px] text-foreground placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed block max-h-32"
+            className="w-full bg-transparent text-[14px] text-foreground placeholder:text-muted-subtle focus:outline-none resize-none leading-relaxed block max-h-32"
           />
         </div>
 
@@ -223,7 +223,7 @@ export function ChatComposer({
                 className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer ${
                   isEmojiOpen
                     ? "bg-primary-tint text-primary"
-                    : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                    : "text-muted-subtle hover:text-strong hover:bg-surface-muted"
                 }`}
                 title="Insert emoji"
                 disabled={disabled}
@@ -235,7 +235,7 @@ export function ChatComposer({
               side="top"
               align="end"
               sideOffset={10}
-              className="p-0 border-slate-200/90 shadow-2xl shadow-primary/15 rounded-2xl overflow-hidden w-auto"
+              className="p-0 border-line/90 shadow-2xl shadow-primary/15 rounded-2xl overflow-hidden w-auto"
             >
               <EmojiPicker onSelect={handleInsertEmoji} />
             </PopoverContent>
@@ -256,7 +256,7 @@ export function ChatComposer({
           ) : (
             <button
               type="button"
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-muted-subtle hover:text-strong hover:bg-surface-muted transition-colors cursor-pointer shrink-0"
               title="Voice message"
             >
               <Mic className="w-4 h-4" />
@@ -266,12 +266,12 @@ export function ChatComposer({
       </div>
 
       {/* Sub-dock Keyboard Hint */}
-      <div className="hidden sm:flex max-w-4xl mx-auto mt-1.5 items-center justify-between px-2 text-[11px] text-slate-400">
+      <div className="hidden sm:flex max-w-4xl mx-auto mt-1.5 items-center justify-between px-2 text-[11px] text-muted-subtle">
         <span>
-          <strong className="font-semibold text-slate-600">Enter</strong> to send &bull;{" "}
-          <strong className="font-semibold text-slate-600">Shift + Enter</strong> for new line
+          <strong className="font-semibold text-muted-strong">Enter</strong> to send &bull;{" "}
+          <strong className="font-semibold text-muted-strong">Shift + Enter</strong> for new line
         </span>
-        <span className="flex items-center gap-1 text-slate-500">
+        <span className="flex items-center gap-1 text-muted">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> End-to-end encrypted
         </span>
       </div>

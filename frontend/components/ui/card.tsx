@@ -9,9 +9,9 @@ const cardVariants = cva(
     variants: {
       variant: {
         default: "rounded-xl border bg-card shadow-sm",
-        elevated: "rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-decor-glow/50",
-        flat: "rounded-2xl border border-slate-200 bg-slate-50/50",
-        glass: "rounded-3xl border border-white/60 bg-white/80 backdrop-blur-md shadow-xl",
+        elevated: "rounded-3xl border border-line/80 bg-surface shadow-xl shadow-decor-glow/50",
+        flat: "rounded-2xl border border-line bg-background/50",
+        glass: "rounded-3xl border border-surface/60 bg-surface/80 backdrop-blur-md shadow-xl",
       },
     },
     defaultVariants: {

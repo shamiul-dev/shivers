@@ -25,11 +25,11 @@ export function PasswordField({
 
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={name} className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+      <Label htmlFor={name} className="text-xs font-semibold uppercase tracking-wider text-muted-strong">
         {label}
       </Label>
       <div className="relative">
-        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-subtle pointer-events-none" />
         <Input
           id={name}
           name={name}
@@ -45,7 +45,7 @@ export function PasswordField({
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
           aria-label={showPassword ? "Hide password" : "Show password"}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-subtle hover:text-strong transition-colors cursor-pointer"
         >
           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
         </button>

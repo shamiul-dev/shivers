@@ -116,7 +116,7 @@ export function ChannelMembersDialog({
       <DialogTrigger asChild>
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary flex items-center justify-center transition-colors cursor-pointer text-slate-500"
+          className="w-9 h-9 rounded-xl hover:bg-surface-muted hover:text-primary flex items-center justify-center transition-colors cursor-pointer text-muted"
           title="Channel members"
         >
           <Users className="w-4 h-4" />
@@ -134,7 +134,7 @@ export function ChannelMembersDialog({
         </DialogHeader>
 
         {/* Tab switch */}
-        <div className="flex rounded-xl bg-slate-100 p-1 gap-1">
+        <div className="flex rounded-xl bg-surface-muted p-1 gap-1">
           <button
             type="button"
             onClick={() => {
@@ -143,8 +143,8 @@ export function ChannelMembersDialog({
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "members"
-                ? "bg-white text-primary shadow-xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-surface text-primary shadow-xs"
+                : "text-muted hover:text-foreground"
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -158,8 +158,8 @@ export function ChannelMembersDialog({
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "add"
-                ? "bg-white text-primary shadow-xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-surface text-primary shadow-xs"
+                : "text-muted hover:text-foreground"
             }`}
           >
             <UserPlus className="w-3.5 h-3.5" />
@@ -177,18 +177,18 @@ export function ChannelMembersDialog({
         {tab === "members" && (
           <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
             {isLoadingMembers ? (
-              <div className="py-8 flex justify-center text-slate-400">
+              <div className="py-8 flex justify-center text-muted-subtle">
                 <Loader2 className="w-5 h-5 animate-spin" />
               </div>
             ) : members.length === 0 ? (
-              <p className="py-6 text-center text-xs text-slate-400">
+              <p className="py-6 text-center text-xs text-muted-subtle">
                 No members found.
               </p>
             ) : (
               members.map((member) => (
                 <div
                   key={member.userId}
-                  className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors"
+                  className="flex items-center justify-between p-2 rounded-xl hover:bg-background transition-colors"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <UserAvatar
@@ -201,7 +201,7 @@ export function ChannelMembersDialog({
                       <p className="text-xs font-semibold text-foreground truncate">
                         {member.name}
                       </p>
-                      <p className="text-[11px] text-slate-400 truncate">
+                      <p className="text-[11px] text-muted-subtle truncate">
                         @{member.username || "user"}
                       </p>
                     </div>
@@ -224,24 +224,24 @@ export function ChannelMembersDialog({
         {tab === "add" && (
           <div className="space-y-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-subtle" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => void handleSearch(e.target.value)}
                 placeholder="Search by name or username..."
-                className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-100/80 border border-slate-200/60 text-xs text-foreground placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                className="w-full h-9 pl-9 pr-3 rounded-xl bg-surface-muted/80 border border-line/60 text-xs text-foreground placeholder:text-muted-subtle focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 autoFocus
               />
             </div>
 
             <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
               {isSearching ? (
-                <div className="py-6 flex justify-center text-slate-400">
+                <div className="py-6 flex justify-center text-muted-subtle">
                   <Loader2 className="w-5 h-5 animate-spin" />
                 </div>
               ) : searchResults.length === 0 ? (
-                <p className="py-6 text-center text-xs text-slate-400">
+                <p className="py-6 text-center text-xs text-muted-subtle">
                   {searchQuery.trim().length < 2
                     ? "Type at least 2 characters to search users..."
                     : "No users found."}
@@ -255,7 +255,7 @@ export function ChannelMembersDialog({
                   return (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors"
+                      className="flex items-center justify-between p-2 rounded-xl hover:bg-background transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <UserAvatar
@@ -268,7 +268,7 @@ export function ChannelMembersDialog({
                           <p className="text-xs font-semibold text-foreground truncate">
                             {user.name}
                           </p>
-                          <p className="text-[11px] text-slate-400 truncate">
+                          <p className="text-[11px] text-muted-subtle truncate">
                             @{user.username}
                           </p>
                         </div>

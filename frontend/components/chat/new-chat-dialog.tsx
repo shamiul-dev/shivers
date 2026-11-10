@@ -108,7 +108,7 @@ export function NewChatDialog() {
         </DialogHeader>
 
         {/* Tab switch */}
-        <div className="flex rounded-xl bg-slate-100 p-1 gap-1">
+        <div className="flex rounded-xl bg-surface-muted p-1 gap-1">
           <button
             type="button"
             onClick={() => {
@@ -117,8 +117,8 @@ export function NewChatDialog() {
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "dm"
-                ? "bg-white text-primary shadow-xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-surface text-primary shadow-xs"
+                : "text-muted hover:text-foreground"
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
@@ -132,8 +132,8 @@ export function NewChatDialog() {
             }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               tab === "room"
-                ? "bg-white text-primary shadow-xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-surface text-primary shadow-xs"
+                : "text-muted hover:text-foreground"
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -150,7 +150,7 @@ export function NewChatDialog() {
         {tab === "dm" ? (
           <div className="space-y-3 pt-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-subtle" />
               <Input
                 value={query}
                 onChange={(e) => handleSearch(e.target.value)}
@@ -159,7 +159,7 @@ export function NewChatDialog() {
                 autoFocus
               />
               {isSearching && (
-                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 animate-spin" />
+                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-subtle animate-spin" />
               )}
             </div>
 
@@ -172,7 +172,7 @@ export function NewChatDialog() {
                     type="button"
                     onClick={() => handleSelectUser(u.id)}
                     disabled={isPending}
-                    className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-100 transition-colors text-left cursor-pointer group disabled:opacity-50"
+                    className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-surface-muted transition-colors text-left cursor-pointer group disabled:opacity-50"
                   >
                     <UserAvatar
                       name={u.name}
@@ -184,18 +184,18 @@ export function NewChatDialog() {
                       <p className="text-xs font-bold text-foreground truncate group-hover:text-primary">
                         {u.name}
                       </p>
-                      <p className="text-[11px] text-slate-500 truncate">
+                      <p className="text-[11px] text-muted truncate">
                         @{u.username}
                       </p>
                     </div>
                   </button>
                 ))
               ) : query.trim().length >= 2 && !isSearching ? (
-                <p className="text-center py-6 text-xs text-slate-400">
+                <p className="text-center py-6 text-xs text-muted-subtle">
                   No users found matching &ldquo;{query}&rdquo;
                 </p>
               ) : (
-                <div className="text-center py-6 text-xs text-slate-400">
+                <div className="text-center py-6 text-xs text-muted-subtle">
                   Type at least 2 characters to search Shivers users.
                 </div>
               )}

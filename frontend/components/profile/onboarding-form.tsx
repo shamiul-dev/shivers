@@ -33,7 +33,7 @@ export function OnboardingForm({ defaultSuggested = "" }: OnboardingFormProps) {
 
       <AuthSubmitButton pendingLabel="Claiming handle">Claim Handle & Continue</AuthSubmitButton>
 
-      <p className="text-center text-xs text-slate-500 pt-3">
+      <p className="text-center text-xs text-muted pt-3">
         Your handle will be unique to you and used in mentions and direct messages.
       </p>
     </form>

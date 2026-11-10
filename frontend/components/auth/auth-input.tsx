@@ -22,13 +22,13 @@ export function AuthInput({
     <div className="space-y-1.5">
       <Label
         htmlFor={name}
-        className="text-xs font-semibold uppercase tracking-wider text-slate-600"
+        className="text-xs font-semibold uppercase tracking-wider text-muted-strong"
       >
         {label}
       </Label>
       <div className="relative">
         {Icon && (
-          <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-subtle pointer-events-none" />
         )}
         <Input
           id={name}

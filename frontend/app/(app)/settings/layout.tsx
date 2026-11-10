@@ -39,7 +39,7 @@ export default function SettingsLayout({
         {/* Back to Chat Link */}
         <Link
           href="/chat"
-          className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-300/60 shadow-xs text-foreground hover:bg-slate-50 transition-all text-xs font-semibold"
+          className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-surface border border-line-strong/60 shadow-xs text-foreground hover:bg-background transition-all text-xs font-semibold"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-primary" />
           <span>Back to Chat</span>
@@ -48,7 +48,7 @@ export default function SettingsLayout({
 
       {/* Main Settings Stage */}
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-line/60">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Account Settings

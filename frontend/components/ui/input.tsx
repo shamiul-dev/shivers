@@ -9,9 +9,9 @@ const inputVariants = cva(
     variants: {
       variant: {
         default:
-          "rounded-xl border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary",
+          "rounded-xl border border-line bg-surface text-foreground placeholder:text-muted-subtle focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary",
         filled:
-          "rounded-xl border border-transparent bg-slate-100 text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:bg-white focus-visible:border-primary",
+          "rounded-xl border border-transparent bg-surface-muted text-foreground placeholder:text-muted-subtle focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:bg-surface focus-visible:border-primary",
       },
       inputSize: {
         default: "h-10 px-3 py-2 text-sm",

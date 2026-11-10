@@ -181,7 +181,7 @@ export function ChatMessagesView({
                 <React.Fragment key={msg.id}>
                   {showDateHeader && msg.createdAt && (
                     <div className="flex justify-center my-3">
-                      <span className="px-3 py-1 rounded-full bg-slate-200/60 border border-slate-300/40 text-[10px] font-semibold text-slate-600 select-none">
+                      <span className="px-3 py-1 rounded-full bg-surface-shade/60 border border-line-strong/40 text-[10px] font-semibold text-muted-strong select-none">
                         {formatDateHeader(msg.createdAt)}
                       </span>
                     </div>
@@ -260,11 +260,11 @@ export function ChatMessagesView({
                   size="sm"
                   className="mb-1"
                 />
-                <div className="bg-slate-100 text-slate-500 rounded-2xl rounded-bl-sm px-3.5 py-2 flex items-center gap-1.5 shadow-xs border border-slate-200/60">
+                <div className="bg-surface-muted text-muted rounded-2xl rounded-bl-sm px-3.5 py-2 flex items-center gap-1.5 shadow-xs border border-line/60">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.3s]" />
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.15s]" />
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" />
-                  <span className="text-[11px] font-medium text-slate-500 ml-1">
+                  <span className="text-[11px] font-medium text-muted ml-1">
                     {otherUser?.name ? `${otherUser.name} is typing...` : "typing..."}
                   </span>
                 </div>
@@ -275,7 +275,7 @@ export function ChatMessagesView({
           </div>
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-primary">
+            <div className="w-12 h-12 rounded-2xl bg-surface border border-line shadow-sm flex items-center justify-center text-primary">
               <MessageSquare className="w-6 h-6 text-primary" />
             </div>
             <div className="space-y-1">

@@ -29,12 +29,12 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
     : "Channel room";
 
   return (
-    <header className="h-16 bg-white/90 backdrop-blur-md z-20 flex items-center justify-between px-4 md:px-6 border-b border-slate-200/80 shrink-0 select-none">
+    <header className="h-16 bg-surface/90 backdrop-blur-md z-20 flex items-center justify-between px-4 md:px-6 border-b border-line/80 shrink-0 select-none">
       <div className="flex items-center gap-3">
         {/* Mobile Back Button */}
         <Link
           href="/chat"
-          className="md:hidden p-1.5 -ml-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors"
+          className="md:hidden p-1.5 -ml-1 text-muted hover:text-foreground rounded-lg hover:bg-surface-muted transition-colors"
           title="Back to conversations"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -52,7 +52,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
               presenceStatus={isOnline ? "online" : "offline"}
             />
           ) : (
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center font-bold text-sm shadow-xs shadow-primary/20">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary text-on-primary flex items-center justify-center font-bold text-sm shadow-xs shadow-primary/20">
               <Hash className="w-5 h-5" />
             </div>
           )}
@@ -75,7 +75,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
               isDm
                 ? isOnline
                   ? "text-emerald-600"
-                  : "text-slate-400"
+                  : "text-muted-subtle"
                 : "text-indigo-600"
             }`}
           >
@@ -84,7 +84,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
                 isDm
                   ? isOnline
                     ? "bg-emerald-500"
-                    : "bg-slate-300"
+                    : "bg-line-strong"
                   : "bg-indigo-500"
               }`}
             />
@@ -94,7 +94,7 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
       </div>
 
       {/* Header Actions */}
-      <div className="flex items-center gap-1 text-slate-500 shrink-0">
+      <div className="flex items-center gap-1 text-muted shrink-0">
         {!isDm && (
           <ChannelMembersDialog
             conversationId={conversation.id}
@@ -103,29 +103,29 @@ export function ChatHeader({ conversation }: ChatHeaderProps) {
         )}
         <button
           type="button"
-          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-surface-muted hover:text-primary items-center justify-center transition-colors cursor-pointer"
           title="Audio call"
         >
           <Phone className="w-4 h-4" />
         </button>
         <button
           type="button"
-          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-primary items-center justify-center transition-colors cursor-pointer"
+          className="hidden sm:flex w-9 h-9 rounded-xl hover:bg-surface-muted hover:text-primary items-center justify-center transition-colors cursor-pointer"
           title="Video meeting"
         >
           <Video className="w-4 h-4" />
         </button>
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-9 h-9 rounded-xl hover:bg-surface-muted hover:text-foreground flex items-center justify-center transition-colors cursor-pointer"
           title="Search conversation"
         >
           <Search className="w-4 h-4" />
         </button>
-        <div className="hidden sm:block h-4 w-px bg-slate-200 mx-1" />
+        <div className="hidden sm:block h-4 w-px bg-surface-shade mx-1" />
         <button
           type="button"
-          className="w-9 h-9 rounded-xl hover:bg-slate-100 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-9 h-9 rounded-xl hover:bg-surface-muted hover:text-foreground flex items-center justify-center transition-colors cursor-pointer"
           title="Conversation details"
         >
           <Info className="w-4 h-4" />

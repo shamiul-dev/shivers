@@ -23,7 +23,7 @@ export function ChatEmptyStage({ user, profile }: ChatEmptyStageProps) {
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-decor-glow/50 via-decor-haze/30 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
 
       <div className="w-full max-w-lg space-y-6">
-        <Card variant="elevated" className="text-center p-8 border-slate-200/80 shadow-xl shadow-decor-glow/40">
+        <Card variant="elevated" className="text-center p-8 border-line/80 shadow-xl shadow-decor-glow/40">
           <CardContent className="p-0 space-y-6">
             {/* Shivers Beacon Icon */}
             <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl shadow-primary/25 p-3.5 mx-auto">
@@ -51,7 +51,7 @@ export function ChatEmptyStage({ user, profile }: ChatEmptyStageProps) {
 
             {/* Feature Pills */}
             <div className="grid grid-cols-2 gap-3 pt-2 text-left">
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-background border border-line/60 space-y-1">
                 <div className="flex items-center space-x-1.5 text-xs font-semibold text-foreground">
                   <MessageSquare className="w-3.5 h-3.5 text-primary" />
                   <span>Real-Time Mesh</span>
@@ -61,7 +61,7 @@ export function ChatEmptyStage({ user, profile }: ChatEmptyStageProps) {
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-background border border-line/60 space-y-1">
                 <div className="flex items-center space-x-1.5 text-xs font-semibold text-foreground">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Secure Sessions</span>
@@ -78,7 +78,7 @@ export function ChatEmptyStage({ user, profile }: ChatEmptyStageProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-xl border-slate-200 text-xs gap-1.5"
+                  className="rounded-xl border-line text-xs gap-1.5"
                 >
                   <Settings className="w-3.5 h-3.5 text-primary" />
                   <span>Manage Profile</span>

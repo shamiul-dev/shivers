@@ -53,37 +53,37 @@ async function ChatNavigation() {
 
 function ChatNavigationSkeleton() {
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-white text-foreground">
+    <div className="h-screen w-screen overflow-hidden flex bg-surface text-foreground">
       {/* Rail Skeleton */}
-      <div className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-white border-r border-slate-100 shrink-0 animate-pulse">
-        <div className="w-10 h-10 rounded-xl bg-slate-200" />
+      <div className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-surface border-r border-line-soft shrink-0 animate-pulse">
+        <div className="w-10 h-10 rounded-xl bg-surface-shade" />
         <div className="space-y-3">
-          <div className="w-10 h-10 rounded-2xl bg-slate-100" />
-          <div className="w-10 h-10 rounded-2xl bg-slate-100" />
+          <div className="w-10 h-10 rounded-2xl bg-surface-muted" />
+          <div className="w-10 h-10 rounded-2xl bg-surface-muted" />
         </div>
-        <div className="w-10 h-10 rounded-full bg-slate-200" />
+        <div className="w-10 h-10 rounded-full bg-surface-shade" />
       </div>
 
       {/* Sidebar Skeleton */}
-      <div className="w-full md:w-[340px] lg:w-[360px] h-screen bg-white border-r border-slate-100 flex flex-col p-4 space-y-4 shrink-0 animate-pulse">
+      <div className="w-full md:w-[340px] lg:w-[360px] h-screen bg-surface border-r border-line-soft flex flex-col p-4 space-y-4 shrink-0 animate-pulse">
         <div className="flex justify-between items-center">
-          <div className="h-6 w-28 bg-slate-200 rounded" />
-          <div className="h-8 w-14 bg-slate-100 rounded-xl" />
+          <div className="h-6 w-28 bg-surface-shade rounded" />
+          <div className="h-8 w-14 bg-surface-muted rounded-xl" />
         </div>
-        <div className="h-9 w-full bg-slate-100 rounded-xl" />
+        <div className="h-9 w-full bg-surface-muted rounded-xl" />
         <div className="flex space-x-2">
-          <div className="h-6 w-12 bg-slate-200 rounded-full" />
-          <div className="h-6 w-16 bg-slate-100 rounded-full" />
+          <div className="h-6 w-12 bg-surface-shade rounded-full" />
+          <div className="h-6 w-16 bg-surface-muted rounded-full" />
         </div>
         <div className="space-y-3 pt-3 flex-1">
-          <div className="h-16 w-full bg-slate-50 rounded-2xl border border-slate-100" />
-          <div className="h-16 w-full bg-slate-50 rounded-2xl border border-slate-100" />
+          <div className="h-16 w-full bg-background rounded-2xl border border-line-soft" />
+          <div className="h-16 w-full bg-background rounded-2xl border border-line-soft" />
         </div>
       </div>
 
       {/* Main Stage Skeleton for desktop */}
-      <div className="hidden md:flex flex-1 h-screen bg-slate-50/50 items-center justify-center animate-pulse">
-        <div className="w-12 h-12 rounded-2xl bg-slate-200" />
+      <div className="hidden md:flex flex-1 h-screen bg-background/50 items-center justify-center animate-pulse">
+        <div className="w-12 h-12 rounded-2xl bg-surface-shade" />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ interface ChatRailProps {
 
 export function ChatRail({ user, profile }: ChatRailProps) {
   return (
-    <aside className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-white border-r border-slate-200/80 z-20 shrink-0 h-screen select-none">
+    <aside className="w-[68px] hidden md:flex flex-col items-center justify-between py-5 bg-surface border-r border-line/80 z-20 shrink-0 h-screen select-none">
       {/* Top Brand Beacon */}
       <div className="flex flex-col items-center space-y-6">
         <Link

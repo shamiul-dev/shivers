@@ -27,10 +27,10 @@ async function SecuritySettingsContent() {
 
   return (
     <Card variant="elevated">
-      <CardHeader className="pb-4 border-b border-slate-100">
+      <CardHeader className="pb-4 border-b border-line-soft">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md shadow-primary/20">
-            <KeyRound className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-on-primary shadow-md shadow-primary/20">
+            <KeyRound className="w-5 h-5 text-on-primary" />
           </div>
           <div>
             <CardTitle className="text-lg font-bold tracking-tight text-foreground">
@@ -44,7 +44,7 @@ async function SecuritySettingsContent() {
       </CardHeader>
 
       <CardContent className="pt-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200/60 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-background border border-line/60 gap-4">
           <div className="space-y-0.5">
             <span className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
               <Lock className="w-3.5 h-3.5 text-primary" />
@@ -58,14 +58,14 @@ async function SecuritySettingsContent() {
           <Button
             variant="outline"
             size="sm"
-            className="text-xs rounded-xl border-slate-200 self-start sm:self-auto"
+            className="text-xs rounded-xl border-line self-start sm:self-auto"
             disabled
           >
             <span>Change Password</span>
           </Button>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200/60 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-background border border-line/60 gap-4">
           <div className="space-y-0.5">
             <span className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
               <Shield className="w-3.5 h-3.5 text-emerald-600" />
@@ -81,7 +81,7 @@ async function SecuritySettingsContent() {
           </span>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200/60 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-2xl bg-background border border-line/60 gap-4">
           <div className="space-y-0.5">
             <span className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
               <LogOut className="w-3.5 h-3.5 text-rose-600" />

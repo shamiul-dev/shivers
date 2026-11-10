@@ -63,7 +63,7 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
                 <span>Username Handle</span>
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm select-none">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-subtle font-semibold text-sm select-none">
                   @
                 </span>
                 <Input
@@ -105,7 +105,7 @@ export function ProfileSettingsForm({ user, profile }: ProfileSettingsFormProps)
           <AccountCredentialsSection email={user.email} />
 
           {/* Form Actions */}
-          <div className="pt-4 flex items-center justify-end space-x-3 border-t border-slate-100">
+          <div className="pt-4 flex items-center justify-end space-x-3 border-t border-line-soft">
             <SettingsSubmitButton idleText="Save Changes" pendingText="Saving changes..." />
           </div>
         </form>

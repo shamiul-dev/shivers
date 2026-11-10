@@ -20,11 +20,11 @@ const chatBubbleVariants = cva(
     variants: {
       variant: {
         outbound:
-          "bg-gradient-to-r from-primary to-secondary text-white shadow-sm shadow-primary/20",
+          "bg-gradient-to-r from-primary to-secondary text-on-primary shadow-sm shadow-primary/20",
         inbound:
-          "bg-white border border-slate-200/80 text-foreground shadow-xs shadow-slate-900/5",
+          "bg-surface border border-line/80 text-foreground shadow-xs shadow-foreground/5",
         pending:
-          "bg-gradient-to-r from-primary/75 to-secondary/75 text-white/90 shadow-none animate-pulse",
+          "bg-gradient-to-r from-primary/75 to-secondary/75 text-on-primary/90 shadow-none animate-pulse",
         failed:
           "bg-red-50 border border-red-200 text-red-900 shadow-xs",
       },
@@ -155,8 +155,8 @@ export function ChatBubble({
               className={cn(
                 "flex items-center gap-2.5 p-2 rounded-xl transition-colors select-none",
                 isOutbound
-                  ? "bg-white/10 hover:bg-white/20 text-white"
-                  : "bg-slate-100 hover:bg-slate-200/80 text-slate-800"
+                  ? "bg-white/10 hover:bg-white/20 text-on-primary"
+                  : "bg-surface-muted hover:bg-surface-shade/80 text-strong"
               )}
             >
               <FileText className="w-5 h-5 shrink-0" />
@@ -176,19 +176,19 @@ export function ChatBubble({
         <div
           className={cn(
             "flex items-center justify-end gap-1 mt-1 text-[11px] select-none shrink-0",
-            isOutbound ? "text-white/75" : "text-slate-400"
+            isOutbound ? "text-on-primary/75" : "text-muted-subtle"
           )}
         >
           {time && <span>{time}</span>}
 
           {status === "pending" && (
-            <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-ping" />
+            <span className="w-1.5 h-1.5 rounded-full bg-on-primary/70 animate-ping" />
           )}
 
-          {status === "sent" && <Check className="w-3.5 h-3.5 text-white/80" />}
+          {status === "sent" && <Check className="w-3.5 h-3.5 text-on-primary/80" />}
 
           {status === "delivered" && (
-            <CheckCheck className="w-3.5 h-3.5 text-white/85" />
+            <CheckCheck className="w-3.5 h-3.5 text-on-primary/85" />
           )}
 
           {status === "read" && (

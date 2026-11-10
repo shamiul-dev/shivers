@@ -8,8 +8,8 @@ import {
 export function OnboardingCardHeader() {
   return (
     <CardHeader className="text-center pb-6">
-      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md shadow-primary/30 mx-auto mb-4">
-        <Sparkles className="w-6 h-6 text-white" />
+      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-on-primary shadow-md shadow-primary/30 mx-auto mb-4">
+        <Sparkles className="w-6 h-6 text-on-primary" />
       </div>
       <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
         Choose your identity

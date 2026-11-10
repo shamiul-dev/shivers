@@ -83,7 +83,7 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
   };
 
   return (
-    <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50/60 to-white pb-6">
+    <CardHeader className="border-b border-line-soft bg-gradient-to-r from-slate-50/60 to-surface pb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div className="flex items-center space-x-4">
           <div className="relative group">
@@ -141,7 +141,7 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading || isDeleting}
-            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-foreground shadow-xs hover:bg-slate-50 transition-all cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface border border-line text-foreground shadow-xs hover:bg-background transition-all cursor-pointer disabled:opacity-50"
           >
             {isUploading ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
@@ -156,7 +156,7 @@ export function ProfileHeaderCard({ user, profile }: ProfileHeaderCardProps) {
               type="button"
               onClick={handleDelete}
               disabled={isUploading || isDeleting}
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-500 hover:text-red-600 hover:bg-red-50/60 border border-transparent hover:border-red-200/60 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-medium text-muted hover:text-red-600 hover:bg-red-50/60 border border-transparent hover:border-red-200/60 transition-all cursor-pointer disabled:opacity-50"
               title="Remove profile photo"
             >
               {isDeleting ? (

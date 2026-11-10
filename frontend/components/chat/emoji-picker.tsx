@@ -43,7 +43,7 @@ export function EmojiPicker({ onSelect }: EmojiPickerProps) {
   return (
     <div
       ref={containerRef}
-      className="min-h-[380px] bg-white rounded-2xl overflow-hidden [&_em-emoji-picker]:w-full [&_em-emoji-picker]:border-none [&_em-emoji-picker]:shadow-none"
+      className="min-h-[380px] bg-surface rounded-2xl overflow-hidden [&_em-emoji-picker]:w-full [&_em-emoji-picker]:border-none [&_em-emoji-picker]:shadow-none"
     />
   );
 }

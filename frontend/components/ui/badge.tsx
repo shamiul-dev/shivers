@@ -9,15 +9,15 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-slate-100 text-slate-700 hover:bg-slate-200/80",
+          "bg-surface-muted text-strong hover:bg-surface-shade/80",
         indigo:
-          "bg-primary text-white shadow-xs shadow-primary/20",
+          "bg-primary text-on-primary shadow-xs shadow-primary/20",
         subtle:
           "bg-primary-tint text-primary border border-primary/10",
         online:
           "bg-emerald-50 text-emerald-700 border border-emerald-500/20",
         outline:
-          "border border-slate-200 text-slate-600 bg-white",
+          "border border-line text-muted-strong bg-surface",
       },
       size: {
         xs: "text-[10px] px-1.5 py-0.5 rounded-md",

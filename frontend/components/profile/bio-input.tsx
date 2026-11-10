@@ -21,11 +21,11 @@ export function BioInput({
       <div className="flex items-center justify-between">
         <Label
           htmlFor={name}
-          className="text-xs font-semibold uppercase tracking-wider text-slate-600"
+          className="text-xs font-semibold uppercase tracking-wider text-muted-strong"
         >
-          {label} <span className="font-normal text-slate-400 lowercase">{hint}</span>
+          {label} <span className="font-normal text-muted-subtle lowercase">{hint}</span>
         </Label>
-        <span className="text-[11px] font-medium text-slate-400">
+        <span className="text-[11px] font-medium text-muted-subtle">
           Max 160 chars
         </span>
       </div>

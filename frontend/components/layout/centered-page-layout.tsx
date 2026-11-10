@@ -41,7 +41,7 @@ export function CenteredPageLayout({
         </div>
 
         {/* Security / Status badge */}
-        <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white border border-slate-300/40 shadow-xs text-muted text-xs font-medium">
+        <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface border border-line-strong/40 shadow-xs text-muted text-xs font-medium">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <ShieldCheck className="w-3.5 h-3.5 text-primary" />
           <span>{statusBadge}</span>
