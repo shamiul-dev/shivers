@@ -1,27 +1,53 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens — single source of truth (Tailwind v4).
+ *
+ * All brand colors live in :root; @theme inline publishes them as
+ * utilities (bg-primary, text-foreground, ...). To rebrand or add a
+ * dark theme, override the :root values only — never edit @theme.
+ *
+ * NOTE: components still carry hard-coded hex duplicates of these
+ * values (mapped 1:1 to the tokens below); they are swept in a later
+ * step. Until then the values here MUST match those literals.
+ */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --primary: #4338ca;
-  --primary-hover: #3730a3;
-  --secondary: #2563eb;
-  --muted: #64748b;
-  --border: rgba(148, 163, 184, 0.2);
+  /* core semantic */
+  --background: #f8fafc;              /* slate-50 */
+  --foreground: #0f172a;              /* slate-900 */
+  --primary: #4338ca;                 /* indigo-700 */
+  --primary-hover: #3730a3;           /* indigo-800 */
+  --secondary: #2563eb;               /* blue-600 */
+  --muted: #64748b;                   /* slate-500 */
+  --muted-subtle: #94a3b8;            /* slate-400 */
+  --border: rgba(148, 163, 184, 0.2); /* slate-400 @ 20% */
+  /* branding extras */
+  --primary-tint: #eef2ff;            /* indigo-50 — soft backgrounds (badges) */
+  --decor-mist: #e5eeff;              /* page-header gradient, far stop */
+  --decor-haze: #eff4ff;              /* page-header gradient, near stop */
+  --decor-glow: #dce9ff;              /* elevated-card shadow tint */
+  --selection-tint: #e3dfff;          /* ::selection background */
+  --selection-contrast: #100069;      /* ::selection text */
 }
 
-@theme {
-  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+@theme inline {
+  --font-sans: var(--font-jakarta);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #4338ca;
-  --color-primary-hover: #3730a3;
-  --color-secondary: #2563eb;
-  --color-slate-base: #f8fafc;
-  --color-slate-surface: #ffffff;
-  --color-slate-text: #0f172a;
-  --color-slate-muted: #64748b;
-  --color-slate-border: rgba(148, 163, 184, 0.2);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: #ffffff;
+  --color-primary-tint: var(--primary-tint);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: #ffffff;
+  --color-muted: var(--muted);
+  --color-muted-subtle: var(--muted-subtle);
+  --color-decor-mist: var(--decor-mist);
+  --color-decor-haze: var(--decor-haze);
+  --color-decor-glow: var(--decor-glow);
+  --color-selection-tint: var(--selection-tint);
+  --color-selection-contrast: var(--selection-contrast);
+  --color-border: var(--border);
 }
 
 body {
