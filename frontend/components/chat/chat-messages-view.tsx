@@ -9,7 +9,14 @@ import { ChatBubble } from "@/components/ui/chat-bubble";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { ChatComposer } from "@/components/chat/chat-composer";
 import { ImageLightbox } from "@/components/chat/image-lightbox";
-import type { Message, UserSummary, Attachment } from "@/types/chat";
+import {
+  MessageActionsBar,
+  MessageContextMenu,
+  MessageReactionChips,
+} from "@/components/chat/message-actions";
+import { editMessageAction } from "@/app/actions/chat";
+import { useChatStore } from "@/store/chatStore";
+import type { Message, UserSummary } from "@/types/chat";
 
 interface ChatMessagesViewProps {
   conversationId: string;
@@ -56,6 +63,89 @@ function formatDateHeader(isoString?: string): string {
   }
 }
 
+/** Inline editor shown in place of the bubble while a message is being edited. */
+function MessageEditForm({
+  conversationId,
+  message,
+  onCancel,
+}: {
+  conversationId: string;
+  message: Message;
+  onCancel: () => void;
+}) {
+  const [value, setValue] = useState(message.body);
+  const [saving, setSaving] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Focus and put the caret at the end on open
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.focus();
+    const end = el.value.length;
+    el.setSelectionRange(end, end);
+  }, []);
+
+  const save = async () => {
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === message.body || saving) return;
+    setSaving(true);
+    const res = await editMessageAction(conversationId, message.id, trimmed);
+    setSaving(false);
+    if (res.ok) {
+      // Socket echo confirms too; apply immediately for the sender's own view
+      useChatStore.getState().applyMessageUpdate(conversationId, res.message);
+      onCancel(); // closes the editor on success
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Escape") {
+      onCancel();
+    } else if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      void save();
+    }
+  };
+
+  const dirty = value.trim().length > 0 && value !== message.body;
+
+  return (
+    <div className="w-full min-w-[14rem] rounded-2xl border border-primary/40 bg-surface p-2 shadow-sm">
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={onKeyDown}
+        rows={2}
+        maxLength={4000}
+        aria-label="Edit message"
+        className="w-full resize-none rounded-lg bg-transparent px-1 py-0.5 text-[14px] leading-relaxed text-foreground outline-none"
+      />
+      <div className="mt-1 flex items-center justify-end gap-1.5">
+        <span className="mr-auto text-[10px] text-muted select-none">
+          Enter to save · Esc to cancel
+        </span>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-full px-3 py-1 text-xs font-semibold text-muted-strong transition-colors hover:bg-surface-shade select-none"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => void save()}
+          disabled={!dirty || saving}
+          className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-50 select-none"
+        >
+          {saving ? "Saving…" : "Save"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function ChatMessagesView({
   conversationId,
   currentUserId,
@@ -76,6 +166,18 @@ export function ChatMessagesView({
 
   const [lightboxMedia, setLightboxMedia] = useState<{ url: string; fileName?: string } | null>(null);
 
+  // Inline edit mode: holds the id of the message being edited (null = none)
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const handleSaveEdit = async (message: Message, body: string) => {
+    const res = await editMessageAction(conversationId, message.id, body);
+    if (res.ok) {
+      // Socket echo confirms too; apply immediately for the sender's own view
+      useChatStore.getState().applyMessageUpdate(conversationId, res.message);
+      setEditingId(null);
+    }
+  };
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollAnchorRef = useRef<HTMLDivElement>(null);
   const isInitialMountRef = useRef(true);
@@ -85,37 +187,33 @@ export function ChatMessagesView({
     isInitialMountRef.current = true;
   }, [conversationId]);
 
-  // Combine committed + pending messages for unified display
+  // Combine committed + pending messages for unified display.
+  // Committed items carry the full Message (editedAt, deletedAt, reactions);
+  // pending items are synthesized in the same shape (blank createdAt = no time row).
   const allMessages = useMemo(() => {
-    const list: Array<{
-      id: string;
-      senderId: string;
-      body: string;
-      createdAt?: string;
-      isPending?: boolean;
-      failed?: boolean;
-      attachment?: Attachment | null;
-    }> = committed.map((m) => ({
-      id: m.id,
-      senderId: m.senderId,
-      body: m.body,
-      createdAt: m.createdAt,
-      attachment: m.attachment,
-    }));
+    const list: Array<Message & { isPending?: boolean; failed?: boolean }> = committed.map(
+      (m) => ({ ...m })
+    );
 
     for (const p of pending) {
       list.push({
         id: p.clientId,
+        conversationId,
         senderId: currentUserId,
+        type: p.type ?? "text",
         body: p.body,
+        clientId: p.clientId,
+        createdAt: "",
+        editedAt: null,
+        deletedAt: null,
+        attachment: p.attachment ?? null,
         isPending: true,
         failed: p.failed,
-        attachment: p.attachment,
       });
     }
 
     return list;
-  }, [committed, pending, currentUserId]);
+  }, [committed, pending, currentUserId, conversationId]);
 
   // Scroll helper
   const scrollToBottom = React.useCallback((behavior: "instant" | "smooth" = "instant") => {
@@ -169,13 +267,26 @@ export function ChatMessagesView({
                 !prevMsg ||
                 formatDateHeader(prevMsg.createdAt) !== formatDateHeader(msg.createdAt);
 
+              const isDeleted = !!msg.deletedAt;
+              const isEditing = editingId === msg.id;
+              const settled = !msg.isPending && !msg.failed;
+
               const bubbleVariant = msg.failed
                 ? "failed"
                 : msg.isPending
                 ? "pending"
+                : isDeleted
+                ? "tombstone"
                 : isOutbound
                 ? "outbound"
                 : "inbound";
+
+              const actionProps = {
+                conversationId,
+                message: msg,
+                isOutbound,
+                onEdit: () => setEditingId(msg.id),
+              };
 
               return (
                 <React.Fragment key={msg.id}>
@@ -188,7 +299,7 @@ export function ChatMessagesView({
                   )}
 
                   <div
-                    className={`flex items-end gap-2.5 w-full ${
+                    className={`group relative flex items-end gap-2.5 w-full ${
                       isOutbound ? "justify-end" : "justify-start"
                     } ${sameSenderAsPrev ? "mt-1" : "mt-3"}`}
                   >
@@ -218,32 +329,73 @@ export function ChatMessagesView({
                         </span>
                       )}
 
-                      <ChatBubble
-                        variant={bubbleVariant}
-                        podPosition={podPosition}
-                        time={formatTime(msg.createdAt)}
-                        status={
-                          msg.failed
-                            ? "failed"
-                            : msg.isPending
-                            ? "pending"
-                            : isOutbound
-                            ? "sent"
-                            : undefined
-                        }
-                        attachment={msg.attachment}
-                        onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
-                        onMediaLoad={() => {
-                          const el = scrollContainerRef.current;
-                          if (!el) return;
-                          const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 400;
-                          if (isNearBottom) {
-                            scrollToBottom("instant");
-                          }
-                        }}
-                      >
-                        {msg.body}
-                      </ChatBubble>
+                      {/* Hover action bar (settled messages only; tombstones have nothing to act on) */}
+                      {settled && !isDeleted && !isEditing && (
+                        <MessageActionsBar
+                          {...actionProps}
+                          className={`absolute -top-9 ${
+                            isOutbound ? "right-0" : "left-9"
+                          } opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-150`}
+                        />
+                      )}
+
+                      {isEditing ? (
+                        <MessageEditForm
+                          conversationId={conversationId}
+                          message={msg}
+                          onCancel={() => setEditingId(null)}
+                        />
+                      ) : settled ? (
+                        <MessageContextMenu {...actionProps}>
+                          <ChatBubble
+                            variant={bubbleVariant}
+                            podPosition={podPosition}
+                            time={formatTime(msg.createdAt)}
+                            status={
+                              msg.failed
+                                ? "failed"
+                                : msg.isPending
+                                ? "pending"
+                                : isOutbound
+                                ? "sent"
+                                : undefined
+                            }
+                            edited={!isDeleted && !!msg.editedAt}
+                            attachment={isDeleted ? null : msg.attachment}
+                            onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
+                            onMediaLoad={() => {
+                              const el = scrollContainerRef.current;
+                              if (!el) return;
+                              const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 400;
+                              if (isNearBottom) {
+                                scrollToBottom("instant");
+                              }
+                            }}
+                          >
+                            {isDeleted ? "Message deleted" : msg.body}
+                          </ChatBubble>
+                        </MessageContextMenu>
+                      ) : (
+                        <ChatBubble
+                          variant={bubbleVariant}
+                          podPosition={podPosition}
+                          time={formatTime(msg.createdAt)}
+                          status={msg.failed ? "failed" : "pending"}
+                          attachment={msg.attachment}
+                          onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
+                        >
+                          {msg.body}
+                        </ChatBubble>
+                      )}
+
+                      {/* Reaction chips (tombstones keep their reactions visible) */}
+                      {settled && !isEditing && (
+                        <MessageReactionChips
+                          conversationId={conversationId}
+                          message={msg}
+                          className="mt-1"
+                        />
+                      )}
                     </div>
                   </div>
                 </React.Fragment>

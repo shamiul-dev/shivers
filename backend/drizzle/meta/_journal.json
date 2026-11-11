@@ -36,6 +36,13 @@
       "when": 1793524316409,
       "tag": "0004_quick_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794297485236,
+      "tag": "0005_jazzy_hedge_knight",
+      "breakpoints": true
     }
   ]
 }

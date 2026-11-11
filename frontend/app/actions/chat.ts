@@ -271,6 +271,104 @@ export async function addChannelMemberAction(
 }
 
 /**
+ * Toggle a fixed-set emoji reaction on a message (add; backend is idempotent).
+ * Returns the server-computed aggregate for this message.
+ */
+export async function reactMessageAction(
+  conversationId: string,
+  messageId: string,
+  emoji: string
+): Promise<
+  | { ok: true; messageId: string; reactions: Message["reactions"] }
+  | { ok: false; error: string }
+> {
+  const result = await serverFetch<{
+    messageId: string;
+    reactions: Message["reactions"];
+    error?: string;
+  }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(
+      messageId
+    )}/reactions`,
+    { method: "POST", body: JSON.stringify({ emoji }) }
+  );
+
+  if (!result.ok || !result.data) {
+    return { ok: false, error: result.data?.error || "Failed to react" };
+  }
+  return { ok: true, messageId: result.data.messageId, reactions: result.data.reactions };
+}
+
+/**
+ * Remove the caller's reaction (remove; removing an absent reaction is a 200 no-op).
+ */
+export async function unreactMessageAction(
+  conversationId: string,
+  messageId: string,
+  emoji: string
+): Promise<
+  | { ok: true; messageId: string; reactions: Message["reactions"] }
+  | { ok: false; error: string }
+> {
+  const result = await serverFetch<{
+    messageId: string;
+    reactions: Message["reactions"];
+    error?: string;
+  }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(
+      messageId
+    )}/reactions`,
+    { method: "DELETE", body: JSON.stringify({ emoji }) }
+  );
+
+  if (!result.ok || !result.data) {
+    return { ok: false, error: result.data?.error || "Failed to remove reaction" };
+  }
+  return { ok: true, messageId: result.data.messageId, reactions: result.data.reactions };
+}
+
+/**
+ * Edit own message body (no time window; editedAt marks the change).
+ */
+export async function editMessageAction(
+  conversationId: string,
+  messageId: string,
+  body: string
+): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
+  const result = await serverFetch<{ message: Message; error?: string }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(
+      messageId
+    )}`,
+    { method: "PATCH", body: JSON.stringify({ body }) }
+  );
+
+  if (!result.ok || !result.data?.message) {
+    return { ok: false, error: result.data?.error || "Failed to edit message" };
+  }
+  return { ok: true, message: result.data.message };
+}
+
+/**
+ * Soft delete own message (tombstone; history and media stay intact server-side).
+ */
+export async function deleteMessageAction(
+  conversationId: string,
+  messageId: string
+): Promise<{ ok: true; message: Message } | { ok: false; error: string }> {
+  const result = await serverFetch<{ message: Message; error?: string }>(
+    `/api/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(
+      messageId
+    )}`,
+    { method: "DELETE" }
+  );
+
+  if (!result.ok || !result.data?.message) {
+    return { ok: false, error: result.data?.error || "Failed to delete message" };
+  }
+  return { ok: true, message: result.data.message };
+}
+
+/**
  * Upload an attachment file for a conversation.
  */
 export async function uploadAttachmentAction(

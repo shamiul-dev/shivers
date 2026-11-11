@@ -9,7 +9,7 @@ import {
   useChatStore,
   type PendingMessage,
 } from "@/store/chatStore";
-import type { Message, SendMessageAck, Attachment } from "@/types/chat";
+import type { Message, ReactionAggregate, SendMessageAck, Attachment } from "@/types/chat";
 
 export type JoinState = "idle" | "joined" | "not_found";
 
@@ -82,8 +82,27 @@ export function useMessages(input: {
       socket.emit("conversation:read", { conversationId, messageId: message.id });
     };
 
+    // Edit or soft delete landed anywhere in the room: swap the message in place
+    const handleUpdatedMessage = (message: Message) => {
+      if (!message || message.conversationId !== conversationId) return;
+      useChatStore.getState().applyMessageUpdate(conversationId, message);
+    };
+
+    // Reaction aggregate changed for one message in this conversation
+    const handleReactions = (payload: {
+      messageId: string;
+      reactions: ReactionAggregate[];
+    }) => {
+      if (!payload?.messageId) return;
+      useChatStore
+        .getState()
+        .setReactions(conversationId, payload.messageId, payload.reactions ?? []);
+    };
+
     socket.on("connect", joinAndResync);
     socket.on("message:new", handleNewMessage);
+    socket.on("message:updated", handleUpdatedMessage);
+    socket.on("message:reactions", handleReactions);
 
     // If socket is disconnected, connect now with token
     if (!socket.connected) {
@@ -95,6 +114,8 @@ export function useMessages(input: {
     return () => {
       socket.off("connect", joinAndResync);
       socket.off("message:new", handleNewMessage);
+      socket.off("message:updated", handleUpdatedMessage);
+      socket.off("message:reactions", handleReactions);
     };
   }, [conversationId, sessionToken]);
 

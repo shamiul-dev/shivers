@@ -27,6 +27,8 @@ const chatBubbleVariants = cva(
           "bg-gradient-to-r from-primary/75 to-secondary/75 text-on-primary/90 shadow-none animate-pulse",
         failed:
           "bg-red-50 border border-red-200 text-red-900 shadow-xs",
+        tombstone:
+          "bg-surface-muted border border-dashed border-line-strong/50 text-muted italic",
       },
       podPosition: {
         single: "rounded-2xl",
@@ -59,7 +61,7 @@ const chatBubbleVariants = cva(
       },
       // Inbound pod corner adjustments (anchor at top-left or contracted inner left corners)
       {
-        variant: ["inbound", "failed"],
+        variant: ["inbound", "failed", "tombstone"],
         podPosition: "single",
         className: "rounded-2xl rounded-tl-sm",
       },
@@ -91,6 +93,8 @@ export interface ChatBubbleProps
     VariantProps<typeof chatBubbleVariants> {
   time?: string;
   status?: "pending" | "sent" | "delivered" | "read" | "failed";
+  /** Shows an "edited" tag in the time row (owner edits only; hidden on tombstones). */
+  edited?: boolean;
   attachment?: Attachment | null;
   onImageClick?: (url: string, fileName?: string) => void;
   onMediaLoad?: () => void;
@@ -103,6 +107,7 @@ export function ChatBubble({
   children,
   time,
   status,
+  edited,
   attachment,
   onImageClick,
   onMediaLoad,
@@ -179,6 +184,8 @@ export function ChatBubble({
             isOutbound ? "text-on-primary/75" : "text-muted-subtle"
           )}
         >
+          {edited && <span className="italic opacity-80">edited</span>}
+
           {time && <span>{time}</span>}
 
           {status === "pending" && (

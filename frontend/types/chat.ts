@@ -16,6 +16,20 @@ export type Attachment = {
     thumbUrl?: string | null;
 };
 
+/**
+ * MUST mirror backend/src/services/reaction.service.ts REACTION_EMOJIS.
+ * The backend whitelist is the source of truth — edit both in lockstep.
+ */
+export const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏"] as const;
+export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
+
+/** Aggregated reactions for one message, sorted count-desc (server-computed). */
+export type ReactionAggregate = {
+    emoji: ReactionEmoji;
+    count: number;
+    reactedByMe: boolean;
+};
+
 export type Message = {
     id: string;
     conversationId: string;
@@ -27,6 +41,7 @@ export type Message = {
     editedAt: string | null;
     deletedAt: string | null;
     attachment?: Attachment | null;
+    reactions?: ReactionAggregate[];
 };
 
 export type UserSummary = {

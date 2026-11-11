@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-import type { Message, Attachment } from "@/types/chat";
+import type { Message, Attachment, ReactionAggregate, ReactionEmoji } from "@/types/chat";
 
 export type PendingMessage = {
   clientId: string;
@@ -34,6 +34,20 @@ type ChatState = {
     message: Message | null
   ) => void;
   markPendingFailed: (conversationId: string, clientId: string) => void;
+  /** Replace one committed message by id (edit result or delete tombstone). */
+  applyMessageUpdate: (conversationId: string, message: Message) => void;
+  /** Overwrite a message's reactions with server-computed truth. */
+  setReactions: (
+    conversationId: string,
+    messageId: string,
+    reactions: ReactionAggregate[]
+  ) => void;
+  /** Optimistic reaction toggle (see-me flip + count shift, count-desc order kept). */
+  applyReactionDelta: (
+    conversationId: string,
+    messageId: string,
+    emoji: ReactionEmoji
+  ) => void;
   clear: (conversationId: string) => void;
 };
 
@@ -119,6 +133,82 @@ export const useChatStore = create<ChatState>()((set) => ({
         messages: {
           ...state.messages,
           [conversationId]: { committed: entry.committed, pending },
+        },
+      };
+    }),
+
+  applyMessageUpdate: (conversationId, message) =>
+    set((state) => {
+      const entry = ensureEntry(state.messages, conversationId);
+      const index = entry.committed.findIndex((m) => m.id === message.id);
+      // Unknown id (e.g. update raced ahead of our history seed): ignore
+      if (index === -1) return state;
+      // createdAt is immutable → sort order cannot change
+      const committed = [
+        ...entry.committed.slice(0, index),
+        message,
+        ...entry.committed.slice(index + 1),
+      ];
+      return {
+        messages: {
+          ...state.messages,
+          [conversationId]: { committed, pending: entry.pending },
+        },
+      };
+    }),
+
+  setReactions: (conversationId, messageId, reactions) =>
+    set((state) => {
+      const entry = ensureEntry(state.messages, conversationId);
+      const index = entry.committed.findIndex((m) => m.id === messageId);
+      if (index === -1) return state;
+      const committed = [
+        ...entry.committed.slice(0, index),
+        { ...entry.committed[index], reactions },
+        ...entry.committed.slice(index + 1),
+      ];
+      return {
+        messages: {
+          ...state.messages,
+          [conversationId]: { committed, pending: entry.pending },
+        },
+      };
+    }),
+
+  applyReactionDelta: (conversationId, messageId, emoji) =>
+    set((state) => {
+      const entry = ensureEntry(state.messages, conversationId);
+      const index = entry.committed.findIndex((m) => m.id === messageId);
+      if (index === -1) return state;
+
+      const current = entry.committed[index].reactions ?? [];
+      const match = current.find((r) => r.emoji === emoji);
+
+      // Flip my own participation; count follows it
+      let next: ReactionAggregate[];
+      if (match?.reactedByMe) {
+        next =
+          match.count <= 1
+            ? current.filter((r) => r.emoji !== emoji)
+            : current.map((r) =>
+                r.emoji === emoji ? { ...r, count: r.count - 1, reactedByMe: false } : r
+              );
+      } else {
+        const bumped = { emoji, count: (match?.count ?? 0) + 1, reactedByMe: true };
+        next = [...current.filter((r) => r.emoji !== emoji), bumped].sort(
+          (a, b) => b.count - a.count
+        );
+      }
+
+      const committed = [
+        ...entry.committed.slice(0, index),
+        { ...entry.committed[index], reactions: next },
+        ...entry.committed.slice(index + 1),
+      ];
+      return {
+        messages: {
+          ...state.messages,
+          [conversationId]: { committed, pending: entry.pending },
         },
       };
     }),

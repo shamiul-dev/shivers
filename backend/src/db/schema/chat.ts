@@ -77,6 +77,30 @@ export const messages = pgTable(
 );
 
 /**
+ * Message Reactions (emoji per user per message)
+ */
+export const messageReactions = pgTable(
+  "message_reactions",
+  {
+    id: text("id").primaryKey(),
+    messageId: text("message_id")
+      .notNull()
+      .references(() => messages.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    emoji: text("emoji").notNull(), // base codepoint (skin tones normalize upstream)
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    // One reaction per emoji per user per message (re-tap = remove)
+    unique("message_reactions_unique").on(table.messageId, table.userId, table.emoji),
+    // Aggregation reads: reactions for a message in the history fetch
+    index("message_reactions_message_id_idx").on(table.messageId),
+  ]
+);
+
+/**
  * Attachments
  */
 export const attachments = pgTable(
