@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy, Pencil, SmilePlus, Trash2 } from "lucide-react";
+import { Check, Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -15,6 +15,10 @@ import { REACTION_EMOJIS, type Message, type ReactionEmoji } from "@/types/chat"
 
 /**
  * Message-level actions: fixed emoji reactions (toggle), copy, edit, delete.
+ *
+ * Interaction model: click/touch-first — an always-visible "⋯" trigger next to
+ * each settled bubble opens the shared action panel. A right-click context
+ * menu reuses the same panel for desktop convenience. No hover dependency.
  *
  * Scope rules (enforced by callers, mirrored here):
  * - Only rendered on settled (non-pending, non-failed) bubbles.
@@ -66,7 +70,7 @@ interface MessageActionHandlersProps {
   onEdit?: () => void;
 }
 
-/** Shared bar + context-menu behavior. */
+/** Shared trigger + context-menu behavior. */
 function useMessageActions(props: MessageActionHandlersProps) {
   const { conversationId, message, isOutbound } = props;
   const react = useReactionToggle(conversationId, message.id);
@@ -106,100 +110,165 @@ function useMessageActions(props: MessageActionHandlersProps) {
   };
 }
 
-const barButtonClass =
-  "flex h-7 w-7 items-center justify-center rounded-full text-muted-strong transition-colors hover:bg-surface-shade hover:text-foreground select-none";
-
-/** Floating hover bar: reactions, copy, owner-only edit + delete. */
-export function MessageActionsBar(
-  props: MessageActionHandlersProps & { className?: string }
+/**
+ * Close an open surface on outside pointerdown or Escape.
+ *
+ * `guardRef` is the element (and its DOM subtree) inside which pointerdowns do
+ * NOT dismiss — pass the wrapper containing both trigger and panel so toggling
+ * the trigger doesn't instantly reopen, or the panel alone to close on any
+ * other interaction (context-menu behavior).
+ */
+function useDismissOnOutside(
+  open: boolean,
+  guardRef: React.RefObject<HTMLElement | null>,
+  onClose: () => void
 ) {
-  const { className } = props;
-  const { react, copy, copied, remove, canModify } = useMessageActions(props);
-  const [pickerOpen, setPickerOpen] = React.useState(false);
-
-  // Click-away + Escape close the emoji picker
   React.useEffect(() => {
-    if (!pickerOpen) return;
-    const close = () => setPickerOpen(false);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+    if (!open) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (guardRef.current && guardRef.current.contains(e.target as Node)) return;
+      onClose();
     };
-    document.addEventListener("pointerdown", close);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [pickerOpen]);
+  }, [open, guardRef, onClose]);
+}
 
+const panelItemClass =
+  "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-[13px] text-foreground transition-colors hover:bg-surface-shade select-none text-left";
+
+interface MessageActionsPanelProps {
+  react: (emoji: ReactionEmoji) => void;
+  copy: () => void;
+  copied: boolean;
+  remove: () => void;
+  canModify: boolean;
+  onEdit?: () => void;
+  onClose: () => void;
+}
+
+/** Shared panel content: fixed reaction row + copy + owner edit/delete. */
+function MessageActionsPanel({
+  react,
+  copy,
+  copied,
+  remove,
+  canModify,
+  onEdit,
+  onClose,
+}: MessageActionsPanelProps) {
   return (
     <div
-      className={cn(
-        "z-20 flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5 shadow-sm",
-        className
-      )}
-      role="toolbar"
+      role="menu"
       aria-label="Message actions"
+      className="min-w-44 rounded-md border border-line bg-surface p-1 shadow-md"
     >
+      <div className="mb-1 flex items-center gap-0.5 border-b border-line px-1 pb-1.5">
+        {REACTION_EMOJIS.map((emoji) => (
+          <button
+            key={emoji}
+            type="button"
+            role="menuitem"
+            aria-label={`React with ${emoji}`}
+            className="flex h-7 w-7 items-center justify-center rounded-full text-base transition-transform hover:scale-110 select-none"
+            onClick={() => {
+              react(emoji);
+              onClose();
+            }}
+          >
+            {emoji}
+          </button>
+        ))}
+      </div>
       <button
         type="button"
-        aria-label="Add reaction"
-        aria-expanded={pickerOpen}
-        className={cn(barButtonClass, pickerOpen && "bg-surface-shade text-foreground")}
-        onPointerDown={(e) => e.stopPropagation()}
-        onClick={() => setPickerOpen((open) => !open)}
-      >
-        <SmilePlus className="h-4 w-4" />
-      </button>
-
-      <button
-        type="button"
-        aria-label={copied ? "Copied" : "Copy message"}
-        className={barButtonClass}
-        onClick={copy}
+        role="menuitem"
+        className={panelItemClass}
+        onClick={() => {
+          copy();
+          onClose();
+        }}
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        {copied ? "Copied" : "Copy"}
       </button>
-
-      {canModify && props.onEdit && (
+      {canModify && onEdit && (
         <button
           type="button"
-          aria-label="Edit message"
-          className={barButtonClass}
-          onClick={props.onEdit}
+          role="menuitem"
+          className={panelItemClass}
+          onClick={() => {
+            onClose();
+            onEdit();
+          }}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-4 w-4" />
+          Edit
         </button>
       )}
-
       {canModify && (
         <button
           type="button"
-          aria-label="Delete message"
-          className={cn(barButtonClass, "hover:text-destructive")}
-          onClick={remove}
+          role="menuitem"
+          className={cn(panelItemClass, "text-destructive")}
+          onClick={() => {
+            onClose();
+            remove();
+          }}
         >
           <Trash2 className="h-4 w-4" />
+          Delete
         </button>
       )}
+    </div>
+  );
+}
 
-      {pickerOpen && (
-        <div className="absolute bottom-full left-1/2 z-30 mb-1.5 flex -translate-x-1/2 items-center gap-0.5 rounded-full border border-line bg-surface p-1 shadow-md">
-          {REACTION_EMOJIS.map((emoji) => (
-            <button
-              key={emoji}
-              type="button"
-              aria-label={`React with ${emoji}`}
-              className="flex h-7 w-7 items-center justify-center rounded-full text-base transition-transform hover:scale-110 select-none"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => {
-                react(emoji);
-                setPickerOpen(false);
-              }}
-            >
-              {emoji}
-            </button>
-          ))}
+/**
+ * Always-visible "⋯" trigger beside the bubble; click/tap opens the panel
+ * above it, aligned to the bubble's side.
+ */
+export function MessageActionsTrigger(props: MessageActionHandlersProps) {
+  const { isOutbound } = props;
+  const { react, copy, copied, remove, canModify } = useMessageActions(props);
+  const [open, setOpen] = React.useState(false);
+  const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+  const close = React.useCallback(() => setOpen(false), []);
+  useDismissOnOutside(open, wrapperRef, close);
+
+  return (
+    <div ref={wrapperRef} className="relative shrink-0">
+      <button
+        type="button"
+        aria-label="Message actions"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="flex h-6 w-6 items-center justify-center rounded-full text-muted-subtle transition-colors hover:bg-surface-shade hover:text-foreground select-none"
+        onClick={() => setOpen((o) => !o)}
+      >
+        <MoreHorizontal className="h-4 w-4" />
+      </button>
+
+      {open && (
+        <div
+          className={cn("absolute bottom-full z-40 mb-1", isOutbound ? "right-0" : "left-0")}
+        >
+          <MessageActionsPanel
+            react={react}
+            copy={copy}
+            copied={copied}
+            remove={remove}
+            canModify={canModify}
+            onEdit={props.onEdit}
+            onClose={close}
+          />
         </div>
       )}
     </div>
@@ -207,11 +276,10 @@ export function MessageActionsBar(
 }
 
 /**
- * Right-click context menu around the bubble.
- *
- * Hand-rolled (instead of Radix DropdownMenu) because a menu trigger would
- * open on left-click too, stealing clicks from images and links. Anchors at
- * the cursor; closes on click-away, Escape, or selection.
+ * Right-click context menu around the bubble. Hand-rolled (instead of Radix
+ * DropdownMenu) because a menu trigger would open on left-click too, stealing
+ * clicks from images and links. Anchors at the cursor; closes on click-away,
+ * Escape, or selection.
  */
 export function MessageContextMenu(
   props: MessageActionHandlersProps & { children: React.ReactNode }
@@ -220,20 +288,9 @@ export function MessageContextMenu(
   const { react, copy, copied, remove, canModify } = useMessageActions(props);
   const [anchor, setAnchor] = React.useState<{ x: number; y: number } | null>(null);
   const wrapperRef = React.useRef<HTMLDivElement | null>(null);
-
-  React.useEffect(() => {
-    if (!anchor) return;
-    const close = () => setAnchor(null);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    document.addEventListener("pointerdown", close);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", close);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [anchor]);
+  const panelRef = React.useRef<HTMLDivElement | null>(null);
+  const close = React.useCallback(() => setAnchor(null), []);
+  useDismissOnOutside(anchor !== null, panelRef, close);
 
   const openMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -242,74 +299,25 @@ export function MessageContextMenu(
     setAnchor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
-  const itemClass =
-    "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-[13px] text-foreground transition-colors hover:bg-surface-shade select-none text-left";
-
   return (
-    <div
-      ref={wrapperRef}
-      className="relative w-fit max-w-full"
-      onContextMenu={openMenu}
-    >
+    <div ref={wrapperRef} className="relative w-fit max-w-full" onContextMenu={openMenu}>
       {children}
 
       {anchor && (
         <div
-          role="menu"
-          aria-label="Message actions"
-          className="absolute z-40 min-w-40 rounded-md border border-line bg-surface p-1 shadow-md"
+          ref={panelRef}
+          className="absolute z-40"
           style={{ left: anchor.x, top: anchor.y }}
-          onContextMenu={(e) => e.preventDefault()}
         >
-          <div className="mb-1 flex items-center gap-0.5 rounded-sm border-b border-line px-1 pb-1.5">
-            {REACTION_EMOJIS.map((emoji) => (
-              <button
-                key={emoji}
-                type="button"
-                role="menuitem"
-                aria-label={`React with ${emoji}`}
-                className="flex h-7 w-7 items-center justify-center rounded-full text-base transition-transform hover:scale-110 select-none"
-                onClick={() => {
-                  react(emoji);
-                  setAnchor(null);
-                }}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-          <button type="button" role="menuitem" className={itemClass} onClick={() => { copy(); setAnchor(null); }}>
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? "Copied" : "Copy"}
-          </button>
-          {canModify && props.onEdit && (
-            <button
-              type="button"
-              role="menuitem"
-              className={itemClass}
-              onClick={() => {
-                setAnchor(null);
-                props.onEdit?.();
-              }}
-            >
-              <Pencil className="h-4 w-4" />
-              Edit
-            </button>
-          )}
-          {canModify && (
-            <button
-              type="button"
-              role="menuitem"
-              className={cn(itemClass, "text-destructive")}
-              onClick={() => {
-                setAnchor(null);
-                remove();
-              }}
-            >
-              <Trash2 className="h-4 w-4" />
-              Delete
-            </button>
-          )}
+          <MessageActionsPanel
+            react={react}
+            copy={copy}
+            copied={copied}
+            remove={remove}
+            canModify={canModify}
+            onEdit={props.onEdit}
+            onClose={close}
+          />
         </div>
       )}
     </div>

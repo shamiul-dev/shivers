@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, Download, ZoomIn } from "lucide-react";
+import { Download } from "lucide-react";
 
 import {
   Dialog,
@@ -25,8 +25,8 @@ export function ImageLightbox({ url, onClose, fileName = "image" }: ImageLightbo
         <DialogTitle className="sr-only">Image Preview</DialogTitle>
         <DialogDescription className="sr-only">Full-resolution photo preview</DialogDescription>
 
-        {/* Action Header */}
-        <div className="w-full flex items-center justify-between px-3 py-2 text-white/80">
+        {/* Action Header (pr-12 clears the DialogContent built-in close at right-4 top-4) */}
+        <div className="w-full flex items-center justify-between pl-3 pr-12 py-2 text-white/80">
           <span className="text-xs font-medium truncate max-w-[240px] text-white/70">
             {fileName}
           </span>
@@ -41,14 +41,6 @@ export function ImageLightbox({ url, onClose, fileName = "image" }: ImageLightbo
             >
               <Download className="w-4 h-4" />
             </a>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-2 rounded-xl hover:bg-white/10 text-white/80 hover:text-white transition-colors cursor-pointer"
-              title="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
         </div>
 

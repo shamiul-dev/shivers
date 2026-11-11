@@ -10,7 +10,7 @@ import { UserAvatar } from "@/components/ui/user-avatar";
 import { ChatComposer } from "@/components/chat/chat-composer";
 import { ImageLightbox } from "@/components/chat/image-lightbox";
 import {
-  MessageActionsBar,
+  MessageActionsTrigger,
   MessageContextMenu,
   MessageReactionChips,
 } from "@/components/chat/message-actions";
@@ -299,7 +299,7 @@ export function ChatMessagesView({
                   )}
 
                   <div
-                    className={`group relative flex items-end gap-2.5 w-full ${
+                    className={`flex items-end gap-2.5 w-full ${
                       isOutbound ? "justify-end" : "justify-start"
                     } ${sameSenderAsPrev ? "mt-1" : "mt-3"}`}
                   >
@@ -329,16 +329,8 @@ export function ChatMessagesView({
                         </span>
                       )}
 
-                      {/* Hover action bar (settled messages only; tombstones have nothing to act on) */}
-                      {settled && !isDeleted && !isEditing && (
-                        <MessageActionsBar
-                          {...actionProps}
-                          className={`absolute -top-9 ${
-                            isOutbound ? "right-0" : "left-9"
-                          } opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-150`}
-                        />
-                      )}
-
+                      {/* Action trigger + bubble (settled messages; tombstones keep
+                          only their chips, no actions) */}
                       {isEditing ? (
                         <MessageEditForm
                           conversationId={conversationId}
@@ -346,35 +338,43 @@ export function ChatMessagesView({
                           onCancel={() => setEditingId(null)}
                         />
                       ) : settled ? (
-                        <MessageContextMenu {...actionProps}>
-                          <ChatBubble
-                            variant={bubbleVariant}
-                            podPosition={podPosition}
-                            time={formatTime(msg.createdAt)}
-                            status={
-                              msg.failed
-                                ? "failed"
-                                : msg.isPending
-                                ? "pending"
-                                : isOutbound
-                                ? "sent"
-                                : undefined
-                            }
-                            edited={!isDeleted && !!msg.editedAt}
-                            attachment={isDeleted ? null : msg.attachment}
-                            onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
-                            onMediaLoad={() => {
-                              const el = scrollContainerRef.current;
-                              if (!el) return;
-                              const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 400;
-                              if (isNearBottom) {
-                                scrollToBottom("instant");
+                        <div className="flex min-w-0 items-center gap-1">
+                          {isOutbound && !isDeleted && (
+                            <MessageActionsTrigger {...actionProps} />
+                          )}
+                          <MessageContextMenu {...actionProps}>
+                            <ChatBubble
+                              variant={bubbleVariant}
+                              podPosition={podPosition}
+                              time={formatTime(msg.createdAt)}
+                              status={
+                                msg.failed
+                                  ? "failed"
+                                  : msg.isPending
+                                  ? "pending"
+                                  : isOutbound
+                                  ? "sent"
+                                  : undefined
                               }
-                            }}
-                          >
-                            {isDeleted ? "Message deleted" : msg.body}
-                          </ChatBubble>
-                        </MessageContextMenu>
+                              edited={!isDeleted && !!msg.editedAt}
+                              attachment={isDeleted ? null : msg.attachment}
+                              onImageClick={(url, fileName) => setLightboxMedia({ url, fileName })}
+                              onMediaLoad={() => {
+                                const el = scrollContainerRef.current;
+                                if (!el) return;
+                                const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 400;
+                                if (isNearBottom) {
+                                  scrollToBottom("instant");
+                                }
+                              }}
+                            >
+                              {isDeleted ? "Message deleted" : msg.body}
+                            </ChatBubble>
+                          </MessageContextMenu>
+                          {!isOutbound && !isDeleted && (
+                            <MessageActionsTrigger {...actionProps} />
+                          )}
+                        </div>
                       ) : (
                         <ChatBubble
                           variant={bubbleVariant}
