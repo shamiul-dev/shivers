@@ -1,6 +1,7 @@
 import { Router, type Response } from 'express';
 import { z } from "zod";
 
+import { logger } from "@/config/logger";
 import { requireAuth, type AuthenticatedRequest } from '@/middleware/requireAuth';
 import {
     listConversations,
@@ -31,7 +32,7 @@ conversationsRouter.get("/", requireAuth, async (req, res: Response) => {
         const result = await listConversations(authreq.user.id);
         res.status(200).json({ conversations: result });
     } catch (error) {
-        console.error("Error listing conversations:", error);
+        logger.error({ err: error }, "Error listing conversations");
         res.status(500).json({ error: "Failed to list conversation" });
     }
 });
@@ -51,7 +52,7 @@ conversationsRouter.post("/", requireAuth, async (req, res: Response) => {
         const conversation = await createRoom(authReq.user.id, parsed.data.name);
         res.status(201).json({ conversation });
     } catch (error) {
-        console.error("Error creating room:", error);
+        logger.error({ err: error }, "Error creating room");
         res.status(500).json({ error: "Failed to create room" });
     }
 });
@@ -80,7 +81,7 @@ conversationsRouter.post("/dm", requireAuth, async (req, res: Response) => {
         }
         res.status(result.created ? 201 : 200).json({ conversation: result.conversation });
     } catch (error) {
-        console.error("Error creating DM:", error);
+        logger.error({ err: error }, "Error creating DM");
         res.status(500).json({ error: "Failed to create DM" });
     }
 });
@@ -103,7 +104,7 @@ conversationsRouter.get("/:id", requireAuth, async (req, res: Response) => {
             membership: row.membership,
         });
     } catch (error) {
-        console.error("Error fetching conversation:", error);
+        logger.error({ err: error }, "Error fetching conversation");
         res.status(500).json({ error: "Failed to fetch conversation"});
     }
 });
@@ -124,7 +125,7 @@ conversationsRouter.post("/:id/read", requireAuth, async (req, res: Response) =>
         }
         res.status(200).json({ lastReadMessageId: updated.lastReadMessageId });
     } catch (error) {
-        console.error("Error marking conversation read", error);
+        logger.error({ err: error }, "Error marking conversation read");
         res.status(500).json({ error: "Failed to mark conversation read" });
     }
 });
@@ -147,7 +148,7 @@ conversationsRouter.get("/:id/members", requireAuth, async (req, res: Response) 
         }
         res.status(200).json({ members });
     } catch (error) {
-        console.error("Error listing conversation members:", error);
+        logger.error({ err: error }, "Error listing conversation members");
         res.status(500).json({ error: "Failed to list members" });
     }
 });
@@ -181,7 +182,7 @@ conversationsRouter.post("/:id/members", requireAuth, async (req, res: Response)
 
         res.status(201).json({ membership: result.membership, conversation: result.conversation });
     } catch (error) {
-        console.error("Error adding member:", error);
+        logger.error({ err: error }, "Error adding member");
         res.status(500).json({ error: "Failed to add member" });
     }
 });

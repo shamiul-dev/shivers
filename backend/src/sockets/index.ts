@@ -4,6 +4,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { and, eq, gt } from "drizzle-orm";
 
 import { env } from "@/config/env";
+import { logger } from "@/config/logger";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { session as sessionTable, user as userTable, conversationMembers } from "@/db/schema";
@@ -97,7 +98,7 @@ export function createSocketServer(httpServer: HttpServer) {
             socket.data.session = authenticatedSession;
             next();
         } catch (err) {
-            console.error("Socket handshake error:", err);
+            logger.error({ err }, "Socket handshake error");
             next(new Error("unauthorized"));
         }
     });
@@ -118,7 +119,7 @@ export function createSocketServer(httpServer: HttpServer) {
                 io.in(userRoom(userId)).socketsJoin(conversation.id);
                 io.to(userRoom(userId)).emit("conversation:created", conversation);
             } catch (err) {
-                console.error("conversation:created socket sync error:", err);
+                logger.error({ err }, "conversation:created socket sync error");
             }
         }
     };
@@ -131,7 +132,7 @@ export function createSocketServer(httpServer: HttpServer) {
                 role,
             });
         } catch (err) {
-            console.error("conversation:member_joined socket sync error:", err);
+            logger.error({ err }, "conversation:member_joined socket sync error");
         }
     };
 
@@ -164,7 +165,7 @@ export function createSocketServer(httpServer: HttpServer) {
                     socket.join(row.conversationId);
                 }
             } catch (err) {
-                console.error("Auto-join error:", err);
+                logger.error({ err }, "Socket auto-join error");
             }
         }
 
@@ -193,7 +194,7 @@ export function createSocketServer(httpServer: HttpServer) {
                 socket.join(id);
                 respond({ ok: true });
             } catch (err) {
-                console.error("conversation:join error", err);
+                logger.error({ err }, "conversation:join error");
                 respond({ ok: false, error: "server" });
             }
         });
@@ -222,7 +223,7 @@ export function createSocketServer(httpServer: HttpServer) {
                 const updated = await markRead(conversationId, user.id, cursor);
                 respond({ ok: true, lastReadMessageId: updated?.lastReadMessageId });
             } catch (err) {
-                console.error("conversation:read error", err);
+                logger.error({ err }, "conversation:read error");
                 respond({ ok: false, error: "server" });
             }
         });

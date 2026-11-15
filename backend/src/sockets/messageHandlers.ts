@@ -1,6 +1,7 @@
 import type { Server, Socket } from "socket.io";
 import { z } from "zod";
 
+import { logger } from "@/config/logger";
 import { isMember } from "@/services/conversation.service";
 import { createMessage } from "@/services/message.service";
 
@@ -59,7 +60,7 @@ export function registerMessageHandlers(
       io.to(conversationId).emit("message:new", message);
       respond({ ok: true, message, duplicated });
     } catch (err) {
-      console.error("message:send error:", err);
+      logger.error({ err }, "message:send error");
       respond({ ok: false, error: "server" });
     }
   });

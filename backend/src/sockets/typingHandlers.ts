@@ -1,6 +1,7 @@
 import type { Server, Socket } from "socket.io";
 import { z } from "zod";
 
+import { logger } from "@/config/logger";
 import { isMember } from "@/services/conversation.service";
 import type { SocketRateLimiter } from "./messageHandlers";
 
@@ -30,7 +31,7 @@ export function registerTypingHandlers(
                 userId: user.id,
             });
         } catch (err) {
-            console.error("typing:start error:", err);
+            logger.error({ err }, "typing:start error");
         }
     });
 
@@ -49,7 +50,7 @@ export function registerTypingHandlers(
                 userId: user.id,
             });
         } catch (err) {
-            console.error("typing:stop error:", err);
+            logger.error({ err }, "typing:stop error");
         }
     });
 }

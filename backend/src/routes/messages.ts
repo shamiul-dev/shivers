@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { z } from "zod";
 
+import { logger } from "@/config/logger";
 import { requireAuth, type AuthenticatedRequest } from '@/middleware/requireAuth';
 import { getConversationForUser } from "@/services/conversation.service";
 import { fetchHistory, editMessage, deleteMessage } from "@/services/message.service";
@@ -74,7 +75,7 @@ async function handleEditOrDelete(
 
         res.status(200).json({ message: result.message });
     } catch (error) {
-        console.error(`Error handling message ${action}:`, error);
+        logger.error({ err: error, action }, "Error handling message");
         res.status(500).json({ error: `Failed to ${action} message` });
     }
 }
@@ -128,7 +129,7 @@ messagesRouter.post("/:messageId/reactions", requireAuth, async (req, res: Respo
 
         res.status(200).json({ messageId, reactions });
     } catch (error) {
-        console.error("Error adding reaction:", error);
+        logger.error({ err: error }, "Error adding reaction");
         res.status(500).json({ error: "Failed to add reaction" });
     }
 });
@@ -164,7 +165,7 @@ messagesRouter.delete("/:messageId/reactions", requireAuth, async (req, res: Res
 
         res.status(200).json({ messageId, reactions });
     } catch (error) {
-        console.error("Error removing reaction:", error);
+        logger.error({ err: error }, "Error removing reaction");
         res.status(500).json({ error: "Failed to remove reaction" });
     }
 });
@@ -205,7 +206,7 @@ messagesRouter.get("/", requireAuth, async (req, res: Response) => {
             hasOlder: result.hasOlder,
         });
     } catch (error) {
-        console.error("Error fetching messages:", error);
+        logger.error({ err: error }, "Error fetching messages");
         res.status(500).json({ error: "Failed to fetch messages" });
     }
 });

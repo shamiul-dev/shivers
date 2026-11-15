@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import { pinoHttp } from "pino-http";
 import { toNodeHandler } from "better-auth/node";
 
 import { env } from "@/config/env";
+import { logger } from "@/config/logger";
 import { auth } from "@/auth";
 import { profileRouter } from "@/routes/profile";
 import { usersRouter } from "@/routes/users";
@@ -13,10 +15,16 @@ import { attachmentsRouter } from "@/routes/attachments";
 
 export const app = express();
 
-// 1. Security headers and CORS
+// 1. Security headers, CORS, structured request logging
 app.use(
     helmet({
         crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+);
+app.use(
+    pinoHttp({
+        logger,
+        autoLogging: { ignore: (req) => req.url === "/health" },
     })
 );
 app.use(
@@ -52,7 +60,7 @@ app.get("/health", (req, res) => {
 // 5. Global error handling
 app.use((err: unknown, req: express.Request, res: express.Response,
     next: express.NextFunction) => {
-    console.error("Unhandled Error", err);
+    logger.error({ err }, "Unhandled error");
     res.status(500).json({
         error: "Internal server error",
     });

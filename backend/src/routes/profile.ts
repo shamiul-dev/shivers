@@ -7,6 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { db } from "@/db";
 import { profiles, user } from "@/db/schema";
 import { env } from "@/config/env";
+import { logger } from "@/config/logger";
 import { requireAuth, type AuthenticatedRequest } from "@/middleware/requireAuth";
 
 const uploadAvatar = multer({
@@ -88,7 +89,7 @@ profileRouter.get("/me", requireAuth, async (req, res: Response) => {
       profile: userProfile || null,
     });
   } catch (error) {
-    console.error("Error fetching profile:", error);
+    logger.error({ err: error }, "Error fetching profile");
     res.status(500).json({ error: "Failed to fetch profile" });
   }
 });
@@ -157,7 +158,7 @@ profileRouter.patch("/me", requireAuth, async (req, res: Response) => {
       profile: savedProfile,
     });
   } catch (error) {
-    console.error("Error saving profile:", error);
+    logger.error({ err: error }, "Error saving profile");
     res.status(500).json({ error: "Failed to save profile" });
   }
 });
@@ -247,7 +248,7 @@ profileRouter.post(
         avatarUrl: uploadResult.secure_url,
       });
     } catch (err: any) {
-      console.error("Avatar upload error:", err);
+      logger.error({ err }, "Avatar upload error");
       res.status(500).json({ error: "Failed to upload avatar" });
     }
   }
@@ -270,7 +271,7 @@ profileRouter.delete("/avatar", requireAuth, async (req, res: Response) => {
 
     res.status(200).json({ ok: true });
   } catch (err: any) {
-    console.error("Delete avatar error:", err);
+    logger.error({ err }, "Delete avatar error");
     res.status(500).json({ error: "Failed to remove avatar" });
   }
 });

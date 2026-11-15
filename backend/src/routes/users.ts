@@ -3,6 +3,7 @@ import { eq, and, ne, or, ilike, isNotNull } from "drizzle-orm";
 
 import { db } from "@/db";
 import { user, profiles } from "@/db/schema"
+import { logger } from "@/config/logger";
 import { requireAuth, type AuthenticatedRequest } from "@/middleware/requireAuth";
 import { id } from "zod/locales";
 
@@ -57,7 +58,7 @@ usersRouter.get("/search", requireAuth, async (req, res: Response) => {
 
         res.status(200).json({ users: results});
     } catch (error) {
-        console.error("Error searching users:", error);
+        logger.error({ err: error }, "Error searching users");
         res.status(500).json({ error: "Failed to search users"});
     }
 });
@@ -98,7 +99,7 @@ usersRouter.get("/:username", requireAuth, async (req, res: Response) => {
 
         res.status(200).json({ user: foundUser });
     } catch (error) {
-        console.error("Error fetching user profile:", error);
+        logger.error({ err: error }, "Error fetching user profile");
         res.status(500).json({ error: "Failed to fetch user profile" });
     }
 });

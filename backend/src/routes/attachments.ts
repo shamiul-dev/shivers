@@ -1,6 +1,7 @@
 import { Router, type Response, type Request } from "express";
 import multer from "multer";
 
+import { logger } from "@/config/logger";
 import { requireAuth, type AuthenticatedRequest } from "@/middleware/requireAuth";
 import {
   uploadAttachment,
@@ -53,7 +54,7 @@ attachmentsRouter.post(
         res.status(403).json({ error: "Forbidden: Not a member of this conversation" });
         return;
       }
-      console.error("Upload attachment error:", err);
+      logger.error({ err }, "Upload attachment error");
       res.status(500).json({ error: "Failed to upload attachment" });
     }
   }
@@ -116,7 +117,7 @@ attachmentsRouter.get("/attachments/:id", async (req: Request, res: Response) =>
         res.status(403).json({ error: "Forbidden" });
         return;
       }
-      console.error("Get attachment error:", err);
+      logger.error({ err }, "Get attachment error");
       res.status(500).json({ error: "Failed to get attachment" });
     }
   });
@@ -176,7 +177,7 @@ attachmentsRouter.get("/attachments/:id/thumb", async (req: Request, res: Respon
         res.status(403).json({ error: "Forbidden" });
         return;
       }
-      console.error("Get thumbnail error:", err);
+      logger.error({ err }, "Get thumbnail error");
       res.status(500).json({ error: "Failed to get thumbnail" });
     }
   });

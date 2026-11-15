@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "@/auth";
+import { logger } from "@/config/logger";
 
 //Extract Better Auth inferred session and user types
 type sessionData = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
@@ -34,7 +35,7 @@ export async function requireAuth(
 
         next();
     } catch(error) {
-        console.error("Authentication middleware error:", error);
+        logger.error({ err: error }, "Authentication middleware error");
         res.status(401).json({
             error: "unauthorised",
             message: "Session verification failed",
