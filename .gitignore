@@ -4,6 +4,9 @@ AGENTS.md
 .impeccable/
 designs
 
+# Local disk upload fallback (see storage.service.ts) — dev/test artifacts only
+backend/uploads/
+
 # impeccable-ignore-start
 # Ephemeral output, runtime state, and per-dev overrides.
 # Shared artifacts stay tracked: config.json, live/config.json,
