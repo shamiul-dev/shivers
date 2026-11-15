@@ -87,12 +87,16 @@ All three default to `http://localhost:4000`, so local builds work without env f
 ```bash
 cd backend
 npm test    # integration suite: auth, conversations, channels, media, sockets
+
+cd frontend
+npm test    # unit/component suite (Vitest + Testing Library): stores, utils, chat UI
 ```
 
 CI (`.github/workflows/ci.yml`) runs two jobs on every push/PR to `master`:
 
 1. **backend-tests** — the integration suite against `TEST_DATABASE_URL` (includes one throwaway Cloudinary upload, destroyed immediately)
-2. **frontend-build** — `next build` type-check and production compile
+2. **frontend-tests** — the frontend unit/component suite (Vitest; no database or env needed)
+3. **frontend-build** — `next build` type-check and production compile
 
 ## Theming
 
